@@ -1,0 +1,1752 @@
+[
+  {
+    "index": 0,
+    "scrambled": "L-P-P-E-A",
+    "type": "Food",
+    "answer": "apple",
+    "translation": "りんご (ringo)"
+  },
+  {
+    "index": 1,
+    "scrambled": "H-S-S-I-U",
+    "type": "食べ物 (tabemono)",
+    "answer": "sushi",
+    "meaning": "sushi"
+  },
+  {
+    "index": 2,
+    "scrambled": "A-A-N-B-N-A",
+    "type": "Food",
+    "answer": "banana",
+    "translation": "バナナ (banana)"
+  },
+  {
+    "index": 3,
+    "scrambled": "A-K-U-R-A-S",
+    "type": "植物 (shokubutsu)",
+    "answer": "sakura",
+    "meaning": "cherry blossom"
+  },
+  {
+    "index": 4,
+    "scrambled": "M-T-R-P-E-O-U-C",
+    "type": "Technology",
+    "answer": "computer",
+    "translation": "コンピュータ (konpyuuta)"
+  },
+  {
+    "index": 5,
+    "scrambled": "I-J-N-N-A",
+    "type": "職業 (shokugyou)",
+    "answer": "ninja",
+    "meaning": "ninja"
+  },
+  {
+    "index": 6,
+    "scrambled": "E-P-H-O-N",
+    "type": "Technology",
+    "answer": "phone",
+    "translation": "電話 (でんわ, denwa)"
+  },
+  {
+    "index": 7,
+    "scrambled": "A-I-N-S-F-J-U",
+    "type": "自然 (shizen)",
+    "answer": "fujisan",
+    "meaning": "Mount Fuji"
+  },
+  {
+    "index": 8,
+    "scrambled": "T-A-L-E-B",
+    "type": "Furniture",
+    "answer": "table",
+    "translation": "テーブル (teeburu)"
+  },
+  {
+    "index": 9,
+    "scrambled": "I-A-N-J-J",
+    "type": "場所 (basho)",
+    "answer": "jinja",
+    "meaning": "shrine"
+  },
+  {
+    "index": 10,
+    "scrambled": "R-H-A-C-I",
+    "type": "Furniture",
+    "answer": "chair",
+    "translation": "椅子 (いす, isu)"
+  },
+  {
+    "index": 11,
+    "scrambled": "A-S-O-D-U",
+    "type": "文化 (bunka)",
+    "answer": "sadou",
+    "meaning": "tea ceremony"
+  },
+  {
+    "index": 12,
+    "scrambled": "C-O-H-O-S-L",
+    "type": "Place",
+    "answer": "school",
+    "translation": "学校 (がっこう, gakkou)"
+  },
+  {
+    "index": 13,
+    "scrambled": "I-U-K-A-K-B",
+    "type": "文化 (bunka)",
+    "answer": "kabuki",
+    "meaning": "kabuki theater"
+  },
+  {
+    "index": 14,
+    "scrambled": "R-I-R-E-V",
+    "type": "Nature",
+    "answer": "river",
+    "translation": "川 (かわ, kawa)"
+  },
+  {
+    "index": 15,
+    "scrambled": "O-O-K-N-M-I",
+    "type": "衣服 (ifuku)",
+    "answer": "kimono",
+    "meaning": "kimono"
+  },
+  {
+    "index": 16,
+    "scrambled": "U-N-M-I-N-A-T-O",
+    "type": "Nature",
+    "answer": "mountain",
+    "translation": "山 (やま, yama)"
+  },
+  {
+    "index": 17,
+    "scrambled": "F-N-I-U-U-R",
+    "type": "物 (mono)",
+    "answer": "fuurin",
+    "meaning": "wind chime"
+  },
+  {
+    "index": 18,
+    "scrambled": "O-O-K-B",
+    "type": "Object",
+    "answer": "book",
+    "translation": "本 (ほん, hon)"
+  },
+  {
+    "index": 19,
+    "scrambled": "E-U-T-R-P-M-A",
+    "type": "食べ物 (tabemono)",
+    "answer": "tempura",
+    "meaning": "tempura"
+  },
+  {
+    "index": 20,
+    "scrambled": "P-E-N",
+    "type": "Stationery",
+    "answer": "pen",
+    "translation": "ペン (pen)"
+  },
+  {
+    "index": 21,
+    "scrambled": "Y-A-K-T-A-U",
+    "type": "衣服 (ifuku)",
+    "answer": "yukata",
+    "meaning": "summer kimono"
+  },
+  {
+    "index": 22,
+    "scrambled": "I-C-P-L-N-E",
+    "type": "Stationery",
+    "answer": "pencil",
+    "translation": "鉛筆 (えんぴつ, enpitsu)"
+  },
+  {
+    "index": 23,
+    "scrambled": "T-M-A-I-S-U-R",
+    "type": "イベント (ibento)",
+    "answer": "matsuri",
+    "meaning": "festival"
+  },
+  {
+    "index": 24,
+    "scrambled": "L-P-M-A",
+    "type": "Furniture",
+    "answer": "lamp",
+    "translation": "ランプ (ranpu)"
+  },
+  {
+    "index": 25,
+    "scrambled": "O-N-S-A-I-B",
+    "type": "趣味 (shumi)",
+    "answer": "bonsai",
+    "meaning": "bonsai"
+  },
+  {
+    "index": 26,
+    "scrambled": "L-T-O-B-T-E",
+    "type": "Object",
+    "answer": "bottle",
+    "translation": "瓶 (びん, bin)"
+  },
+  {
+    "index": 27,
+    "scrambled": "H-C-N-A-W-A",
+    "type": "食器 (shokki)",
+    "answer": "chawan",
+    "meaning": "tea bowl"
+  },
+  {
+    "index": 28,
+    "scrambled": "O-I-D-N-W-W",
+    "type": "Architecture",
+    "answer": "window",
+    "translation": "窓 (まど, mado)"
+  },
+  {
+    "index": 29,
+    "scrambled": "N-A-A-A-T-K",
+    "type": "武器 (buki)",
+    "answer": "katana",
+    "meaning": "sword"
+  },
+  {
+    "index": 30,
+    "scrambled": "R-O-O-D",
+    "type": "Architecture",
+    "answer": "door",
+    "translation": "ドア (doa)"
+  },
+  {
+    "index": 31,
+    "scrambled": "A-I-T-T-A-M",
+    "type": "家具 (kagu)",
+    "answer": "tatami",
+    "meaning": "tatami mat"
+  },
+  {
+    "index": 32,
+    "scrambled": "E-E-T-R",
+    "type": "Nature",
+    "answer": "tree",
+    "translation": "木 (き, ki)"
+  },
+  {
+    "index": 33,
+    "scrambled": "U-H-H-N-C-I-C-O",
+    "type": "物 (mono)",
+    "answer": "chouchin",
+    "meaning": "lantern"
+  },
+  {
+    "index": 34,
+    "scrambled": "L-W-R-E-O-F",
+    "type": "Nature",
+    "answer": "flower",
+    "translation": "花 (はな, hana)"
+  },
+  {
+    "index": 35,
+    "scrambled": "S-N-E-O-N",
+    "type": "場所 (basho)",
+    "answer": "onsen",
+    "meaning": "hot spring"
+  },
+  {
+    "index": 36,
+    "scrambled": "R-D-N-A-E-G",
+    "type": "Place",
+    "answer": "garden",
+    "translation": "庭 (にわ, niwa)"
+  },
+  {
+    "index": 37,
+    "scrambled": "A-I-S-U-M-A-R",
+    "type": "職業 (shokugyou)",
+    "answer": "samurai",
+    "meaning": "samurai"
+  },
+  {
+    "index": 38,
+    "scrambled": "M-U-C-I-S",
+    "type": "Art",
+    "answer": "music",
+    "translation": "音楽 (おんがく, ongaku)"
+  },
+  {
+    "index": 39,
+    "scrambled": "H-A-C-A-Y",
+    "type": "場所 (basho)",
+    "answer": "chaya",
+    "meaning": "teahouse"
+  },
+  {
+    "index": 40,
+    "scrambled": "V-I-E-M-O",
+    "type": "Art",
+    "answer": "movie",
+    "translation": "映画 (えいが, eiga)"
+  },
+  {
+    "index": 41,
+    "scrambled": "K-F-U-U-I-E",
+    "type": "自然 (shizen)",
+    "answer": "fuukei",
+    "meaning": "scenery"
+  },
+  {
+    "index": 42,
+    "scrambled": "Y-C-C-I-L-E-B",
+    "type": "Transport",
+    "answer": "bicycle",
+    "translation": "自転車 (じてんしゃ, jitensha)"
+  },
+  {
+    "index": 43,
+    "scrambled": "A-K-U-H-I",
+    "type": "文化 (bunka)",
+    "answer": "haiku",
+    "meaning": "haiku"
+  },
+  {
+    "index": 44,
+    "scrambled": "A-N-R-E-I-P-A-L",
+    "type": "Transport",
+    "answer": "airplane",
+    "translation": "飛行機 (ひこうき, hikouki)"
+  },
+  {
+    "index": 45,
+    "scrambled": "I-N-H-B-A-A",
+    "type": "イベント (ibento)",
+    "answer": "hanabi",
+    "meaning": "fireworks"
+  },
+  {
+    "index": 46,
+    "scrambled": "N-A-R-I-T",
+    "type": "Transport",
+    "answer": "train",
+    "translation": "電車 (でんしゃ, densha)"
+  },
+  {
+    "index": 47,
+    "scrambled": "D-N-E-K-O-I-O",
+    "type": "道具 (dougu)",
+    "answer": "ondokei",
+    "meaning": "thermometer"
+  },
+  {
+    "index": 48,
+    "scrambled": "A-R-E-C-M-A",
+    "type": "Technology",
+    "answer": "camera",
+    "translation": "カメラ (kamera)"
+  },
+  {
+    "index": 49,
+    "scrambled": "N-A-D-S-H-E",
+    "type": "交通 (koutsuu)",
+    "answer": "densha",
+    "meaning": "train"
+  },
+  {
+    "index": 50,
+    "scrambled": "C-W-H-T-A",
+    "type": "Accessory",
+    "answer": "watch",
+    "translation": "腕時計 (うでどけい, udedokei)"
+  },
+  {
+    "index": 51,
+    "scrambled": "N-A-S-K-T-O-H-O",
+    "type": "場所 (basho)",
+    "answer": "toshokan",
+    "meaning": "library"
+  },
+  {
+    "index": 52,
+    "scrambled": "I-R-T-H-S",
+    "type": "Clothing",
+    "answer": "shirt",
+    "translation": "シャツ (shatsu)"
+  },
+  {
+    "index": 53,
+    "scrambled": "K-G-E-A-I-N-A",
+    "type": "場所 (basho)",
+    "answer": "eigakan",
+    "meaning": "cinema"
+  },
+  {
+    "index": 54,
+    "scrambled": "S-N-A-P-T",
+    "type": "Clothing",
+    "answer": "pants",
+    "translation": "ズボン (zubon)"
+  },
+  {
+    "index": 55,
+    "scrambled": "I-C-B-A-H-I",
+    "type": "場所 (basho)",
+    "answer": "ichiba",
+    "meaning": "market"
+  },
+  {
+    "index": 56,
+    "scrambled": "O-S-E-S-H",
+    "type": "Clothing",
+    "answer": "shoes",
+    "translation": "靴 (くつ, kutsu)"
+  },
+  {
+    "index": 57,
+    "scrambled": "U-I-U-T-K-J-S-N-A-B",
+    "type": "場所 (basho)",
+    "answer": "bijutsukan",
+    "meaning": "art museum"
+  },
+  {
+    "index": 58,
+    "scrambled": "O-O-S-P-N",
+    "type": "Kitchenware",
+    "answer": "spoon",
+    "translation": "スプーン (supuun)"
+  },
+  {
+    "index": 59,
+    "scrambled": "Y-H-S-I-S-U-A",
+    "type": "場所 (basho)",
+    "answer": "sushiya",
+    "meaning": "sushi restaurant"
+  },
+  {
+    "index": 60,
+    "scrambled": "O-R-F-K",
+    "type": "Kitchenware",
+    "answer": "fork",
+    "translation": "フォーク (fooku)"
+  },
+  {
+    "index": 61,
+    "scrambled": "N-I-H-U-S-N-B",
+    "type": "媒体 (baitai)",
+    "answer": "shinbun",
+    "meaning": "newspaper"
+  },
+  {
+    "index": 62,
+    "scrambled": "K-F-E-N-I",
+    "type": "Kitchenware",
+    "answer": "knife",
+    "translation": "ナイフ (naifu)"
+  },
+  {
+    "index": 63,
+    "scrambled": "G-T-S-U-U-J-I",
+    "type": "概念 (gainen)",
+    "answer": "gijutsu",
+    "meaning": "technology"
+  },
+  {
+    "index": 64,
+    "scrambled": "C-P-U",
+    "type": "Kitchenware",
+    "answer": "cup",
+    "translation": "コップ (koppu)"
+  },
+  {
+    "index": 65,
+    "scrambled": "Y-K-O-I-U-K",
+    "type": "概念 (gainen)",
+    "answer": "kyoiku",
+    "meaning": "education"
+  },
+  {
+    "index": 66,
+    "scrambled": "E-T-A-L-P",
+    "type": "Kitchenware",
+    "answer": "plate",
+    "translation": "皿 (さら, sara)"
+  },
+  {
+    "index": 67,
+    "scrambled": "A-I-Z-K-I-E",
+    "type": "概念 (gainen)",
+    "answer": "keizai",
+    "meaning": "economy"
+  },
+  {
+    "index": 68,
+    "scrambled": "R-K-A-Y-D-B-E-O",
+    "type": "Technology",
+    "answer": "keyboard",
+    "translation": "キーボード (kiiboodo)"
+  },
+  {
+    "index": 69,
+    "scrambled": "H-S-Z-I-E-N",
+    "type": "概念 (gainen)",
+    "answer": "shizen",
+    "meaning": "nature"
+  },
+  {
+    "index": 70,
+    "scrambled": "E-S-M-U-O",
+    "type": "Technology",
+    "answer": "mouse",
+    "translation": "マウス (mausu)"
+  },
+  {
+    "index": 71,
+    "scrambled": "B-N-K-U-A",
+    "type": "概念 (gainen)",
+    "answer": "bunka",
+    "meaning": "culture"
+  },
+  {
+    "index": 72,
+    "scrambled": "M-I-R-O-N-O-T",
+    "type": "Technology",
+    "answer": "monitor",
+    "translation": "モニター (monitaa)"
+  },
+  {
+    "index": 73,
+    "scrambled": "S-U-E-J-T-G-I-U",
+    "type": "概念 (gainen)",
+    "answer": "geijutsu",
+    "meaning": "art"
+  },
+  {
+    "index": 74,
+    "scrambled": "N-T-R-E-R-I-P",
+    "type": "Technology",
+    "answer": "printer",
+    "translation": "プリンター (purintaa)"
+  },
+  {
+    "index": 75,
+    "scrambled": "U-S-S-H-I",
+    "type": "食べ物 (tabemono)",
+    "answer": "sushi",
+    "meaning": "sushi"
+  },
+  {
+    "index": 76,
+    "scrambled": "L-C-O-K-C",
+    "type": "Furniture",
+    "answer": "clock",
+    "translation": "時計 (とけい, tokei)"
+  },
+  {
+    "index": 77,
+    "scrambled": "A-A-U-K-S-R",
+    "type": "植物 (shokubutsu)",
+    "answer": "sakura",
+    "meaning": "cherry blossom"
+  },
+  {
+    "index": 78,
+    "scrambled": "D-B-E",
+    "type": "Furniture",
+    "answer": "bed",
+    "translation": "ベッド (beddo)"
+  },
+  {
+    "index": 79,
+    "scrambled": "J-A-I-N-N",
+    "type": "職業 (shokugyou)",
+    "answer": "ninja",
+    "meaning": "ninja"
+  },
+  {
+    "index": 80,
+    "scrambled": "L-P-W-O-I-L",
+    "type": "Furniture",
+    "answer": "pillow",
+    "translation": "枕 (まくら, makura)"
+  },
+  {
+    "index": 81,
+    "scrambled": "A-N-F-U-I-S-J",
+    "type": "自然 (shizen)",
+    "answer": "fujisan",
+    "meaning": "Mount Fuji"
+  },
+  {
+    "index": 82,
+    "scrambled": "A-E-K-B-N-L-T",
+    "type": "Furniture",
+    "answer": "blanket",
+    "translation": "毛布 (もうふ, moufu)"
+  },
+  {
+    "index": 83,
+    "scrambled": "N-J-A-I-J",
+    "type": "場所 (basho)",
+    "answer": "jinja",
+    "meaning": "shrine"
+  },
+  {
+    "index": 84,
+    "scrambled": "F-A-O-S",
+    "type": "Furniture",
+    "answer": "sofa",
+    "translation": "ソファ (sofa)"
+  },
+  {
+    "index": 85,
+    "scrambled": "D-U-S-A-O",
+    "type": "文化 (bunka)",
+    "answer": "sadou",
+    "meaning": "tea ceremony"
+  },
+  {
+    "index": 86,
+    "scrambled": "K-D-E-S",
+    "type": "Furniture",
+    "answer": "desk",
+    "translation": "机 (つくえ, tsukue)"
+  },
+  {
+    "index": 87,
+    "scrambled": "K-B-U-I-K-A",
+    "type": "文化 (bunka)",
+    "answer": "kabuki",
+    "meaning": "kabuki theater"
+  },
+  {
+    "index": 88,
+    "scrambled": "A-A-K-K-C-B-C-P",
+    "type": "Accessory",
+    "answer": "backpack",
+    "translation": "リュックサック (ryukkusakku)"
+  },
+  {
+    "index": 89,
+    "scrambled": "I-O-K-M-N-O",
+    "type": "衣服 (ifuku)",
+    "answer": "kimono",
+    "meaning": "kimono"
+  },
+  {
+    "index": 90,
+    "scrambled": "E-L-W-T-A-L",
+    "type": "Accessory",
+    "answer": "wallet",
+    "translation": "財布 (さいふ, saifu)"
+  },
+  {
+    "index": 91,
+    "scrambled": "F-U-N-U-R-I",
+    "type": "物 (mono)",
+    "answer": "fuurin",
+    "meaning": "wind chime"
+  },
+  {
+    "index": 92,
+    "scrambled": "Y-K-E",
+    "type": "Accessory",
+    "answer": "key",
+    "translation": "鍵 (かぎ, kagi)"
+  },
+  {
+    "index": 93,
+    "scrambled": "A-R-T-M-E-U-P",
+    "type": "食べ物 (tabemono)",
+    "answer": "tempura",
+    "meaning": "tempura"
+  },
+  {
+    "index": 94,
+    "scrambled": "R-I-T-U-A-G",
+    "type": "Music",
+    "answer": "guitar",
+    "translation": "ギター (gitaa)"
+  },
+  {
+    "index": 95,
+    "scrambled": "U-A-A-T-K-Y",
+    "type": "衣服 (ifuku)",
+    "answer": "yukata",
+    "meaning": "summer kimono"
+  },
+  {
+    "index": 96,
+    "scrambled": "P-I-N-O-A",
+    "type": "Music",
+    "answer": "piano",
+    "translation": "ピアノ (piano)"
+  },
+  {
+    "index": 97,
+    "scrambled": "U-R-M-A-I-S-T",
+    "type": "イベント (ibento)",
+    "answer": "matsuri",
+    "meaning": "festival"
+  },
+  {
+    "index": 98,
+    "scrambled": "V-I-O-I-L-N",
+    "type": "Music",
+    "answer": "violin",
+    "translation": "バイオリン (baiorin)"
+  },
+  {
+    "index": 99,
+    "scrambled": "I-N-O-B-A-S",
+    "type": "趣味 (shumi)",
+    "answer": "bonsai",
+    "meaning": "bonsai"
+  },
+  {
+    "index": 100,
+    "scrambled": "E-N-L-E-A-H-T-P",
+    "type": "Animal",
+    "answer": "elephant",
+    "translation": "象 (ぞう, zou)"
+  },
+  {
+    "index": 101,
+    "scrambled": "A-C-A-N-H-W",
+    "type": "食器 (shokki)",
+    "answer": "chawan",
+    "meaning": "tea bowl"
+  },
+  {
+    "index": 102,
+    "scrambled": "R-I-E-G-T",
+    "type": "Animal",
+    "answer": "tiger",
+    "translation": "虎 (とら, tora)"
+  },
+  {
+    "index": 103,
+    "scrambled": "N-A-A-T-A-K",
+    "type": "武器 (buki)",
+    "answer": "katana",
+    "meaning": "sword"
+  },
+  {
+    "index": 104,
+    "scrambled": "N-O-L-I",
+    "type": "Animal",
+    "answer": "lion",
+    "translation": "ライオン (raion)"
+  },
+  {
+    "index": 105,
+    "scrambled": "M-T-I-T-A-A",
+    "type": "家具 (kagu)",
+    "answer": "tatami",
+    "meaning": "tatami mat"
+  },
+  {
+    "index": 106,
+    "scrambled": "Z-R-B-E-A",
+    "type": "Animal",
+    "answer": "zebra",
+    "translation": "シマウマ (shimauma)"
+  },
+  {
+    "index": 107,
+    "scrambled": "O-C-I-C-H-H-U-N",
+    "type": "物 (mono)",
+    "answer": "chouchin",
+    "meaning": "lantern"
+  },
+  {
+    "index": 108,
+    "scrambled": "F-R-G-A-F-E-I",
+    "type": "Animal",
+    "answer": "giraffe",
+    "translation": "キリン (kirin)"
+  },
+  {
+    "index": 109,
+    "scrambled": "S-N-N-E-O",
+    "type": "場所 (basho)",
+    "answer": "onsen",
+    "meaning": "hot spring"
+  },
+  {
+    "index": 110,
+    "scrambled": "K-A-N-O-A-G-O-R",
+    "type": "Animal",
+    "answer": "kangaroo",
+    "translation": "カンガルー (kangaruu)"
+  },
+  {
+    "index": 111,
+    "scrambled": "M-S-I-R-U-A-A",
+    "type": "職業 (shokugyou)",
+    "answer": "samurai",
+    "meaning": "samurai"
+  },
+  {
+    "index": 112,
+    "scrambled": "O-M-E-K-N-Y",
+    "type": "Animal",
+    "answer": "monkey",
+    "translation": "猿 (さる, saru)"
+  },
+  {
+    "index": 113,
+    "scrambled": "A-H-C-Y-A",
+    "type": "場所 (basho)",
+    "answer": "chaya",
+    "meaning": "teahouse"
+  },
+  {
+    "index": 114,
+    "scrambled": "P-D-A-N-A",
+    "type": "Animal",
+    "answer": "panda",
+    "translation": "パンダ (panda)"
+  },
+  {
+    "index": 115,
+    "scrambled": "K-U-I-U-F-E",
+    "type": "自然 (shizen)",
+    "answer": "fuukei",
+    "meaning": "scenery"
+  },
+  {
+    "index": 116,
+    "scrambled": "A-K-A-O-L",
+    "type": "Animal",
+    "answer": "koala",
+    "translation": "コアラ (koara)"
+  },
+  {
+    "index": 117,
+    "scrambled": "U-I-A-K-H",
+    "type": "文化 (bunka)",
+    "answer": "haiku",
+    "meaning": "haiku"
+  },
+  {
+    "index": 118,
+    "scrambled": "A-B-R-T-B-I",
+    "type": "Animal",
+    "answer": "rabbit",
+    "translation": "うさぎ (usagi)"
+  },
+  {
+    "index": 119,
+    "scrambled": "B-A-N-H-I-A",
+    "type": "イベント (ibento)",
+    "answer": "hanabi",
+    "meaning": "fireworks"
+  },
+  {
+    "index": 120,
+    "scrambled": "G-D-O",
+    "type": "Animal",
+    "answer": "dog",
+    "translation": "犬 (いぬ, inu)"
+  },
+  {
+    "index": 121,
+    "scrambled": "N-O-E-K-O-I-D",
+    "type": "道具 (dougu)",
+    "answer": "ondokei",
+    "meaning": "thermometer"
+  },
+  {
+    "index": 122,
+    "scrambled": "T-C-A",
+    "type": "Animal",
+    "answer": "cat",
+    "translation": "猫 (ねこ, neko)"
+  },
+  {
+    "index": 123,
+    "scrambled": "A-E-D-H-S-N",
+    "type": "交通 (koutsuu)",
+    "answer": "densha",
+    "meaning": "train"
+  },
+  {
+    "index": 124,
+    "scrambled": "F-I-H-S",
+    "type": "Animal",
+    "answer": "fish",
+    "translation": "魚 (さかな, sakana)"
+  },
+  {
+    "index": 125,
+    "scrambled": "N-K-O-T-O-H-A-S",
+    "type": "場所 (basho)",
+    "answer": "toshokan",
+    "meaning": "library"
+  },
+  {
+    "index": 126,
+    "scrambled": "A-H-E-L-W",
+    "type": "Animal",
+    "answer": "whale",
+    "translation": "鯨 (くじら, kujira)"
+  },
+  {
+    "index": 127,
+    "scrambled": "K-A-N-A-G-E-I",
+    "type": "場所 (basho)",
+    "answer": "eigakan",
+    "meaning": "cinema"
+  },
+  {
+    "index": 128,
+    "scrambled": "D-H-O-N-I-L-P",
+    "type": "Animal",
+    "answer": "dolphin",
+    "translation": "イルカ (iruka)"
+  },
+  {
+    "index": 129,
+    "scrambled": "C-A-B-I-I-H",
+    "type": "場所 (basho)",
+    "answer": "ichiba",
+    "meaning": "market"
+  },
+  {
+    "index": 130,
+    "scrambled": "R-S-K-H-A",
+    "type": "Animal",
+    "answer": "shark",
+    "translation": "サメ (same)"
+  },
+  {
+    "index": 131,
+    "scrambled": "K-J-S-U-T-A-I-U-N-B",
+    "type": "場所 (basho)",
+    "answer": "bijutsukan",
+    "meaning": "art museum"
+  },
+  {
+    "index": 132,
+    "scrambled": "L-R-E-U-T-T",
+    "type": "Animal",
+    "answer": "turtle",
+    "translation": "亀 (かめ, kame)"
+  },
+  {
+    "index": 133,
+    "scrambled": "Y-I-H-S-U-S-A",
+    "type": "場所 (basho)",
+    "answer": "sushiya",
+    "meaning": "sushi restaurant"
+  },
+  {
+    "index": 134,
+    "scrambled": "R-G-O-F",
+    "type": "Animal",
+    "answer": "frog",
+    "translation": "蛙 (かえる, kaeru)"
+  },
+  {
+    "index": 135,
+    "scrambled": "H-S-N-U-N-B-I",
+    "type": "媒体 (baitai)",
+    "answer": "shinbun",
+    "meaning": "newspaper"
+  },
+  {
+    "index": 136,
+    "scrambled": "A-K-E-N-S",
+    "type": "Animal",
+    "answer": "snake",
+    "translation": "蛇 (へび, hebi)"
+  },
+  {
+    "index": 137,
+    "scrambled": "I-U-J-G-T-S-U",
+    "type": "概念 (gainen)",
+    "answer": "gijutsu",
+    "meaning": "technology"
+  },
+  {
+    "index": 138,
+    "scrambled": "T-U-E-L-B-T-Y-F-R",
+    "type": "Animal",
+    "answer": "butterfly",
+    "translation": "蝶 (ちょう, chou)"
+  },
+  {
+    "index": 139,
+    "scrambled": "K-O-Y-U-K-I",
+    "type": "概念 (gainen)",
+    "answer": "kyoiku",
+    "meaning": "education"
+  },
+  {
+    "index": 140,
+    "scrambled": "I-E-S-D-P-R",
+    "type": "Animal",
+    "answer": "spider",
+    "translation": "蜘蛛 (くも, kuma)"
+  },
+  {
+    "index": 141,
+    "scrambled": "K-I-E-Z-I-A",
+    "type": "概念 (gainen)",
+    "answer": "keizai",
+    "meaning": "economy"
+  },
+  {
+    "index": 142,
+    "scrambled": "A-N-T",
+    "type": "Animal",
+    "answer": "ant",
+    "translation": "蟻 (あり, ari)"
+  },
+  {
+    "index": 143,
+    "scrambled": "Z-N-E-S-H-I",
+    "type": "概念 (gainen)",
+    "answer": "shizen",
+    "meaning": "nature"
+  },
+  {
+    "index": 144,
+    "scrambled": "E-E-B",
+    "type": "Animal",
+    "answer": "bee",
+    "translation": "蜂 (はち, hachi)"
+  },
+  {
+    "index": 145,
+    "scrambled": "N-B-U-K-A",
+    "type": "概念 (gainen)",
+    "answer": "bunka",
+    "meaning": "culture"
+  },
+  {
+    "index": 146,
+    "scrambled": "A-C-R-B",
+    "type": "Animal",
+    "answer": "crab",
+    "translation": "蟹 (かに, kani)"
+  },
+  {
+    "index": 147,
+    "scrambled": "G-J-S-U-T-I-E-U",
+    "type": "概念 (gainen)",
+    "answer": "geijutsu",
+    "meaning": "art"
+  },
+  {
+    "index": 148,
+    "scrambled": "I-R-P-H-S-M",
+    "type": "Animal",
+    "answer": "shrimp",
+    "translation": "えび (ebi)"
+  },
+  {
+    "index": 149,
+    "scrambled": "U-S-S-I-H",
+    "type": "食べ物 (tabemono)",
+    "answer": "sushi",
+    "meaning": "sushi"
+  },
+  {
+    "index": 150,
+    "scrambled": "O-B-L-T-R-S-E",
+    "type": "Animal",
+    "answer": "lobster",
+    "translation": "ロブスター (robusutaa)"
+  },
+  {
+    "index": 151,
+    "scrambled": "R-S-A-U-A-K",
+    "type": "植物 (shokubutsu)",
+    "answer": "sakura",
+    "meaning": "cherry blossom"
+  },
+  {
+    "index": 152,
+    "scrambled": "R-O-E-S",
+    "type": "Plant",
+    "answer": "rose",
+    "translation": "バラ (bara)"
+  },
+  {
+    "index": 153,
+    "scrambled": "N-A-I-N-J",
+    "type": "職業 (shokugyou)",
+    "answer": "ninja",
+    "meaning": "ninja"
+  },
+  {
+    "index": 154,
+    "scrambled": "T-P-U-I-L",
+    "type": "Plant",
+    "answer": "tulip",
+    "translation": "チューリップ (chuurippu)"
+  },
+  {
+    "index": 155,
+    "scrambled": "N-S-I-A-F-U-J",
+    "type": "自然 (shizen)",
+    "answer": "fujisan",
+    "meaning": "Mount Fuji"
+  },
+  {
+    "index": 156,
+    "scrambled": "A-O-K",
+    "type": "Plant",
+    "answer": "oak",
+    "translation": "樫 (かし, kashi)"
+  },
+  {
+    "index": 157,
+    "scrambled": "J-J-N-A-I",
+    "type": "場所 (basho)",
+    "answer": "jinja",
+    "meaning": "shrine"
+  },
+  {
+    "index": 158,
+    "scrambled": "P-I-E-N",
+    "type": "Plant",
+    "answer": "pine",
+    "translation": "松 (まつ, matsu)"
+  },
+  {
+    "index": 159,
+    "scrambled": "D-U-O-A-S",
+    "type": "文化 (bunka)",
+    "answer": "sadou",
+    "meaning": "tea ceremony"
+  },
+  {
+    "index": 160,
+    "scrambled": "E-M-L-A-P",
+    "type": "Plant",
+    "answer": "maple",
+    "translation": "楓 (かえで, kaede)"
+  },
+  {
+    "index": 161,
+    "scrambled": "B-K-U-A-K-I",
+    "type": "文化 (bunka)",
+    "answer": "kabuki",
+    "meaning": "kabuki theater"
+  },
+  {
+    "index": 162,
+    "scrambled": "A-O-B-M-O-B",
+    "type": "Plant",
+    "answer": "bamboo",
+    "translation": "竹 (たけ, take)"
+  },
+  {
+    "index": 163,
+    "scrambled": "M-I-N-K-O-O",
+    "type": "衣服 (ifuku)",
+    "answer": "kimono",
+    "meaning": "kimono"
+  },
+  {
+    "index": 164,
+    "scrambled": "E-C-H-R-Y-R",
+    "type": "Plant",
+    "answer": "cherry",
+    "translation": "桜 (さくら, sakura)"
+  },
+  {
+    "index": 165,
+    "scrambled": "U-I-N-R-U-F",
+    "type": "物 (mono)",
+    "answer": "fuurin",
+    "meaning": "wind chime"
+  },
+  {
+    "index": 166,
+    "scrambled": "A-N-M-O-G",
+    "type": "Food",
+    "answer": "mango",
+    "translation": "マンゴー (mangoo)"
+  },
+  {
+    "index": 167,
+    "scrambled": "R-P-T-M-U-A-E",
+    "type": "食べ物 (tabemono)",
+    "answer": "tempura",
+    "meaning": "tempura"
+  },
+  {
+    "index": 168,
+    "scrambled": "E-N-M-O-L",
+    "type": "Food",
+    "answer": "lemon",
+    "translation": "レモン (remon)"
+  },
+  {
+    "index": 169,
+    "scrambled": "Y-K-U-A-A-T",
+    "type": "衣服 (ifuku)",
+    "answer": "yukata",
+    "meaning": "summer kimono"
+  },
+  {
+    "index": 170,
+    "scrambled": "R-O-E-A-N-G",
+    "type": "Food",
+    "answer": "orange",
+    "translation": "オレンジ (orenji)"
+  },
+  {
+    "index": 171,
+    "scrambled": "S-I-T-A-M-R-U",
+    "type": "イベント (ibento)",
+    "answer": "matsuri",
+    "meaning": "festival"
+  },
+  {
+    "index": 172,
+    "scrambled": "R-E-P-G-A",
+    "type": "Food",
+    "answer": "grape",
+    "translation": "ぶどう (budou)"
+  },
+  {
+    "index": 173,
+    "scrambled": "I-N-S-B-A-O",
+    "type": "趣味 (shumi)",
+    "answer": "bonsai",
+    "meaning": "bonsai"
+  },
+  {
+    "index": 174,
+    "scrambled": "M-T-O-T-O-A",
+    "type": "Food",
+    "answer": "tomato",
+    "translation": "トマト (tomato)"
+  },
+  {
+    "index": 175,
+    "scrambled": "C-N-W-A-A-H",
+    "type": "食器 (shokki)",
+    "answer": "chawan",
+    "meaning": "tea bowl"
+  },
+  {
+    "index": 176,
+    "scrambled": "P-E-L-P-A",
+    "type": "Food",
+    "answer": "apple",
+    "translation": "りんご (ringo)"
+  },
+  {
+    "index": 177,
+    "scrambled": "A-N-T-A-K-A",
+    "type": "武器 (buki)",
+    "answer": "katana",
+    "meaning": "sword"
+  },
+  {
+    "index": 178,
+    "scrambled": "N-A-A-B-A-N",
+    "type": "Food",
+    "answer": "banana",
+    "translation": "バナナ (banana)"
+  },
+  {
+    "index": 179,
+    "scrambled": "A-T-A-I-M-T",
+    "type": "家具 (kagu)",
+    "answer": "tatami",
+    "meaning": "tatami mat"
+  },
+  {
+    "index": 180,
+    "scrambled": "C-O-U-E-P-M-T-R",
+    "type": "Technology",
+    "answer": "computer",
+    "translation": "コンピュータ (konpyuuta)"
+  },
+  {
+    "index": 181,
+    "scrambled": "H-H-O-U-I-C-C-N",
+    "type": "物 (mono)",
+    "answer": "chouchin",
+    "meaning": "lantern"
+  },
+  {
+    "index": 182,
+    "scrambled": "H-N-P-O-E",
+    "type": "Technology",
+    "answer": "phone",
+    "translation": "電話 (でんわ, denwa)"
+  },
+  {
+    "index": 183,
+    "scrambled": "E-N-S-O-N",
+    "type": "場所 (basho)",
+    "answer": "onsen",
+    "meaning": "hot spring"
+  },
+  {
+    "index": 184,
+    "scrambled": "B-A-L-T-E",
+    "type": "Furniture",
+    "answer": "table",
+    "translation": "テーブル (teeburu)"
+  },
+  {
+    "index": 185,
+    "scrambled": "I-A-S-M-U-A-R",
+    "type": "職業 (shokugyou)",
+    "answer": "samurai",
+    "meaning": "samurai"
+  },
+  {
+    "index": 186,
+    "scrambled": "R-A-H-C-I",
+    "type": "Furniture",
+    "answer": "chair",
+    "translation": "椅子 (いす, isu)"
+  },
+  {
+    "index": 187,
+    "scrambled": "A-C-H-A-Y",
+    "type": "場所 (basho)",
+    "answer": "chaya",
+    "meaning": "teahouse"
+  },
+  {
+    "index": 188,
+    "scrambled": "S-L-O-O-H-C",
+    "type": "Place",
+    "answer": "school",
+    "translation": "学校 (がっこう, gakkou)"
+  },
+  {
+    "index": 189,
+    "scrambled": "I-E-U-F-K-U",
+    "type": "自然 (shizen)",
+    "answer": "fuukei",
+    "meaning": "scenery"
+  },
+  {
+    "index": 190,
+    "scrambled": "E-R-I-R-V",
+    "type": "Nature",
+    "answer": "river",
+    "translation": "川 (かわ, kawa)"
+  },
+  {
+    "index": 191,
+    "scrambled": "U-A-I-H-K",
+    "type": "文化 (bunka)",
+    "answer": "haiku",
+    "meaning": "haiku"
+  },
+  {
+    "index": 192,
+    "scrambled": "N-A-N-U-T-O-M-I",
+    "type": "Nature",
+    "answer": "mountain",
+    "translation": "山 (やま, yama)"
+  },
+  {
+    "index": 193,
+    "scrambled": "N-A-B-H-A-I",
+    "type": "イベント (ibento)",
+    "answer": "hanabi",
+    "meaning": "fireworks"
+  },
+  {
+    "index": 194,
+    "scrambled": "B-O-K-O",
+    "type": "Object",
+    "answer": "book",
+    "translation": "本 (ほん, hon)"
+  },
+  {
+    "index": 195,
+    "scrambled": "N-I-D-K-O-O-E",
+    "type": "道具 (dougu)",
+    "answer": "ondokei",
+    "meaning": "thermometer"
+  },
+  {
+    "index": 196,
+    "scrambled": "E-P-N",
+    "type": "Stationery",
+    "answer": "pen",
+    "translation": "ペン (pen)"
+  },
+  {
+    "index": 197,
+    "scrambled": "S-E-A-D-H-N",
+    "type": "交通 (koutsuu)",
+    "answer": "densha",
+    "meaning": "train"
+  },
+  {
+    "index": 198,
+    "scrambled": "N-C-I-L-E-P",
+    "type": "Stationery",
+    "answer": "pencil",
+    "translation": "鉛筆 (えんぴつ, enpitsu)"
+  },
+  {
+    "index": 199,
+    "scrambled": "T-A-O-O-N-K-H-S",
+    "type": "場所 (basho)",
+    "answer": "toshokan",
+    "meaning": "library"
+  },
+  {
+    "index": 200,
+    "scrambled": "M-A-L-P",
+    "type": "Furniture",
+    "answer": "lamp",
+    "translation": "ランプ (ranpu)"
+  },
+  {
+    "index": 201,
+    "scrambled": "N-E-G-A-A-I-K",
+    "type": "場所 (basho)",
+    "answer": "eigakan",
+    "meaning": "cinema"
+  },
+  {
+    "index": 202,
+    "scrambled": "E-L-O-T-T-B",
+    "type": "Object",
+    "answer": "bottle",
+    "translation": "瓶 (びん, bin)"
+  },
+  {
+    "index": 203,
+    "scrambled": "A-C-I-B-H-I",
+    "type": "場所 (basho)",
+    "answer": "ichiba",
+    "meaning": "market"
+  },
+  {
+    "index": 204,
+    "scrambled": "W-N-W-O-D-I",
+    "type": "Architecture",
+    "answer": "window",
+    "translation": "窓 (まど, mado)"
+  },
+  {
+    "index": 205,
+    "scrambled": "B-K-S-T-I-J-U-U-N-A",
+    "type": "場所 (basho)",
+    "answer": "bijutsukan",
+    "meaning": "art museum"
+  },
+  {
+    "index": 206,
+    "scrambled": "O-D-R-O",
+    "type": "Architecture",
+    "answer": "door",
+    "translation": "ドア (doa)"
+  },
+  {
+    "index": 207,
+    "scrambled": "A-S-U-I-H-Y-S",
+    "type": "場所 (basho)",
+    "answer": "sushiya",
+    "meaning": "sushi restaurant"
+  },
+  {
+    "index": 208,
+    "scrambled": "R-E-T-E",
+    "type": "Nature",
+    "answer": "tree",
+    "translation": "木 (き, ki)"
+  },
+  {
+    "index": 209,
+    "scrambled": "U-N-H-S-I-N-B",
+    "type": "媒体 (baitai)",
+    "answer": "shinbun",
+    "meaning": "newspaper"
+  },
+  {
+    "index": 210,
+    "scrambled": "L-R-O-F-W-E",
+    "type": "Nature",
+    "answer": "flower",
+    "translation": "花 (はな, hana)"
+  },
+  {
+    "index": 211,
+    "scrambled": "U-J-T-G-I-S-U",
+    "type": "概念 (gainen)",
+    "answer": "gijutsu",
+    "meaning": "technology"
+  },
+  {
+    "index": 212,
+    "scrambled": "A-G-N-D-E-R",
+    "type": "Place",
+    "answer": "garden",
+    "translation": "庭 (にわ, niwa)"
+  },
+  {
+    "index": 213,
+    "scrambled": "K-U-Y-I-K-O",
+    "type": "概念 (gainen)",
+    "answer": "kyoiku",
+    "meaning": "education"
+  },
+  {
+    "index": 214,
+    "scrambled": "U-I-S-M-C",
+    "type": "Art",
+    "answer": "music",
+    "translation": "音楽 (おんがく, ongaku)"
+  },
+  {
+    "index": 215,
+    "scrambled": "Z-K-A-I-I-E",
+    "type": "概念 (gainen)",
+    "answer": "keizai",
+    "meaning": "economy"
+  },
+  {
+    "index": 216,
+    "scrambled": "O-E-V-M-I",
+    "type": "Art",
+    "answer": "movie",
+    "translation": "映画 (えいが, eiga)"
+  },
+  {
+    "index": 217,
+    "scrambled": "E-N-S-I-H-Z",
+    "type": "概念 (gainen)",
+    "answer": "shizen",
+    "meaning": "nature"
+  },
+  {
+    "index": 218,
+    "scrambled": "L-Y-I-C-E-B-C",
+    "type": "Transport",
+    "answer": "bicycle",
+    "translation": "自転車 (じてんしゃ, jitensha)"
+  },
+  {
+    "index": 219,
+    "scrambled": "B-K-N-A-U",
+    "type": "概念 (gainen)",
+    "answer": "bunka",
+    "meaning": "culture"
+  },
+  {
+    "index": 220,
+    "scrambled": "A-L-E-P-A-N-I-R",
+    "type": "Transport",
+    "answer": "airplane",
+    "translation": "飛行機 (ひこうき, hikouki)"
+  },
+  {
+    "index": 221,
+    "scrambled": "G-S-I-J-T-E-U-U",
+    "type": "概念 (gainen)",
+    "answer": "geijutsu",
+    "meaning": "art"
+  },
+  {
+    "index": 222,
+    "scrambled": "R-T-N-A-I",
+    "type": "Transport",
+    "answer": "train",
+    "translation": "電車 (でんしゃ, densha)"
+  },
+  {
+    "index": 223,
+    "scrambled": "U-S-I-S-H",
+    "type": "食べ物 (tabemono)",
+    "answer": "sushi",
+    "meaning": "sushi"
+  },
+  {
+    "index": 224,
+    "scrambled": "A-A-R-M-E-C",
+    "type": "Technology",
+    "answer": "camera",
+    "translation": "カメラ (kamera)"
+  },
+  {
+    "index": 225,
+    "scrambled": "S-R-A-K-U-A",
+    "type": "植物 (shokubutsu)",
+    "answer": "sakura",
+    "meaning": "cherry blossom"
+  },
+  {
+    "index": 226,
+    "scrambled": "T-W-H-C-A",
+    "type": "Accessory",
+    "answer": "watch",
+    "translation": "腕時計 (うでどけい, udedokei)"
+  },
+  {
+    "index": 227,
+    "scrambled": "N-A-N-J-I",
+    "type": "職業 (shokugyou)",
+    "answer": "ninja",
+    "meaning": "ninja"
+  },
+  {
+    "index": 228,
+    "scrambled": "S-H-R-I-T",
+    "type": "Clothing",
+    "answer": "shirt",
+    "translation": "シャツ (shatsu)"
+  },
+  {
+    "index": 229,
+    "scrambled": "U-S-N-J-I-A-F",
+    "type": "自然 (shizen)",
+    "answer": "fujisan",
+    "meaning": "Mount Fuji"
+  },
+  {
+    "index": 230,
+    "scrambled": "N-P-A-T-S",
+    "type": "Clothing",
+    "answer": "pants",
+    "translation": "ズボン (zubon)"
+  },
+  {
+    "index": 231,
+    "scrambled": "I-J-J-N-A",
+    "type": "場所 (basho)",
+    "answer": "jinja",
+    "meaning": "shrine"
+  },
+  {
+    "index": 232,
+    "scrambled": "H-S-E-O-S",
+    "type": "Clothing",
+    "answer": "shoes",
+    "translation": "靴 (くつ, kutsu)"
+  },
+  {
+    "index": 233,
+    "scrambled": "O-D-A-U-S",
+    "type": "文化 (bunka)",
+    "answer": "sadou",
+    "meaning": "tea ceremony"
+  },
+  {
+    "index": 234,
+    "scrambled": "P-N-O-O-S",
+    "type": "Kitchenware",
+    "answer": "spoon",
+    "translation": "スプーン (supuun)"
+  },
+  {
+    "index": 235,
+    "scrambled": "I-A-U-K-B-K",
+    "type": "文化 (bunka)",
+    "answer": "kabuki",
+    "meaning": "kabuki theater"
+  },
+  {
+    "index": 236,
+    "scrambled": "K-R-F-O",
+    "type": "Kitchenware",
+    "answer": "fork",
+    "translation": "フォーク (fooku)"
+  },
+  {
+    "index": 237,
+    "scrambled": "O-I-K-O-M-N",
+    "type": "衣服 (ifuku)",
+    "answer": "kimono",
+    "meaning": "kimono"
+  },
+  {
+    "index": 238,
+    "scrambled": "K-N-E-I-F",
+    "type": "Kitchenware",
+    "answer": "knife",
+    "translation": "ナイフ (naifu)"
+  },
+  {
+    "index": 239,
+    "scrambled": "U-U-I-N-R-F",
+    "type": "物 (mono)",
+    "answer": "fuurin",
+    "meaning": "wind chime"
+  },
+  {
+    "index": 240,
+    "scrambled": "C-U-P",
+    "type": "Kitchenware",
+    "answer": "cup",
+    "translation": "コップ (koppu)"
+  },
+  {
+    "index": 241,
+    "scrambled": "R-P-E-T-M-U-A",
+    "type": "食べ物 (tabemono)",
+    "answer": "tempura",
+    "meaning": "tempura"
+  },
+  {
+    "index": 242,
+    "scrambled": "T-E-L-P-A",
+    "type": "Kitchenware",
+    "answer": "plate",
+    "translation": "皿 (さら, sara)"
+  },
+  {
+    "index": 243,
+    "scrambled": "Y-U-T-A-K-A",
+    "type": "衣服 (ifuku)",
+    "answer": "yukata",
+    "meaning": "summer kimono"
+  },
+  {
+    "index": 244,
+    "scrambled": "O-R-Y-K-B-D-A-E",
+    "type": "Technology",
+    "answer": "keyboard",
+    "translation": "キーボード (kiiboodo)"
+  },
+  {
+    "index": 245,
+    "scrambled": "I-R-T-S-M-A-U",
+    "type": "イベント (ibento)",
+    "answer": "matsuri",
+    "meaning": "festival"
+  },
+  {
+    "index": 246,
+    "scrambled": "O-U-E-M-S",
+    "type": "Technology",
+    "answer": "mouse",
+    "translation": "マウス (mausu)"
+  },
+  {
+    "index": 247,
+    "scrambled": "O-A-I-S-N-B",
+    "type": "趣味 (shumi)",
+    "answer": "bonsai",
+    "meaning": "bonsai"
+  },
+  {
+    "index": 248,
+    "scrambled": "M-N-O-I-R-T-O",
+    "type": "Technology",
+    "answer": "monitor",
+    "translation": "モニター (monitaa)"
+  },
+  {
+    "index": 249,
+    "scrambled": "H-C-A-W-A-N",
+    "type": "食器 (shokki)",
+    "answer": "chawan",
+    "meaning": "tea bowl"
+  }
+]

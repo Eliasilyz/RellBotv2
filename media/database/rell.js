@@ -1,3 +1,0 @@
-{
-	//Rell-MD Is HERE!!
-}
