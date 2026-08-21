@@ -21,9 +21,6 @@ const readmore = more.repeat(4800);
 const autoBackup = require('./backup.js');
 const cron = require('node-cron');
 
-const { Client } = require("saweria");
-const saweriaapi = new Client();
-
 const pino = require("pino");
 
 const store = makeInMemoryStore({
@@ -233,35 +230,6 @@ async function startSesi() {
       global.currentIndex = (global.currentIndex + 1) % truthjson.length;
     }
   }, 15 * 1000);
-
-  saweriaapi.on("login", (user) => {
-    console.log("Logged in as: ", user.username);
-  });
-
-  saweriaapi.on("donations", async (donations) => {
-    for (const donation of donations) {
-      const donasi = `${donation.donator}さんが${donation.amount}ルピアを寄付しました\n\nメッセージ：${donation.message || "ありがとう"}`;
-      await sock.sendMessage("62881026950162@s.whatsapp.net", { text: donasi });
-      const idch = "120363400223227222@newsletter";
-      const ppnyauser = "https://files.catbox.moe/h5jr7d.jpg";
-      await sock.sendMessage(idch, {
-        text: donation.message || "ありがとう",
-        contextInfo: {
-          isForwarded: false,
-          externalAdReply: {
-            title: donation.donator,
-            body: `*${donation.amount}* ルピア相当の寄付をお願いします`,
-            thumbnailUrl: ppnyauser,
-            mediaType: 1,
-            renderLargerThumbnail: false,
-          },
-        },
-      });
-    }
-  });
-  //saweriaapi.login("farelcuy122@gmail.com", "koclok890")
-  saweriaapi.login("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjdXJyZW5jeSI6IklEUiIsImlkIjoiMmY3YmY2OTktOTc0MS00MzM3LWIxZWItMjEyN2RhZjdhY2I4IiwiZW1haWwiOiJmYXJlbGN1eTEyMkBnbWFpbC5jb20iLCJ1c2VybmFtZSI6InJlaW4xMjIiLCJ0aWVyX2tleSI6IkJBU0lDIiwiaXNzIjoic2F3ZXJpYS1sb2dpbiIsImlhdCI6MTc1MDM0OTQxNSwiZXhwIjoxNzUwNjA4NjE1LCJqdGkiOiIzM2MzMzgyZi0zZmQzLTQzNzUtODRhNS0xMjY3NmM3Zjc4NmUifQ.fUGgK-5qmrir_3MOb92-cjnVgzuzdK3ZehpAcme8Yas"
-  );
 
   cron.schedule('0 0,1 * * *', () => {
     autoBackup(sock, '62881026950162@s.whatsapp.net');
