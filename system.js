@@ -3899,7 +3899,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (isPlayingGame(m.sender)) return reply("🎮 現在、他のクイズをプレイ中です！");
           if (m.sender in guesselementgame) return reply("❗ まだ終了していないゲームがあります！");
 
-          const data = JSON.parse(fs.readFileSync("./all/json/game/quiz.json"));
+          const data = JSON.parse(fs.readFileSync("./all/json/game/chemistry.json"));
           const { element, answer } = FUNC.pickRandom(data);
           console.log("答え: " + answer);
           const teks = `🧪 *化学クイズ*\n🔬 お題: ${element}\n⏰ 制限時間: ${gamewaktu} 秒`;
