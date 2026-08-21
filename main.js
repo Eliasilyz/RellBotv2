@@ -118,7 +118,6 @@ async function startSesi() {
       return { conversation: "" };
     },
     patchMessageBeforeSending: async (msg) => {
-      // Memastikan pre-keys di-upload ulang jika diperlukan oleh server
       await sock.uploadPreKeysToServerIfRequired();
       return msg;
     }
@@ -126,11 +125,11 @@ async function startSesi() {
 
   const sock = func.makeWASocket(connectionOptions);
   if (usePairingCode && !sock.authState.creds.registered) {
-    var phoneNumber = await question(chalk.black(chalk.bgCyan(`\n番号を入力してください:\n`)));
+    var phoneNumber = await question(chalk.black(chalk.bgCyan(`\nPlease enter your phone number:\n`)));
     phoneNumber = phoneNumber.replace(/[^0-9]/g, "");
     var code = await sock.requestPairingCode(phoneNumber.trim());
     code = code?.match(/.{1,4}/g)?.join("-") || code;
-    console.log(chalk.black(chalk.bgCyan(`コード : `)), chalk.black(chalk.bgWhite(code)));
+    console.log(chalk.black(chalk.bgCyan(`Code : `)), chalk.black(chalk.bgWhite(code)));
   }
 
   sock.ev.on("creds.update", await saveCreds);
@@ -223,7 +222,7 @@ async function startSesi() {
 
   setInterval(async () => {
     if (global.db.data.settings.autobio) {
-      const truthjson = [`Rein 👑 || ${getIdPengguna().length} 人のアクティブユーザー`, `Rein 👑 || Status: ${global.db.data.settings.public == false ? "メンテナンス" : "オンライン"}`];
+      const truthjson = [`Rein 👑 || ${getIdPengguna().length} Active Users`, `Rein 👑 || Status: ${global.db.data.settings.public == false ? "Maintenance" : "Online"}`];
       if (!global.currentIndex) global.currentIndex = 0;
       const truth = truthjson[global.currentIndex];
       sock.updateProfileStatus(truth).catch((_) => _);
@@ -271,7 +270,7 @@ async function startSesi() {
             contextInfo: buildContextInfo({
               mentionedJid: tagList,
               title: userName,
-              body: "Kaede (楓) 2k25",
+              body: global.namabot2,
               thumbnailUrl: userPp,
             }),
           });
@@ -285,7 +284,7 @@ async function startSesi() {
             contextInfo: buildContextInfo({
               mentionedJid: tagList,
               title: userName,
-              body: "Kaede (楓) 2k25",
+              body: global.namabot2,
               thumbnailUrl: userPp,
             }),
           });

@@ -72,14 +72,14 @@ const redeemCodeSchema = new mongoose.Schema(
 const waifuSchema = new mongoose.Schema(
  {
   name: { type: String, required: true },
-  source: { type: String, default: "不明" },
+  source: { type: String, default: "Unknown" },
   image: { type: String, required: true },
   rarity: {
    type: String,
    enum: ["⭐ C", "⭐⭐ R", "⭐⭐⭐ SR", "🌟🌟🌟🌟 UR", "✨✨✨ SSR"],
    default: "⭐ C",
   },
-  description: { type: String, default: "説明なし" },
+  description: { type: String, default: "No description" },
   createdAt: { type: Date, default: Date.now },
  },
  { timestamps: true }

@@ -43,13 +43,13 @@ exports.formatNumber2 = (num) => {
 exports.Greetings = () => {
  const hour = moment().tz("Asia/Tokyo").hour();
  if (hour >= 4 && hour < 10) {
-  return "☀️ おはよう";
+  return "☀️ Good morning";
  } else if (hour >= 10 && hour < 18) {
-  return "🌤️ こんにちは";
+  return "🌤️ Good afternoon";
  } else if (hour >= 18 && hour < 24) {
-  return "🌙 こんばんは";
+  return "🌙 Good evening";
  } else {
-  return "🌌 おやすみ";
+  return "🌌 Good night";
  }
 };
 
@@ -377,28 +377,28 @@ exports.generateUserProfile = function (userData) {
  const formatDate = (date) => (date && date !== "-" ? moment(date).tz(timezone).format("YY/MM/DD HH:mm") : "-");
 
  return `
-👤 *プロフィール - ${username}*
-🆔 ユーザーID: *${id}*
+👤 *PROFILE - ${username}*
+🆔 User ID: *${id}*
 
-📊 *ステータス:*
-• 🎚️ レベル: *${level}*
-• 🔋 経験値: *${exp} / ${requiredExp} XP*
-• 💞 ハーレム人数: *${haremCount}*
-• 🎲 ガチャ回数: *${gachaCount}*
+📊 *STATUS:*
+• 🎚️ Level: *${level}*
+• 🔋 EXP: *${exp} / ${requiredExp} XP*
+• 💞 Harem: *${haremCount}*
+• 🎲 Gacha Count: *${gachaCount}*
 
-🎟️ *チケット:*
-• 🔄 リロールチケット: *${tickets} 枚*
-• 📦 リミット使用: *${50 - limit} / ${limitMax}*
+🎟️ *TICKETS:*
+• 🔄 Reroll Tickets: *${tickets}*
+• 📦 Limit Used: *${50 - limit} / ${limitMax}*
 
-💎 *プレミアム:*
-• ステータス: *${isPremium ? "✅ 有効" : "❌ 無効"}*
-${isPremium ? `• ⏳ 有効期限: *${formatDate(premiumUntil)}*` : ""}
+💎 *PREMIUM:*
+• Status: *${isPremium ? "✅ Active" : "❌ Inactive"}*
+${isPremium ? `• ⏳ Expires: *${formatDate(premiumUntil)}*` : ""}
 
-🕒 *タイミング:*
-• 🗓️ 最終ガチャ: *${formatDate(lastGacha)}*
-• 📝 登録日: *${formatDate(registeredAt)}*
+🕒 *TIMESTAMPS:*
+• 🗓️ Last Gacha: *${formatDate(lastGacha)}*
+• 📝 Registered: *${formatDate(registeredAt)}*
 
-📅 更新日時: ${moment().tz(timezone).format("YY/MM/DD HH:mm")}
+📅 Updated: ${moment().tz(timezone).format("YY/MM/DD HH:mm")}
 `.trim();
 };
 

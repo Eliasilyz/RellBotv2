@@ -247,8 +247,8 @@ async function searchMangaOrLightNovel(query) {
   if (!data?.data || data.data.length === 0) return [];
 
   return data.data.map((item) => {
-   const publishedFrom = item.published?.from ? new Date(item.published.from).toLocaleDateString("ja-JP") : "不明";
-   const publishedTo = item.published?.to ? new Date(item.published.to).toLocaleDateString("ja-JP") : "連載中";
+   const publishedFrom = item.published?.from ? new Date(item.published.from).toLocaleDateString("en-US") : "Unknown";
+   const publishedTo = item.published?.to ? new Date(item.published.to).toLocaleDateString("en-US") : "Ongoing";
 
    return {
     // Judul

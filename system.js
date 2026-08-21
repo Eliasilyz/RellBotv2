@@ -197,7 +197,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
     //         linkPreview: {
     //           'matched-text': url,
-    //           title: "楓 (Kaede) 2K25",
+    //           title: "Kaede 2K26",
     //           description: teks,
     //           previewType: 0,
     //           jpegThumbnail: fs.readFileSync('./media/Menu.jpg'),
@@ -205,7 +205,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
     //         },
     //         externalAdReply: {
     //           title: FUNC.Greetings() + " " + pushname,
-    //           body: "楓 (Kaede) 2K25",
+    //           body: "Kaede 2K26",
     //           // previewType: "PHOTO",
     //           // thumbnailUrl: global.thumb,
     //           thumbnail: fs.readFileSync('./media/Menu.jpg'),
@@ -283,7 +283,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       sock.sendMessage(
         m.chat,
         {
-          text: `彼はAFK中です${reason ? "。理由: " + reason : "。"}\nAFK開始から: ${FUNC.clockString(FUNC.getJapanDate() - afkTime)}`
+          text: `He is currently AFK${reason ? ". Reason: " + reason : "."}\nAFK since: ${FUNC.clockString(FUNC.getJapanDate() - afkTime)}`
         },
         { quoted: fsaluran }
       );
@@ -293,7 +293,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       sock.sendMessage(
         m.chat,
         {
-          text: `AFKから戻りました。\n理由: ${user.afkReason ? user.afkReason : "なし"}\nAFK時間: ${FUNC.clockString(FUNC.getJapanDate() - user.afkTime)}`
+          text: `Welcome back from AFK.\nReason: ${user.afkReason ? user.afkReason : "None"}\nAFK duration: ${FUNC.clockString(FUNC.getJapanDate() - user.afkTime)}`
         },
         { quoted: fsaluran }
       );
@@ -401,14 +401,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 答えは: *${jawaban}* でした！`
+          text: `💡 The answer was: *${jawaban}*!`
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
         delete scrambleword[m.sender];
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
-          text: `🎉 *正解！*\n\n👤 解答者: @${m.sender.split("@")[0]}\n📝 答え: ${jawaban}`,
+          text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
           mentions: [m.sender]
         });
         await sock.sendMessage(m.chat, {
@@ -428,14 +428,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
         let hadiahnya = math[m.sender];
 
         if (parseFloat(body) === parseFloat(jawaban)) {
-          await reply(`📐 *計算クイズ*\n\n🎉 正解！`);
+          await reply(`📐 *Math Quiz*\n\n🎉 Correct!`);
           FUNC.sleep(3000);
           delete kuismath[m.sender];
           delete math[m.sender];
         }
       } catch (err) {
         console.error("Error handling math quiz:", err);
-        reply("⚠️ エラーが発生しました。もう一度お試しください。");
+        reply("⚠️ An error occurred. Please try again.");
       }
     }
 
@@ -444,14 +444,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 正解は: *${answer}* でした！`
+          text: `💡 The answer was: *${answer}*!`
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
         delete whosmegame[m.sender];
       } else if (body.toLowerCase().includes(answer.toLowerCase())) {
         await sock.sendMessage(m.chat, {
-          text: `🎉 *正解！*\n\n👤 解答者: @${m.sender.split("@")[0]}\n📝 答え: ${answer}`,
+          text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${answer}`,
           mentions: [m.sender]
         });
         await sock.sendMessage(m.chat, {
@@ -468,14 +468,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 正解は: *${jawaban}* でした！`
+          text: `💡 The answer was: *${jawaban}* !`
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
         delete guesswordgame[m.sender];
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
-          text: `🎉 *正解！*\n\n👤 解答者: @${m.sender.split("@")[0]}\n📝 答え: ${jawaban}`,
+          text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
           mentions: [m.sender]
         });
         await sock.sendMessage(m.chat, {
@@ -492,14 +492,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 正解は: *${answer}* でした！`
+          text: `💡 The answer was: *${answer}* !`
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
         delete guesselementgame[m.sender];
       } else if (body.toLowerCase().includes(answer.toLowerCase())) {
         await sock.sendMessage(m.chat, {
-          text: `🎉 *正解！*\n\n👤 解答者: @${m.sender.split("@")[0]}\n📝 答え: ${answer}`,
+          text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${answer}`,
           mentions: [m.sender]
         });
         await sock.sendMessage(m.chat, {
@@ -516,14 +516,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 正解は: *${jawaban}* でした！`
+          text: `💡 The answer was: *${jawaban}* !`
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
         delete triviaquizgame[m.sender];
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
-          text: `🎉 *正解！*\n\n👤 解答者: @${m.sender.split("@")[0]}\n📝 答え: ${jawaban}`,
+          text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
           mentions: [m.sender]
         });
         await sock.sendMessage(m.chat, {
@@ -540,14 +540,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 正解は: *${jawaban}* でした！`
+          text: `💡 The answer was: *${jawaban}* !`
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
         delete guessstencegame[m.sender];
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
-          text: `🎉 *正解！*\n\n👤 解答者: @${m.sender.split("@")[0]}\n📝 答え: ${jawaban}`,
+          text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
           mentions: [m.sender]
         });
         await sock.sendMessage(m.chat, {
@@ -630,7 +630,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
     }
     setInterval(autoRechargeLimits, 60 * 1000);
 
-    const example = teks => `*コマンドの使用例 :*\nタイプ *${cmd}* ${teks}`;
+    const example = teks => `*Command Usage:*\nType *${cmd}* ${teks}`;
     // leveling
     const user = await USER.getUser(sender);
     const required = await LEVEL.getRequiredExp(user.level);
@@ -648,12 +648,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "menfess":
         {
           if (isGroup) return reply(msg.private);
-          if (global.db.data.menfess[m.sender]?.active) return reply("❗ あなたはフェスセッション中です。");
+          if (global.db.data.menfess[m.sender]?.active) return reply("❗ You are currently in an active Menfess session.");
           if (!text.includes("|")) return reply(example("628xxxxxxx|Ally"));
           const [num, alias] = text.split("|");
           const target = num.replace(/\D/g, "") + "@s.whatsapp.net";
           const check = await sock.onWhatsApp(target);
-          if (!check[0]?.exists) return reply("WhatsAppで番号が見つかりません。");
+          if (!check[0]?.exists) return reply("Number not found on WhatsApp.");
           const menfess = global.db.data.menfess;
           menfess[m.sender] = {
             tujuan: target,
@@ -672,7 +672,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               if (menfess[m.sender]) menfess[m.sender].active = false;
               if (menfess[target]) {
                 sock.sendMessage(target, {
-                  text: "⏳ メンフェスセッションは終了しました。"
+                  text: "⏳ Menfess session has ended."
                 });
                 menfess[target].active = false;
               }
@@ -686,12 +686,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
           global.menfessTimeouts.set(target, timeout);
 
           await sock.sendMessage(target, {
-            text: `📩 匿名のメッセージを受信しました。\n返信するにはこのメッセージに返信してください。\n終了するには *${prefix}delmenfess* と入力してください。`
+            text: `📩 You received an anonymous message.\nReply to this message to send a response.\nType *${prefix}delmenfess* to end.`
           });
           await sock.sendMessage(
             m.chat,
             {
-              text: `✅ Menfessセッションが開始されました。\nメッセージを送信してください。\n10分後または*${prefix}delmenfess*で期限切れになります。`
+              text: `✅ Menfess session started.\nPlease send your message.\nIt will expire in 10 minutes or by typing *${prefix}delmenfess*.`
             },
             { quoted: m }
           );
@@ -703,7 +703,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "delmenfess":
         {
           const menfess = global.db.data.menfess;
-          if (!menfess[m.sender]?.active) return reply(`❌ あなたはメンフェスセッション中ではありません。`);
+          if (!menfess[m.sender]?.active) return reply(`❌ You are not in an active Menfess session.`);
           const partner = menfess[m.sender].tujuan;
           if (global.menfessTimeouts.has(m.sender)) {
             clearTimeout(global.menfessTimeouts.get(m.sender));
@@ -714,10 +714,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
             global.menfessTimeouts.delete(partner);
           }
           await sock.sendMessage(partner, {
-            text: `❌ パートナーがメンフェスセッションを終了しました。`
+            text: `❌ Your partner has ended the Menfess session.`
           });
           await sock.sendMessage(m.chat, {
-            text: `✅ メンフェスセッションを終了しました。`
+            text: `✅ Menfess session ended.`
           });
           menfess[m.sender].active = false;
           menfess[partner].active = false;
@@ -729,7 +729,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         const tickets = await gacha.checkTickets(sender);
         if (!result.status) return sock.sendMessage(m.chat, { text: result.message }, { quoted: m });
         const { name, source, rarity, image } = result.data;
-        const caption = `💮 *今日のワイフ*\n\n🏷️ *名前:* ${name}\n📺 *出典:* ${source}\n⭐ *レア度:* ${rarity}\n\n${result.message}\n> ${tickets.message}`;
+        const caption = `💮 *TODAY'S WAIFU*\n\n🏷️ *Name:* ${name}\n📺 *Origin:* ${source}\n⭐ *Rarity:* ${rarity}\n\n${result.message}\n> ${tickets.message}`;
         sock.sendMessage(
           m.chat,
           {
@@ -756,7 +756,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
 
         const { name, source, rarity, image } = result.data;
-        const caption = `🎟️ *REROLL GACHA*\n\n🏷️ *Name:* ${name}\n📺 *Origin:* ${source}\n⭐ *Rarity:* ${rarity}\n\n「.claim」で受け取る、「.skip」でスキップ。\n${result.message}\n> ${tickets.message}`;
+        const caption = `🎟️ *REROLL GACHA*\n\n🏷️ *Name:* ${name}\n📺 *Origin:* ${source}\n⭐ *Rarity:* ${rarity}\n\nType ".claim" to claim, ".skip" to skip.\n${result.message}\n> ${tickets.message}`;
 
         sock.sendMessage(
           m.chat,
@@ -792,11 +792,11 @@ module.exports = async (sock, m, chatUpdate, store) => {
         if (text) {
           try {
             const { waifu, user } = await gacha.getHaremChar(text);
-            if (!waifu || !user) throw new Error("Waifuまたはユーザーデータが見つかりません");
+            if (!waifu || !user) throw new Error("Waifu or user data not found");
             const count = user.length;
             const list = user.map((u, i) => `${i + 1}. ${u.username || u.phone_number?.split("@")[0] || "Unknown"}`).join("\n");
             const caption =
-              `*🔍 ワイフの所有権チェック*\n\n` +
+              `*🔍 WAIFU OWNERSHIP CHECK*\n\n` +
               `👑 *Name:* ${waifu.name}\n` +
               `🎬 *Anime:* ${waifu.source}\n` +
               `💎 *Rarity:* ${waifu.rarity}\n\n` +
@@ -823,7 +823,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             try {
               const result = await gacha.getUserHarem(sender);
               if (!result.status) {
-                return reply("💤 あなたのハーレムはまだ空っぽです。");
+                return reply("💤 Your harem is currently empty.");
               }
 
               const collection = result.data;
@@ -831,18 +831,18 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
               const list = collection.map((w, i) => {
                 const name = (w.name || "").replace(/[\n\r]/g, " ");
-                const rarity = (w.rarity || "不明").replace(/[\n\r]/g, " ");
-                const source = (w.source || "出典不明").replace(/[\n\r]/g, " ");
+                const rarity = (w.rarity || "Unknown").replace(/[\n\r]/g, " ");
+                const source = (w.source || "Unknown origin").replace(/[\n\r]/g, " ");
                 return `🌸 ${i + 1}. *${name}*\n│ Rarity: ${rarity}\n│ Source: ${source}\n`;
               });
-              const haremText = `💒 *あなたのハーレム (${collection.length}人)*\n\n${list.join("\n")}`;
+              const haremText = `💒 *YOUR HAREM (${collection.length} members)*\n\n${list.join("\n")}`;
               await sock.sendMessage(
                 m.chat,
                 {
                   text: haremText,
                   contextInfo: {
                     externalAdReply: {
-                      title: randomWaifu.name || "あなたの妻",
+                      title: randomWaifu.name || "Your Waifu",
                       body: randomWaifu.rarity,
                       thumbnailUrl: randomWaifu.image,
                       mediaType: 1,
@@ -854,31 +854,31 @@ module.exports = async (sock, m, chatUpdate, store) => {
               );
             } catch (e) {
               console.error("Fallback error:", e);
-              reply("⚠️ ハーレムデータを読み込めませんでした。後でもう一度お試しください。");
+              reply("⚠️ Failed to load harem data. Please try again later.");
             }
           }
         } else {
           try {
             const result = await gacha.getUserHarem(sender);
             if (!result.status) {
-              return reply("💤 あなたのハーレムはまだ空っぽです。");
+              return reply("💤 Your harem is currently empty.");
             }
             const collection = result.data;
             const randomWaifu = collection[Math.floor(Math.random() * collection.length)];
             const list = collection.map((w, i) => {
               const name = (w.name || "").replace(/[\n\r]/g, " ");
-              const rarity = (w.rarity || "不明").replace(/[\n\r]/g, " ");
-              const source = (w.source || "出典不明").replace(/[\n\r]/g, " ");
+              const rarity = (w.rarity || "Unknown").replace(/[\n\r]/g, " ");
+              const source = (w.source || "Unknown origin").replace(/[\n\r]/g, " ");
               return `🌸 ${i + 1}. *${name}*\n│ Rarity: ${rarity}\n│ Source: ${source}\n`;
             });
-            const haremText = `💒 *あなたのハーレム (${collection.length}人)*\n\n${list.join("\n")}`;
+            const haremText = `💒 *YOUR HAREM (${collection.length} members)*\n\n${list.join("\n")}`;
             await sock.sendMessage(
               m.chat,
               {
                 text: haremText,
                 contextInfo: {
                   externalAdReply: {
-                    title: randomWaifu.name || "あなたの妻",
+                    title: randomWaifu.name || "Your Waifu",
                     thumbnailUrl: randomWaifu.image,
                     mediaType: 1,
                     renderLargerThumbnail: false
@@ -889,7 +889,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
           } catch (e) {
             console.error("User harem error:", e);
-            reply("⚠️ あなたのハーレム情報を取得できませんでした。");
+            reply("⚠️ Failed to retrieve your harem information.");
           }
         }
         break;
@@ -931,47 +931,47 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (command === "animasu") {
             let res = await latest();
             if (!res.status) throw res.result;
-            let teks = `📺 *最新アニメ - Animasu*\n\n`;
+            let teks = `📺 *Latest Anime - Animasu*\n\n`;
             res.result.slice(0, 10).forEach((anime, i) => {
               teks += `${i + 1}. *${anime.title}*\n`;
-              teks += `🎞️ タイプ: ${anime.type}\n📚 エピソード: ${anime.episodes}\n🔗 ${anime.link}\n\n`;
+              teks += `🎞️ Type: ${anime.type}\n📚 Episodes: ${anime.episodes}\n🔗 ${anime.link}\n\n`;
             });
             m.reply(teks.trim());
           }
 
           if (command === "animasusearch") {
-            if (!text) throw `キーワードを入力してください！\n例: .animasusearch ワンピース`;
+            if (!text) throw `Please enter keywords!\nExample: .animasusearch One Piece`;
             let res = await search(text);
-            if (!res.status || res.result.length === 0) throw "❌ 見つかりませんでした。";
-            let teks = `🔎 *検索結果: ${text}*\n\n`;
+            if (!res.status || res.result.length === 0) throw "❌ Not found.";
+            let teks = `🔎 *Search Result: ${text}*\n\n`;
             res.result.slice(0, 10).forEach((anime, i) => {
               teks += `${i + 1}. *${anime.title}*\n`;
-              teks += `🎞️ タイプ: ${anime.type}\n📚 エピソード: ${anime.episodes}\n🔗 ${anime.link}\n\n`;
+              teks += `🎞️ Type: ${anime.type}\n📚 Episodes: ${anime.episodes}\n🔗 ${anime.link}\n\n`;
             });
             m.reply(teks.trim());
           }
 
           if (command === "animasudetail") {
             let url = args[0];
-            if (!url || !url.includes("v1.animasu.top")) throw "❌ 有効なURLを入力してください、バカ先生！\n\n例:\n.animasudetail https://v1.animasu.top/anime/boruto-naruto-next-generations-sub-indo/";
+            if (!url || !url.includes("v1.animasu.top")) throw "❌ Please provide a valid URL!\n\nExample:\n.animasudetail https://v1.animasu.top/anime/boruto-naruto-next-generations-sub-indo/";
             let res = await detail(url);
             if (!res.status) throw res.result;
             let a = res.result;
             let teks = `🎬 *${a.title}*\n`;
-            if (a.alternativeTitle) teks += `💡 別名: ${a.alternativeTitle}\n`;
-            teks += `📅 年: ${a.releaseYear || "-"}\n`;
-            teks += `🎞️ タイプ: ${a.type || "-"}\n`;
-            teks += `📚 エピソード: ${a.episodes || "-"}\n`;
-            teks += `⏱️ 時間: ${a.duration || "-"}\n\n`;
-            teks += `📝 *説明:*\n${a.description || "-"}\n\n`;
-            teks += `🏷️ *ジャンル:* ${a.genres.length ? a.genres.join(", ") : "-"}\n\n`;
+            if (a.alternativeTitle) teks += `💡 Alternative: ${a.alternativeTitle}\n`;
+            teks += `📅 Year: ${a.releaseYear || "-"}\n`;
+            teks += `🎞️ Type: ${a.type || "-"}\n`;
+            teks += `📚 Episodes: ${a.episodes || "-"}\n`;
+            teks += `⏱️ Duration: ${a.duration || "-"}\n\n`;
+            teks += `📝 *Description:*\n${a.description || "-"}\n\n`;
+            teks += `🏷️ *Genres:* ${a.genres.length ? a.genres.join(", ") : "-"}\n\n`;
             if (a.episodeLinks.length) {
-              teks += `🎥 *エピソードリンク:*\n`;
+              teks += `🎥 *Episode Links:*\n`;
               a.episodeLinks.slice(0, 5).forEach(ep => (teks += `- ${ep.number}: ${ep.link}\n`));
               teks += "\n";
             }
             if (a.downloadLinks.length) {
-              teks += `⬇️ *ダウンロードリンク:*\n`;
+              teks += `⬇️ *Download Links:*\n`;
               a.downloadLinks.forEach(dl => {
                 teks += `*${dl.quality}*\n`;
                 dl.links.forEach(x => (teks += `• ${x.title}: ${x.link}\n`));
@@ -987,26 +987,26 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
       case "anime":
         {
-          if (!text) return reply("❗ アニメのタイトルを入力してください。\n例: anime 呪術廻戦");
+          if (!text) return reply("❗ Please enter an anime title.\nExample: .anime Jujutsu Kaisen");
 
-          reply("🔍 アニメ情報を検索中...");
+          reply("🔍 Searching anime info...");
 
           const result = await SCR.searchAnimeInfoFromAnilist(text);
-          if (result.error) return reply("❌ アニメが見つかりませんでした。");
+          if (result.error) return reply("❌ Anime not found.");
           const { title, synopsis, poster, cover, startDate, endDate, status, episodeCount, rating, genres, studios, characters } = result;
           const shortDesc = synopsis?.length > 600 ? synopsis.slice(0, 600) + "..." : synopsis;
           let message = "";
 
           message += `✨ *${title}*\n\n`;
-          message += `📺 ステータス: ${status === "finished" ? "完結" : status === "releasing" ? "放送中" : "未放送"}\n`;
-          message += `📅 放送期間: ${startDate} ～ ${endDate || "現在"}\n`;
-          message += `🎨 ジャンル: ${genres.join("、") || "不明"}\n`;
-          message += `🏢 制作会社: ${studios.join("、") || "不明"}\n`;
-          message += `📊 話数: ${episodeCount || "?"}\n`;
-          message += `⭐ 評価: ${rating || "?"}\n\n`;
-          message += `🧙‍♂️ 主要キャラ & 声優:\n`;
+          message += `📺 Status: ${status === "finished" ? "Finished" : status === "releasing" ? "Airing" : "Not yet aired"}\n`;
+          message += `📅 Aired: ${startDate} ～ ${endDate || "Present"}\n`;
+          message += `🎨 Genres: ${genres.join("、") || "Unknown"}\n`;
+          message += `🏢 Studios: ${studios.join("、") || "Unknown"}\n`;
+          message += `📊 Episodes: ${episodeCount || "?"}\n`;
+          message += `⭐ Score: ${rating || "?"}\n\n`;
+          message += `🧙‍♂️ Main Characters & Voice Actors:\n`;
           message += characters.map((c, i) => `  ${i + 1}. ${c.name}（CV: ${c.va}）`).join("\n") + "\n\n";
-          message += `📝 あらすじ:\n${shortDesc}`;
+          message += `📝 Synopsis:\n${shortDesc}`;
 
           await sock.sendMessage(
             m.chat,
@@ -1044,18 +1044,18 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "ln":
       case "searchmanga":
         {
-          if (!text) return reply("📖 えっと…タイトルを教えてくれないと探せないよ〜！\n例: manga re:zero");
+          if (!text) return reply("📖 Please provide a manga title!\nExample: .manga re:zero");
 
           const results = await SCR.searchMangaOrLightNovel(text);
-          if (!results.length) return reply("💢 ごめんなさい…見つかりませんでした (｡•́︿•̀｡)");
+          if (!results.length) return reply("❌ Sorry, no results found.");
 
           const top = results[0];
 
-          let caption = `🎐 *『 かえで図書館 - 検索結果 』* 🎐\n`;
-          caption += `✨ 気になる作品を見つけたかな？ ✨\n\n`;
+          let caption = `🎐 *『 Kaede Library - Search Results 』* 🎐\n`;
+          caption += `✨ Found interesting titles? ✨\n\n`;
 
           // ✨ Judul Lengkap
-          caption += `🎀 *タイトル*: ${top.title_default}\n`;
+          caption += `🎀 *Title*: ${top.title_default}\n`;
           caption += `🇯🇵 *Japanese*: ${top.title_japanese}\n`;
           caption += `🇬🇧 *English*: ${top.title_english}\n`;
 
@@ -1070,25 +1070,25 @@ module.exports = async (sock, m, chatUpdate, store) => {
           caption += `🔥 *Popularity*: ${top.popularity} | 💖 Favorites: ${top.favorites}\n`;
 
           // ✨ Genre & Author
-          caption += `🎭 *Genres*: ${top.genres.join(", ") || "不明"}\n`;
+          caption += `🎭 *Genres*: ${top.genres.join(", ") || "Unknown"}\n`;
           caption += `✍️ *Author(s)*: ${top.authors.join(", ") || "Unknown"}\n\n`;
 
           // ✨ Sinopsis
-          caption += `💬 *あらすじ*:\n${top.synopsis.slice(0, 600)}...\n\n`;
+          caption += `💬 *Synopsis*:\n${top.synopsis.slice(0, 600)}...\n\n`;
 
           // ✨ Tambahan info 2 hasil berikutnya
           caption += `──────────────────────\n`;
 
           for (const [i, result] of results.slice(1, 3).entries()) {
             caption += `🌸 *${i + 2}. ${result.title_default}*\n`;
-            caption += `📘 ${result.type} | ⭐ ${result.score} | 📖 ${result.volumes}巻\n`;
+            caption += `📘 ${result.type} | ⭐ ${result.score} | 📖 ${result.volumes} volumes\n`;
             caption += `🗓️ ${result.releaseFrom} ～ ${result.releaseTo}\n`;
-            caption += `🎭 ${result.genres.join(", ") || "不明"}\n`;
+            caption += `🎭 ${result.genres.join(", ") || "Unknown"}\n`;
             caption += `💬 ${result.synopsis.slice(0, 200)}...\n\n`;
           }
 
-          caption += "📚 他にも読みたい？また教えてねっ〜 ✨\n";
-          caption += "🍵 Powered by *Kaede かえでちゃん*";
+          caption += "📚 Looking for more? Feel free to ask! ✨\n";
+          caption += "🍵 Powered by *Kaede*";
 
           await sock.sendMessage(
             m.chat,
@@ -1097,7 +1097,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               contextInfo: {
                 externalAdReply: {
                   title: top.title_default,
-                  body: "かえで図書館 - Manga Info",
+                  body: "Kaede Library - Manga Info",
                   mediaType: 1,
                   renderLargerThumbnail: false,
                   thumbnailUrl: top.image,
@@ -1111,19 +1111,19 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "swaifu":
         {
-          if (!text) return reply("⚠️ キャラクターの名前を入力してください。\n例: .swaifu マキマ");
+          if (!text) return reply("⚠️ Please enter a character name.\nExample: .swaifu Makima");
           const res = await gacha.swaifu(text);
           if (!res.success) return react("❌");
           const caption =
-            `🌸 *@${m.sender.split("@")[0]} さん、こちらがワイフの情報です！*\n\n` +
-            `🆔 *名前:* ${res.name.native || res.name.full}\n` +
-            (res.name.full && res.name.native !== res.name.full ? `🔤 *ローマ字:* ${res.name.full}\n` : "") +
-            `♀️ *性別:* ${res.gender === "Male" ? "男性" : res.gender === "Female" ? "女性" : "不明"}\n` +
-            `🎂 *誕生日:* ${res.birthDate}\n` +
-            `💖 *人気:* ${res.favourites}人のお気に入り\n` +
-            `🎬 *関連作品:*\n${res.relatedMedia.map(m => `・${m.title}（${m.type === "ANIME" ? "アニメ" : "マンガ"}）`).join("\n")}\n\n` +
-            `📝 *説明:*\n${res.description}\n\n` +
-            `🔗 *リンク:* ${res.siteUrl}`;
+            `🌸 *@${m.sender.split("@")[0]}, here is the waifu information!*\n\n` +
+            `🆔 *Name:* ${res.name.native || res.name.full}\n` +
+            (res.name.full && res.name.native !== res.name.full ? `🔤 *Romaji:* ${res.name.full}\n` : "") +
+            `♀️ *Gender:* ${res.gender === "Male" ? "Male" : res.gender === "Female" ? "Female" : "Unknown"}\n` +
+            `🎂 *Birth Date:* ${res.birthDate}\n` +
+            `💖 *Favorites:* ${res.favourites} users\n` +
+            `🎬 *Related Media:*\n${res.relatedMedia.map(m => `- ${m.title} (${m.type === "ANIME" ? "Anime" : "Manga"})`).join("\n")}\n\n` +
+            `📝 *Description:*\n${res.description}\n\n` +
+            `🔗 *Link:* ${res.siteUrl}`;
 
           await sock.sendMessage(
             m.chat,
@@ -1143,7 +1143,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
         break;
       case "hrevoke": {
-        if (!text) return reply("🔖 削除したい文字の名前を入力します。例：.hrevoke Makima");
+        if (!text) return reply("🔖 Enter the name of the waifu you want to remove. Example: .hrevoke Makima");
         const name = text.trim();
         const result = gacha.revokeWaifu(sender, name);
         const message = result.status ? result.message : result.message;
@@ -1182,7 +1182,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               text: profileText,
               contextInfo: {
                 externalAdReply: {
-                  title: pushname + "プロファイル",
+                  title: pushname + " Profile",
                   thumbnailUrl: ppuser,
                   renderLargerThumbnail: false
                 }
@@ -1197,16 +1197,16 @@ module.exports = async (sock, m, chatUpdate, store) => {
         if (!user) return react("❌");
         const Ranking = await USER.getUserRank(sender);
         let teks = "";
-        teks += "╭━━━「🧬 *ステータス* 」━━━\n";
-        teks += `┃ 🆙 レベル     : ${user.level}\n`;
-        teks += `┃ ⭐ 経験値     : ${FUNC.formatNumber2(user.exp)}/${FUNC.formatNumber2(required)}\n`;
-        teks += `┃ 🏅 ランク     : トップ #${Ranking?.rank || "?"}\n`;
-        teks += `┃ 📈 次のランク : ${user.nextRank || "-"}\n`;
-        teks += "┃ 📊 進行状況：\n";
+        teks += "╭━━━「🧬 *STATUS* 」━━━\n";
+        teks += `┃ 🆙 Level    : ${user.level}\n`;
+        teks += `┃ ⭐ EXP      : ${FUNC.formatNumber2(user.exp)}/${FUNC.formatNumber2(required)}\n`;
+        teks += `┃ 🏅 Rank     : Top #${Ranking?.rank || "?"}\n`;
+        teks += `┃ 📈 Next Rank: ${user.nextRank || "-"}\n`;
+        teks += "┃ 📊 Progress :\n";
         teks += `┃ ${progressBar}\n`;
         teks += "┃\n";
-        teks += "┃ 🔝 .toplevel でランキング表示\n";
-        teks += "┃ 🗡️ 力を試してみよう！\n";
+        teks += "┃ 🔝 Use .toplevel to view leaderboard\n";
+        teks += "┃ 🗡️ Keep chatting to level up!\n";
         teks += "╰━━━━━━━━━━━━━━━━";
         reply(teks);
         break;
@@ -1215,24 +1215,24 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "toplevel": {
         const top = await USER.topUsersLevel(5);
         if (!top.length) {
-          await sendType("⚠️ データが見つかりませんでした。");
+          await sendType("⚠️ No data found.");
           return;
         }
         const Ranking = await USER.getUserRank(sender);
 
-        let teks = `*🏆 トップレベルランキング！*\n`;
-        teks += `「⚔️ レベルで最強の戦士たち」\n\n`;
+        let teks = `*🏆 TOP LEVEL LEADERBOARD!*\n`;
+        teks += `「⚔️ Top ranked active users」\n\n`;
 
         for (const user of top) {
           teks += `✨ *${user.rank}. ${user.name}*\n`;
-          teks += `├ 📈 レベル: ${user.level}\n`;
-          teks += `├ 🏅 称号: ${user.title}\n`;
-          teks += `└ 💠 経験値: ${FUNC.formatNumber2(user.exp)}\n\n`;
+          teks += `├ 📈 Level: ${user.level}\n`;
+          teks += `├ 🏅 Title: ${user.title}\n`;
+          teks += `└ 💠 EXP: ${FUNC.formatNumber2(user.exp)}\n\n`;
         }
 
         teks += `━━━━━━━━━━━━━━\n`;
-        teks += `あなたは *#${Ranking?.rank || "?"}* にいます\n`;
-        teks += `📅 更新: ${new Date().toLocaleDateString("ja-JP")} 🇯🇵`;
+        teks += `Your Rank: *#${Ranking?.rank || "?"}*\n`;
+        teks += `📅 Updated: ${new Date().toLocaleDateString("en-US")}`;
 
         await reply2(teks);
         break;
@@ -1292,7 +1292,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           sock.sendMessage(
             m.chat,
             {
-              text: `${m.pushName} *AFKになった* ${text ? ": " + text : ""}`
+              text: `${m.pushName} *is now AFK* ${text ? ": " + text : ""}`
             },
             { quoted: fsaluran }
           );
@@ -1303,20 +1303,20 @@ module.exports = async (sock, m, chatUpdate, store) => {
           const users = await MONGO.getUser(sender);
           const Ranking = await USER.getUserRank(sender);
           let awal =
-            `╭───〔 *👤 ユーザー情報* 〕\n` +
-            `│ 🏷️ *名前*     : *${pushname}*\n` +
-            `│ 👤 *状態*     : ${isCreator ? "👑 作成者" : isPremium ? "💸 プレミアム" : "🌟 フリープラン"}\n` +
-            `│ 🆙 *レベル*   : ${user.level}\n` +
-            `│ ⭐ *経験値*   : ${FUNC.formatNumber2(user.exp)} / ${FUNC.formatNumber2(required)}\n` +
-            `│ 🏅 *ランク*   : ${user.rank}\n` +
-            `│ 🔝 ランク     : トップ #${Ranking?.rank || "?"}\n` +
+            `╭───〔 *👤 User Info* 〕\n` +
+            `│ 🏷️ *Name*     : *${pushname}*\n` +
+            `│ 👤 *Status*   : ${isCreator ? "👑 Creator" : isPremium ? "💸 Premium" : "🌟 Free Plan"}\n` +
+            `│ 🆙 *Level*    : ${user.level}\n` +
+            `│ ⭐ *EXP*      : ${FUNC.formatNumber2(user.exp)} / ${FUNC.formatNumber2(required)}\n` +
+            `│ 🏅 *Rank*     : ${user.rank}\n` +
+            `│ 🔝 Rank     : Top #${Ranking?.rank || "?"}\n` +
             `│ \n` +
-            `│ 📊 *進行バー* \n` +
+            `│ 📊 *Progress* \n` +
             `│ ${progressBar}\n` +
             `│ \n` +
-            `│ 🎯 *残りリミット* : ${isPremium ? "∞ 無制限" : `${50 - userdb.limit}/50`}\n` +
-            `│ 👩‍❤️‍👩 *ハーレム数* : ${users.waifuCollection?.length || 0} ワイフ\n` +
-            `│ 🎟️ *リロール券* : ${users.tickets || 0}\n` +
+            `│ 🎯 *Limit*       : ${isPremium ? "∞ Unlimited" : `${50 - userdb.limit}/50`}\n` +
+            `│ 👩‍❤️‍👩 *Harem*       : ${users.waifuCollection?.length || 0} waifus\n` +
+            `│ 🎟️ *Tickets*     : ${users.tickets || 0}\n` +
             `╰──────────────•\n` +
             `${readmore}`;
           //reply2(awal + global.menu);
@@ -1405,7 +1405,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           }
 
           async function generateTTS(text, model) {
-            if (!models[model]) throw `❌ モデル "${model}" が見つかりません。\n\n利用可能なモデル:\n` + Object.keys(models).join(", ");
+            if (!models[model]) throw `❌ Model "${model}" not found.\n\nAvailable models:\n` + Object.keys(models).join(", ");
 
             const agent = userAgents[Math.floor(Math.random() * userAgents.length)];
             const { voice_id, voice_name } = models[model];
@@ -1446,11 +1446,11 @@ module.exports = async (sock, m, chatUpdate, store) => {
           const handler = async (m, { text, sock, command }) => {
             if (!text || !text.includes("|")) {
               let listMsg = "";
-              listMsg += "⌬┄┄┄┄┄┄ モデル一覧 ┄┄┄┄┄┄⌬\n\n";
+              listMsg += "⌬┄┄┄┄┄┄ Model List ┄┄┄┄┄┄⌬\n\n";
               listMsg += "• *miku* - Hatsune Miku 🌀\n";
               listMsg += "• *nahida* - Nahida (Exclusive) 🌿\n";
               listMsg += "• *nami* - One Piece 🌊\n";
-              listMsg += "• *ana* - Ana (女性ボイス) 🎙️\n";
+              listMsg += "• *ana* - Ana (Female Voice) 🎙️\n";
               listMsg += "• *optimus_prime* - Optimus Prime 🤖\n";
               listMsg += "• *goku* - Goku (Dragon Ball) 🟠\n";
               listMsg += "• *taylor_swift* - Taylor Swift 🎤\n";
@@ -1459,10 +1459,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
               listMsg += "• *kendrick_lamar* - Kendrick Lamar 🎶\n";
               listMsg += "• *angela_adkinsh* - Angela Adkinsh 👩‍💼\n";
               listMsg += "• *eminem* - Eminem 🎧\n\n";
-              listMsg += "使用形式:\n";
-              listMsg += "*." + command + " テキスト|model*\n\n";
-              listMsg += "例:\n";
-              listMsg += "*." + command + " こんにちは世界|miku*";
+              listMsg += "Usage:\n";
+              listMsg += "*." + command + " text|model*\n\n";
+              listMsg += "Example:\n";
+              listMsg += "*." + command + " Hello World|miku*";
 
               return sock.sendMessage(m.key.remoteJid, { text: listMsg }, { quoted: m });
             }
@@ -1472,13 +1472,13 @@ module.exports = async (sock, m, chatUpdate, store) => {
               return sock.sendMessage(
                 m.key.remoteJid,
                 {
-                  text: `❌ フォーマットが正しくありません: .${command} テキスト|model\n\n利用可能なモデル:\n` + Object.keys(models).join(", ")
+                  text: `❌ Invalid format: .${command} text|model\n\nAvailable models:\n` + Object.keys(models).join(", ")
                 },
                 { quoted: m }
               );
             }
 
-            const loading = await sock.sendMessage(m.key.remoteJid, { text: "⏳ 音声を生成中です..." }, { quoted: m });
+            const loading = await sock.sendMessage(m.key.remoteJid, { text: "⏳ Generating audio..." }, { quoted: m });
 
             try {
               const result = await generateTTS(isi, model);
@@ -1495,7 +1495,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               await sock.sendMessage(
                 m.key.remoteJid,
                 {
-                  text: `❌ エラーが発生しました。\nエラーログ: ${e.message || e}`
+                  text: `❌ An error occurred.\nError log: ${e.message || e}`
                 },
                 { quoted: m }
               );
@@ -1601,14 +1601,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
               { quoted: m }
             );
           } catch (e) {
-            await reply("❌ エラーが発生しました。\nエラーログ");
+            await reply("❌ An error occurred.\nError log");
           }
         }
         break;
       case "ownermenu":
         {
           if (!isCreator) return;
-          let awal = `╭───〔 👤 *ユーザー情報* 〕\n│ • 名前   : *${pushname}*\n│ • ステータス : ${isCreator ? "👑 開発者 (Creator)" : isPremium ? "💸 プレミアム" : "🌟 フリープラン"}\n╰──────────────•\n${readmore}\n`;
+          let awal = `╭───〔 👤 *User Info* 〕\n│ • Name   : *${pushname}*\n│ • Status : ${isCreator ? "👑 Creator" : isPremium ? "💸 Premium" : "🌟 Free Plan"}\n╰──────────────•\n${readmore}\n`;
           reply2(awal + global.menuOwner);
         }
         break;
@@ -1619,10 +1619,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (args.length < 1) return reply(example("off"));
           if (text === "on") {
             global.db.data.settings.autoread = true;
-            reply(`自動読み取りを ${text} に変更しました`);
+            reply(`Autoread changed to ${text}`);
           } else if (text === "off") {
             global.db.data.settings.autoread = false;
-            reply(`自動読み取りを ${text} に変更しました`);
+            reply(`Autoread changed to ${text}`);
           }
         }
         break;
@@ -1731,18 +1731,18 @@ module.exports = async (sock, m, chatUpdate, store) => {
           let users = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
           if (users) {
             await sock.updateBlockStatus(users, "block");
-            reply(`成功`);
+            reply(`Success`);
           } else {
-            reply("メッセージに返信するか、タグを付けるか、ブロックしたい番号を入力してください。");
+            reply("Please reply to a message, tag a user, or provide a number to block.");
           }
         } else if (!isGroup) {
           if (q) {
             var woke = q.replace(new RegExp("[()+-/ +/]", "gi"), "") + `@s.whatsapp.net`;
             await sock.updateBlockStatus(woke, "block");
           } else if (!q) {
-            reply("ブロックしたい番号を入力してください");
+            reply("Please provide a number to block.");
           }
-          reply(`ユーザー ${woke.split("@")[0]} をブロックしました`);
+          reply(`Blocked user ${woke.split("@")[0]}`);
         }
         break;
       case "unblock":
@@ -1751,25 +1751,25 @@ module.exports = async (sock, m, chatUpdate, store) => {
         if (isGroup) {
           if (users) {
             await sock.updateBlockStatus(users, "unblock");
-            await m.reply(`成功`);
+            await m.reply(`Success`);
           } else if (!q) {
-            m.reply("メッセージに返信するか、タグを付けるか、ブロックしたい番号を入力してください。");
+            m.reply("Please reply to a message, tag a user, or provide a number to block.");
           }
         } else if (!isGroup) {
           if (text) {
             let woke = text.replace(new RegExp("[()+-/ +/]", "gi"), "") + `@s.whatsapp.net`;
             await sock.updateBlockStatus(woke, "unblock");
-            reply(`成功`);
+            reply(`Success`);
           } else if (!q) {
-            reply("開きたい番号を入力してください");
+            reply("Please provide a number to unblock.");
           }
         }
         break;
       case "addprem":
         {
           if (!isCreator) return;
-          if (!args[0]) return reply("番号？");
-          if (!args[1]) return reply("何日ですか？");
+          if (!args[0]) return reply("Please provide a phone number.");
+          if (!args[1]) return reply("How many days?");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
           await MONGO.setPremium(blockwww, args[1]).then(reply);
           let react = sock.sendMessage(m.chat, {
@@ -1780,7 +1780,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "delprem":
         {
           if (!isCreator) return;
-          if (!args[0]) return reply("番号？");
+          if (!args[0]) return reply("Please provide a phone number.");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
           await MONGO.delPremium(blockwww);
         }
@@ -1788,8 +1788,8 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "ban":
         {
           if (!isCreator) return;
-          if (!args[0]) return reply("番号？");
-          if (!args[1]) return reply("何日ですか？");
+          if (!args[0]) return reply("Please provide a phone number.");
+          if (!args[1]) return reply("How many days?");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
           await MONGO.banUser(blockwww, args[1]).then(reply);
         }
@@ -1797,8 +1797,8 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "unban":
         {
           if (!isCreator) return;
-          if (!args[0]) return reply("番号？");
-          if (!args[1]) return reply("何日ですか？");
+          if (!args[0]) return reply("Please provide a phone number.");
+          if (!args[1]) return reply("How many days?");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
           await MONGO.unBan(blockwww, args[1]).then(reply);
         }
@@ -1808,22 +1808,22 @@ module.exports = async (sock, m, chatUpdate, store) => {
         {
           if (!isCreator) return;
           const premiumUsers = await MONGO.findPremiumUsers();
-          let text = "🌸*『 プレミアムユーザーリスト 』*🌸\n";
-          text += "ここはプレミアムな仲間たちの一覧だよ〜 ✨\n\n";
+          let text = "🌸*『 Premium Users List 』*🌸\n";
+          text += "Here is the list of premium users ✨\n\n";
           let count = 0;
           for (let user of premiumUsers) {
-            const username = user.username?.trim() || "（未設定）";
-            const phone = user.phone_number?.split("@")[0] || "不明";
+            const username = user.username?.trim() || "(Not set)";
+            const phone = user.phone_number?.split("@")[0] || "Unknown";
             const expDate = moment(user.premiumUntil);
             const isValid = expDate.isValid();
-            const formattedDate = isValid ? expDate.tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss") : "無効な日付";
+            const formattedDate = isValid ? expDate.tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss") : "Invalid Date";
             text += `🎀 *${++count}.*\n`;
-            text += `📱 *電話番号* : ${phone}\n`;
-            text += `🧸 *ユーザー名* : ${username}\n`;
-            text += `🗓️ *有効期限* : ${formattedDate}\n\n`;
+            text += `📱 *Phone* : ${phone}\n`;
+            text += `🧸 *Username* : ${username}\n`;
+            text += `🗓️ *Expires* : ${formattedDate}\n\n`;
           }
-          text += `🍵 合計プレミアムユーザー : *${premiumUsers.length} 人*\n`;
-          text += "ありがとう〜💕";
+          text += `🍵 Total Premium Users : *${premiumUsers.length}  members*\n`;
+          text += "Thank you! 💕";
           reply2(text.trim());
         }
         break;
@@ -1835,12 +1835,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
             try {
               const fileContent = fs.readFileSync("./system.js", "utf-8");
               const caseBlock = fileContent.split(`case "${caseName}"`)[1];
-              if (!caseBlock) return `ケース '${caseName}' が見つかりません。`;
+              if (!caseBlock) return `Case '${caseName}' not found.`;
               const caseEnd = caseBlock.split("break")[0];
               return `case '${caseName}'${caseEnd}break`;
             } catch (error) {
-              console.error("ファイルの読み取りエラー:", error);
-              return "ケースの取得中にエラーが発生しました。";
+              console.error("File read error:", error);
+              return "An error occurred while getting the case.";
             }
           };
           reply(getCase(args[0]));
@@ -1851,7 +1851,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (!text) return reply(example("130.54.130.237"));
           try {
             const res = await fetch(`https://ipwho.is/${text}`).then(res => res.json());
-            if (!res.success) throw new Error(`❌ IPアドレス「${text}」が見つかりませんでした。`);
+            if (!res.success) throw new Error(`❌ IP address "${text}" not found.`);
             await sock.sendMessage(
               m.chat,
               {
@@ -1864,40 +1864,40 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
             await new Promise(resolve => setTimeout(resolve, 2000));
             let infoText = "";
-            infoText += "📡 *IPアドレス情報* 🌐\n\n";
-            infoText += "🗂️ *基本情報*\n";
-            infoText += "• IPアドレス       : " + (res.ip || "N/A") + "\n";
-            infoText += "• 成功              : " + (res.success ? "はい ✅" : "いいえ ❌") + "\n";
-            infoText += "• タイプ            : " + (res.type || "N/A") + "\n";
-            infoText += "• 大陸              : " + (res.continent || "N/A") + " (" + (res.continent_code || "N/A") + ")\n";
-            infoText += "• 国名              : " + (res.country || "N/A") + " (" + (res.country_code || "N/A") + ")\n";
-            infoText += "• 地域              : " + (res.region || "N/A") + " (" + (res.region_code || "N/A") + ")\n";
-            infoText += "• 都市              : " + (res.city || "N/A") + "\n";
-            infoText += "• 緯度 / 経度       : " + (res.latitude || "N/A") + " / " + (res.longitude || "N/A") + "\n";
-            infoText += "• EU加盟           : " + (res.is_eu ? "はい 🇪🇺" : "いいえ") + "\n";
-            infoText += "• 郵便番号         : " + (res.postal || "N/A") + "\n";
-            infoText += "• 国番号           : +" + (res.calling_code || "N/A") + "\n";
-            infoText += "• 首都              : " + (res.capital || "N/A") + "\n";
-            infoText += "• 隣接国            : " + (res.borders || "N/A") + "\n\n";
-            infoText += "🏳️ *国旗*\n";
-            infoText += "• 絵文字            : " + (res.flag?.emoji || "N/A") + "\n";
+            infoText += "📡 *IP ADDRESS INFO* 🌐\n\n";
+            infoText += "🗂️ *BASIC INFO*\n";
+            infoText += "• IP Address      : " + (res.ip || "N/A") + "\n";
+            infoText += "• Success         : " + (res.success ? "Yes ✅" : "No ❌") + "\n";
+            infoText += "• Type            : " + (res.type || "N/A") + "\n";
+            infoText += "• Continent       : " + (res.continent || "N/A") + " (" + (res.continent_code || "N/A") + ")\n";
+            infoText += "• Country         : " + (res.country || "N/A") + " (" + (res.country_code || "N/A") + ")\n";
+            infoText += "• Region          : " + (res.region || "N/A") + " (" + (res.region_code || "N/A") + ")\n";
+            infoText += "• City            : " + (res.city || "N/A") + "\n";
+            infoText += "• Lat / Long      : " + (res.latitude || "N/A") + " / " + (res.longitude || "N/A") + "\n";
+            infoText += "• EU Member       : " + (res.is_eu ? "Yes 🇪🇺" : "No") + "\n";
+            infoText += "• Postal Code     : " + (res.postal || "N/A") + "\n";
+            infoText += "• Calling Code    : +" + (res.calling_code || "N/A") + "\n";
+            infoText += "• Capital         : " + (res.capital || "N/A") + "\n";
+            infoText += "• Borders         : " + (res.borders || "N/A") + "\n\n";
+            infoText += "🏳️ *FLAG*\n";
+            infoText += "• Emoji           : " + (res.flag?.emoji || "N/A") + "\n";
             infoText += "• Unicode         : " + (res.flag?.emoji_unicode || "N/A") + "\n";
-            infoText += "• 画像リンク       : " + (res.flag?.img || "N/A") + "\n\n";
-            infoText += "🔌 *接続情報*\n";
+            infoText += "• Image Link      : " + (res.flag?.img || "N/A") + "\n\n";
+            infoText += "🔌 *CONNECTION INFO*\n";
             infoText += "• ASN               : " + (res.connection?.asn || "N/A") + "\n";
-            infoText += "• 組織              : " + (res.connection?.org || "N/A") + "\n";
+            infoText += "• Organization    : " + (res.connection?.org || "N/A") + "\n";
             infoText += "• ISP              : " + (res.connection?.isp || "N/A") + "\n";
-            infoText += "• ドメイン           : " + (res.connection?.domain || "N/A") + "\n\n";
-            infoText += "🕒 *タイムゾーン*\n";
+            infoText += "• Domain          : " + (res.connection?.domain || "N/A") + "\n\n";
+            infoText += "🕒 *TIMEZONE*\n";
             infoText += "• ID                : " + (res.timezone?.id || "N/A") + "\n";
-            infoText += "• 略称              : " + (res.timezone?.abbr || "N/A") + "\n";
-            infoText += "• 夏時間            : " + (res.timezone?.is_dst ? "はい ☀️" : "いいえ") + "\n";
-            infoText += "• オフセット         : " + (res.timezone?.offset || "N/A") + "\n";
+            infoText += "• Abbr            : " + (res.timezone?.abbr || "N/A") + "\n";
+            infoText += "• DST             : " + (res.timezone?.is_dst ? "Yes ☀️" : "No") + "\n";
+            infoText += "• Offset          : " + (res.timezone?.offset || "N/A") + "\n";
             infoText += "• UTC              : " + (res.timezone?.utc || "N/A") + "\n";
-            infoText += "• 現在時刻          : " + (res.timezone?.current_time || "N/A") + "\n";
+            infoText += "• Current Time    : " + (res.timezone?.current_time || "N/A") + "\n";
             m.reply(infoText);
           } catch (e) {
-            m.reply("⚠️ エラー: IPアドレス「" + text + "」の情報を取得できませんでした。");
+            m.reply("⚠️ Error: Failed to fetch information for IP address `" + text + "`.");
           }
         }
         break;
@@ -1944,7 +1944,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "ai":
         {
           if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
-          if (!text) return m.reply(`はい、どういったご用でしょうか？`);
+          if (!text) return m.reply(`Yes, how can I help you?`);
           await groq.chat.completions
             .create({
               messages: [
@@ -1963,28 +1963,28 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "deepsek":
       case "deepseek":
         {
-          if (!text) return m.reply(`はい、どういったご用でしょうか？`);
+          if (!text) return m.reply(`Yes, how can I help you?`);
           let a = await (await fetch(`https://www.laurine.site/api/ai/deepseek?query=${text}`)).json();
           reply(a.data);
         }
         break;
       case "luminai":
         {
-          if (!text) return m.reply(`はい、どういったご用でしょうか？`);
+          if (!text) return m.reply(`Yes, how can I help you?`);
           let a = await (await fetch(`https://www.laurine.site/api/ai/luminai?query=${text}`)).json();
           reply(a.data);
         }
         break;
       case "gpt":
         {
-          if (!text) return m.reply(`はい、どういったご用でしょうか？`);
+          if (!text) return m.reply(`Yes, how can I help you?`);
           let a = await (await fetch(`https://www.laurine.site/api/ai/gptonline?query=${text}`)).json();
           reply(a.data);
         }
         break;
       case "deepai":
         {
-          if (!text) return m.reply(`はい、どういったご用でしょうか？`);
+          if (!text) return m.reply(`Yes, how can I help you?`);
           let a = await (await fetch(`https://www.laurine.site/api/ai/deepai?query=${text}`)).json();
           reply(a.data);
         }
@@ -2044,7 +2044,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             await fs.unlinkSync(encmedia);
           } else if (/video/.test(mime)) {
             if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
-            if ((quoted.msg || quoted).seconds > 11) return reply("詳細は最大10件まで！");
+            if ((quoted.msg || quoted).seconds > 11) return reply("Maximum video duration is 10 seconds!");
             let media = await quoted.download();
             let encmedia = await sock.sendVideoAsSticker(from, media, m, {
               packname: global.packname,
@@ -2052,7 +2052,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             });
             await fs.unlinkSync(encmedia);
           } else {
-            reply(`キャプション付きの画像/ビデオを送信 ${prefix + command}\nビデオの長さ 1～9 秒`);
+            reply(`Please send an image/video with caption ${prefix + command}\nVideo duration: 1-9 seconds`);
           }
         }
         break;
@@ -2077,7 +2077,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           let q = m.quoted ? m.quoted : m;
           let mime = (q.msg || q).mimetype || "";
           if (!mime) return reply(example(`${atas ? atas : "upper"}>|<${bawah ? bawah : "downer"}`));
-          if (!/image\/(jpe?g|png)/.test(mime)) return reply(`_*${mime} はサポートされていません*_`);
+          if (!/image\/(jpe?g|png)/.test(mime)) return reply(`_*${mime} is not supported*_`);
           if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
           let img = await q.download();
           let url = await TelegraPh(img);
@@ -2093,7 +2093,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         {
           let [teks1, teks2] = text.split`|`;
           if (!teks1) return reply(example("hi|loser"));
-          if (!teks2) return reply(`キャプション付きの画像/ビデオを送信/返信する ${prefix + command} text1|text2`);
+          if (!teks2) return reply(`Please send or reply to an image/video with caption ${prefix + command} text1|text2`);
           let teksbwh = teks2 + `\nDate: ${moment.tz("Asia/Tokyo").format("DD/MM/YY")}\nBot: 0823-3422-6291`;
           if (/image/.test(mime)) {
             if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
@@ -2117,7 +2117,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               await fs.unlinkSync(encmedia.filePath);
             }
           } else {
-            return reply(`キャプション付きの画像/ビデオを送信 ${prefix + command}\nビデオの長さ 1～9 秒`);
+            return reply(`Please send an image/video with caption ${prefix + command}\nVideo duration: 1-9 seconds`);
           }
         }
         break;
@@ -2228,7 +2228,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             }
           } catch (error) {
             console.error(`Terjadi kesalahan: ${error}`);
-            return m.reply(`URLにアクセス中にエラーが発生しました`);
+            return m.reply(`An error occurred while accessing the URL.`);
           }
         }
         break;
@@ -2236,8 +2236,8 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "remini":
         {
           const mime = (quoted.msg || quoted).mimetype || "";
-          if (!quoted) return reply(`キャプション付き写真を送信/返信 ${prefix + command}`);
-          if (!/image/.test(mime)) return reply(`キャプション付き写真を送信/返信 ${prefix + command}`);
+          if (!quoted) return reply(`Please send or reply to a photo with caption ${prefix + command}`);
+          if (!/image/.test(mime)) return reply(`Please send or reply to a photo with caption ${prefix + command}`);
           let { TelegraPh } = require("./all/scrape/uploader.js");
           try {
             if (!(await useLimit(m.sender, isPremium, 5))) return reply(msg.endLimit);
@@ -2270,23 +2270,23 @@ module.exports = async (sock, m, chatUpdate, store) => {
             let namaakun = text.trim().replace(/^@/, "");
             let json = await FUNC.fetchJson(`https://api.siputzx.my.id/api/stalk/tiktok?username=${namaakun}`);
             if (!json || json.status !== true || !json.data?.user) {
-              return reply("データが見つからないか、API でエラーが発生しました。");
+              return reply("Data not found or an error occurred with the API.");
             }
             let user = json.data.user;
             let stats = json.data.stats;
-            let caption = `⦿  *T I K T O K - ストーカー*\n\n`;
-            caption += `👤 *ユーザー名* : ${user.uniqueId}\n`;
-            caption += `📝 *ニックネーム* : ${user.nickname || "なし"}\n`;
-            caption += `📄 *署名* : ${user.signature || "なし"}\n`;
-            caption += `🌍 *地域* : ${user.region || "不明"}\n`;
-            caption += `🔰 *認証済み* : ${user.verified ? "✅ はい" : "❌ いいえ"}\n`;
-            caption += `🔐 *非公開アカウント* : ${user.privateAccount ? "はい" : "いいえ"}\n\n`;
-            caption += `📊 *統計情報*\n`;
-            caption += `❤️ *いいね数* : ${stats.heart.toLocaleString()}\n`;
-            caption += `👥 *フォロワー* : ${stats.followerCount.toLocaleString()}\n`;
-            caption += `➡️ *フォロー中* : ${stats.followingCount.toLocaleString()}\n`;
-            caption += `🎞️ *投稿数* : ${stats.videoCount.toLocaleString()}\n`;
-            caption += `👫 *友達数* : ${stats.friendCount.toLocaleString()}\n`;
+            let caption = `⦿  *T I K T O K - S T A L K*\n\n`;
+            caption += `👤 *Username* : ${user.uniqueId}\n`;
+            caption += `📝 *Nickname* : ${user.nickname || "None"}\n`;
+            caption += `📄 *Bio* : ${user.signature || "None"}\n`;
+            caption += `🌍 *Region* : ${user.region || "Unknown"}\n`;
+            caption += `🔰 *Verified* : ${user.verified ? "✅ Yes" : "❌ No"}\n`;
+            caption += `🔐 *Private Account* : ${user.privateAccount ? "Yes" : "No"}\n\n`;
+            caption += `📊 *STATISTICS*\n`;
+            caption += `❤️ *Likes* : ${stats.heart.toLocaleString()}\n`;
+            caption += `👥 *Followers* : ${stats.followerCount.toLocaleString()}\n`;
+            caption += `➡️ *Following* : ${stats.followingCount.toLocaleString()}\n`;
+            caption += `🎞️ *Posts* : ${stats.videoCount.toLocaleString()}\n`;
+            caption += `👫 *Friends* : ${stats.friendCount.toLocaleString()}\n`;
             await sock.sendMessage(
               m.chat,
               {
@@ -2305,7 +2305,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
           } catch (error) {
             console.error(error);
-            reply("データの取得中にエラーが発生しました。ユーザー名が正しいか確認して、もう一度お試しください。");
+            reply("An error occurred while retrieving data. Please verify the username and try again.");
           }
         }
         break;
@@ -2313,22 +2313,22 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "igprofile": {
         if (!text) return reply(example("google"));
         try {
-          await reply("🔄 Instagramプロフィールを取得中...");
+          await reply("🔄 Fetching Instagram profile...");
           const res = await fetch(`https://api.vreden.my.id/api/igstalk?query=${text}`);
           const json = await res.json();
-          if (!json.result) return reply("⚠️ プロフィールが見つかりませんでした。");
+          if (!json.result) return reply("⚠️ Profile not found.");
           const user = json.result.user;
-          const caption = `📸 *Instagram プロフィール*
-👤 *名前*: ${user.full_name}
-🔖 *ユーザー名*: @${user.username}
-📌 *カテゴリ*: ${user.category || "未分類"}
-🔒 *プライベート*: ${user.is_private ? "はい" : "いいえ"}
-✅ *認証済み*: ${user.is_verified ? "はい" : "いいえ"}
-👥 *フォロワー*: ${user.follower_count.toLocaleString()} 人
-➡️ *フォロー中*: ${user.following_count.toLocaleString()} 人
-📝 *自己紹介*: ${user.biography || "なし"}
-📷 *投稿数*: ${user.media_count} 件
-🔗 *リンク*: ${user.external_url || "なし"}`;
+          const caption = `📸 *Instagram Profile*
+👤 *Name*: ${user.full_name}
+🔖 *Username*: @${user.username}
+📌 *Category*: ${user.category || "Uncategorized"}
+🔒 *Private*: ${user.is_private ? "Yes" : "No"}
+✅ *Verified*: ${user.is_verified ? "Yes" : "No"}
+👥 *Followers*: ${user.follower_count.toLocaleString()}  members
+➡️ *Following*: ${user.following_count.toLocaleString()}  members
+📝 *Bio*: ${user.biography || "None"}
+📷 *Posts*: ${user.media_count} posts
+🔗 *Link*: ${user.external_url || "None"}`;
           await sock.sendMessage(
             m.chat,
             {
@@ -2337,7 +2337,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 mentionedJid: [m.sender],
                 externalAdReply: {
                   title: user.full_name,
-                  body: `Instagram ユーザー名: @${user.username}`,
+                  body: `Instagram Username: @${user.username}`,
                   thumbnailUrl: user.hd_profile_pic_url_info?.url || "",
                   mediaType: 1,
                   renderLargerThumbnail: false,
@@ -2349,7 +2349,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           );
         } catch (err) {
           console.error(err);
-          reply("❌ エラーが発生しました。もう一度お試しください。");
+          reply("❌ An error occurred. Please try again.");
         }
         break;
       }
@@ -2361,24 +2361,24 @@ module.exports = async (sock, m, chatUpdate, store) => {
             let namaakun = args[0].replace(/^@/, "");
             let res = await fetch(`https://api.github.com/users/${namaakun}`);
             let result = await res.json();
-            if (result.message === "Not Found") return reply("そのユーザーは見つかりませんでした。");
-            let data = `*🐙 GitHub プロフィール 情報*\n\n`;
-            data += `👤 *ユーザー名* : ${result.login}\n`;
-            data += `📛 *名前* : ${result.name || "なし"}\n`;
-            data += `📝 *自己紹介* : ${result.bio || "なし"}\n`;
+            if (result.message === "Not Found") return reply("User not found.");
+            let data = `*🐙 GitHub Profile Info*\n\n`;
+            data += `👤 *Username* : ${result.login}\n`;
+            data += `📛 *Name* : ${result.name || "None"}\n`;
+            data += `📝 *Bio* : ${result.bio || "None"}\n`;
             data += `🆔 *ID* : ${result.id}\n`;
-            data += `🔗 *ノードID* : ${result.node_id}\n`;
-            data += `🏢 *会社* : ${result.company || "なし"}\n`;
-            data += `📍 *場所* : ${result.location || "なし"}\n`;
-            data += `✉️ *メール* : ${result.email || "公開されていません"}\n`;
-            data += `📦 *公開リポジトリ* : ${result.public_repos}\n`;
-            data += `🧾 *公開Gist* : ${result.public_gists}\n`;
-            data += `👥 *フォロワー* : ${result.followers}\n`;
-            data += `➡️ *フォロー中* : ${result.following}\n`;
-            data += `📅 *作成日* : ${result.created_at}\n`;
-            data += `♻️ *更新日* : ${result.updated_at}\n`;
-            data += `🔗 *GitHubリンク* : ${result.html_url}\n`;
-            data += `🐤 *Twitter* : ${result.twitter_username ? "@" + result.twitter_username : "なし"}\n`;
+            data += `🔗 *Node ID* : ${result.node_id}\n`;
+            data += `🏢 *Company* : ${result.company || "None"}\n`;
+            data += `📍 *Location* : ${result.location || "None"}\n`;
+            data += `✉️ *Email* : ${result.email || "Not Public"}\n`;
+            data += `📦 *Public Repos* : ${result.public_repos}\n`;
+            data += `🧾 *Public Gists* : ${result.public_gists}\n`;
+            data += `👥 *Followers* : ${result.followers}\n`;
+            data += `➡️ *Following* : ${result.following}\n`;
+            data += `📅 *Created At* : ${result.created_at}\n`;
+            data += `♻️ *Updated At* : ${result.updated_at}\n`;
+            data += `🔗 *GitHub Link* : ${result.html_url}\n`;
+            data += `🐤 *Twitter* : ${result.twitter_username ? "@" + result.twitter_username : "None"}\n`;
             await sock.sendMessage(
               m.chat,
               {
@@ -2386,7 +2386,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 contextInfo: {
                   isForwarded: false,
                   externalAdReply: {
-                    title: result.name || "GitHubユーザー",
+                    title: result.name || "GitHubUser",
                     thumbnailUrl: result.avatar_url,
                     mediaType: 1,
                     renderLargerThumbnail: false
@@ -2397,7 +2397,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
           } catch (error) {
             console.error(error);
-            reply("データの取得中にエラーが発生しました。ユーザー名を確認してもう一度お試しください。");
+            reply("Failed to retrieve data. Please check the username and try again.");
           }
         }
         break;
@@ -2411,33 +2411,33 @@ module.exports = async (sock, m, chatUpdate, store) => {
             .slice(0)
             .map(entry => entry[1]);
           let anu = groups.map(v => v.id);
-          reply(`${anu.length} グループチャットにブロードキャストを送信しています。`);
+          reply(`${anu.length} group chats are being sent a broadcast.`);
           for (let i of anu) {
             await FUNC.sleep(1500);
             sock.sendMessage(i, { text: `${text}` }, { quoted: fkontak });
           }
-          m.reply(`${anu.length} グループにブロードキャストを送信しました`);
+          m.reply(`${anu.length} groups have been sent the broadcast.`);
         }
         break;
       case "update": {
         if (!isOwner) return;
         if (!text.includes("|")) {
-          return reply("📢 正しい形式で入力してください：\n`.update <type> | <title> | <desc>`");
+          return reply("📢 Please use the correct format:\n`.update <type> | <title> | <desc>`");
         }
         const [typeRaw, titleRaw, descRaw] = text.split("|").map(a => a.trim());
         const type = typeRaw.toLowerCase();
-        const title = titleRaw || "無題のアップデート";
-        const desc = descRaw || "説明はありません。";
+        const title = titleRaw || "Untitled Update";
+        const desc = descRaw || "No description available.";
         const typeInfo = {
-          feature: { emoji: "🆕", label: "新機能" },
-          revamp: { emoji: "♻️", label: "システム刷新" },
-          fix: { emoji: "🛠️", label: "バグ修正" },
-          info: { emoji: "📢", label: "お知らせ" },
-          remove: { emoji: "❌", label: "機能削除" }
+          feature: { emoji: "🆕", label: "New Feature" },
+          revamp: { emoji: "♻️", label: "System Revamp" },
+          fix: { emoji: "🛠️", label: "Bug Fix" },
+          info: { emoji: "📢", label: "Announcement" },
+          remove: { emoji: "❌", label: "Feature Removed" }
         };
         const tag = typeInfo[type];
-        if (!tag) return reply("❌ 無効なタイプです。有効なタイプ: feature, revamp, fix, info, remove");
-        const updateMessage = `${tag.emoji} *アップデート - ${tag.label}*\n\n📌 *${title}*\n\n📝 ${desc}\n\n🕒 ${moment().format("YYYY/MM/DD HH:mm")}\n🧑‍💻 Dev: ${global.ownerName || "Bot Owner"}\n\n_この情報は全ユーザー向けに配信されました_`;
+        if (!tag) return reply("❌ Invalid type. Valid types: feature, revamp, fix, info, remove");
+        const updateMessage = `${tag.emoji} *Update - ${tag.label}*\n\n📌 *${title}*\n\n📝 ${desc}\n\n🕒 ${moment().format("YYYY/MM/DD HH:mm")}\n🧑‍💻 Dev: ${global.ownerName || "Bot Owner"}\n\n_This update was broadcast to all users_`;
         const sendTo = ["120363400223227222@newsletter", "120363418657733797@g.us", "120363297738337531@g.us"];
         const sendUpdate = async jid => {
           try {
@@ -2448,7 +2448,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 contextInfo: {
                   isForwarded: false,
                   externalAdReply: {
-                    title: "から " + pushname,
+                    title: "From " + pushname,
                     thumbnailUrl: ppuser,
                     mediaType: 1,
                     renderLargerThumbnail: false
@@ -2465,7 +2465,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           await FUNC.sleep(1500);
           await sendUpdate(jid);
         }
-        await reply(`✅ アップデート「${title}」を通知しました。`);
+        await reply(`✅ Update "${title}" was broadcast.`);
         break;
       }
       case "lyrics": {
@@ -2483,7 +2483,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
         const rawLyrics = res.lyrics;
         const cleaned = await cleanLyrics(rawLyrics, res.title);
-        const caption = `🎵 タイトル: ${res.title}\n👤 アーティスト: ${res.artist}\n📅 発売日: ${res.releaseDate || "Unknown"}\n\n📝 歌詞:\n\n${cleaned}`;
+        const caption = `🎵 Title: ${res.title}\n👤 Artist: ${res.artist}\n📅 Release Date: ${res.releaseDate || "Unknown"}\n\n📝 Lyrics:\n\n${cleaned}`;
         await sock.sendMessage(
           from,
           {
@@ -2507,20 +2507,20 @@ module.exports = async (sock, m, chatUpdate, store) => {
           try {
             const parsed = new URL(url);
             const id = parsed.searchParams.get("id");
-            if (!id) throw new Error("IDが見つかりません。");
+            if (!id) throw new Error("ID not found.");
             return id;
           } catch (err) {
             return null;
           }
         };
         const videoId = extractVideyId(args[0]);
-        if (!videoId) return reply("❌ 無効なリンクです！正しいVideyリンクを入力してください。");
+        if (!videoId) return reply("❌ Invalid link! Please provide a valid Videy link.");
         const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
         sock.sendMessage(
           from,
           {
             video: { url: videoUrl },
-            caption: `✅ ビデオが正常に取得されました！`
+            caption: `✅ Video retrieved successfully!`
           },
           { quoted: m }
         );
@@ -2536,7 +2536,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             const res = await fetch(`https://sekai-api-ruby.vercel.app/api/pinterest?q=${encodeURIComponent(text)}`);
             const data = await res.json();
             const images = data?.data?.result;
-            if (!Array.isArray(images) || images.length === 0) return reply("画像が見つかりません。");
+            if (!Array.isArray(images) || images.length === 0) return reply("Images not found.");
             const shuffled = [...new Set(images)].sort(() => 0.5 - Math.random());
             const selected = shuffled.slice(0, Math.min(count, shuffled.length));
             if (selected.length === 1) {
@@ -2564,12 +2564,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "ttimg":
       case "ttslide":
       case "tiktok": {
-        if (!text) return reply("TikTokのURLを入力してください！");
-        if (!FUNC.isUrl(args[0]) && !args[0].includes("tiktok.com")) return "リンクが無効です!";
+        if (!text) return reply("Please enter a TikTok URL!");
+        if (!FUNC.isUrl(args[0]) && !args[0].includes("tiktok.com")) return "Invalid link!";
         try {
           const fetchAPI = await axios.get(`https://api.vreden.my.id/api/tiktok?url=${encodeURIComponent(text)}`);
           const res = fetchAPI.data;
-          if (res.status !== 200 || !res.result?.status) return reply("TikTokのデータ取得に失敗しました！");
+          if (res.status !== 200 || !res.result?.status) return reply("Failed to retrieve TikTok data!");
           const data = res.result;
           const title = data.title || "TikTok";
           const images = data.data.filter(d => d.type === "photo").map(d => d.url);
@@ -2623,22 +2623,22 @@ module.exports = async (sock, m, chatUpdate, store) => {
               );
             }
           } else {
-            return reply("対応していないコンテンツタイプです。");
+            return reply("Unsupported content type.");
           }
         } catch (err) {
           console.error(err);
-          return reply("TikTokデータ取得中にエラーが発生しました。");
+          return reply("An error occurred while fetching TikTok data.");
         }
         break;
       }
       case "spotify":
       case "spotifysearch":
         {
-          if (!text) return m.reply("検索したい曲名を入力してください。例: spotify 夜に駆ける");
+          if (!text) return m.reply("Please enter a song title to search. Example: .spotify Racing Into the Night");
 
           try {
             const results = await SCR.searchSpotifyTracks(text);
-            if (!results || results.length === 0) return m.reply("該当する曲が見つかりませんでした。");
+            if (!results || results.length === 0) return m.reply("No matching song found.");
 
             function msToMinutes(ms) {
               const minutes = Math.floor(ms / 60000);
@@ -2646,38 +2646,38 @@ module.exports = async (sock, m, chatUpdate, store) => {
               return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
             }
 
-            let msgSpotify = "🎶 *Spotify検索結果 / Spotify Search Result* 🎶\n\n";
+            let msgSpotify = "🎶 *Spotify Search Results* 🎶\n\n";
 
             for (const track of results) {
               const duration = msToMinutes(track.duration_ms);
 
-              msgSpotify += `🎵 *タイトル* : ${track.name}\n`;
-              msgSpotify += `👤 *アーティスト* : ${track.artists.map(v => v.name).join(", ")}\n`;
-              msgSpotify += `💿 *アルバム* : ${track.album.name}\n`;
-              msgSpotify += `👥 *アルバムアーティスト* : ${track.album.artists.map(v => v.name).join(", ")}\n`;
-              msgSpotify += `📅 *リリース日* : ${track.album.release_date}\n`;
-              msgSpotify += `🔢 *トラック番号* : ${track.track_number} / ${track.album.total_tracks}\n`;
-              msgSpotify += `⏳ *時間* : ${duration}\n`;
-              msgSpotify += `🆔 *トラックID* : ${track.id}\n`;
-              msgSpotify += `🆔 *アルバムID* : ${track.album.id}\n`;
+              msgSpotify += `🎵 *Title* : ${track.name}\n`;
+              msgSpotify += `👤 *Artist* : ${track.artists.map(v => v.name).join(", ")}\n`;
+              msgSpotify += `💿 *Album* : ${track.album.name}\n`;
+              msgSpotify += `👥 *Album Artist* : ${track.album.artists.map(v => v.name).join(", ")}\n`;
+              msgSpotify += `📅 *Release Date* : ${track.album.release_date}\n`;
+              msgSpotify += `🔢 *Track Number* : ${track.track_number} / ${track.album.total_tracks}\n`;
+              msgSpotify += `⏳ *Duration* : ${duration}\n`;
+              msgSpotify += `🆔 *Track ID* : ${track.id}\n`;
+              msgSpotify += `🆔 *Album ID* : ${track.album.id}\n`;
               msgSpotify += `🔗 *Spotify URI* : ${track.uri}\n`;
-              msgSpotify += `🌐 *アルバムURL* : ${track.album.external_urls.spotify}\n`;
+              msgSpotify += `🌐 *Album URL* : ${track.album.external_urls.spotify}\n`;
               msgSpotify += `─────────────────────\n\n`;
             }
 
             reply(msgSpotify);
           } catch (e) {
             console.error(e);
-            return m.reply("エラーが発生しました。もう一度お試しください。");
+            return m.reply("An error occurred. Please try again.");
           }
         }
         break;
       case "ytplay":
       case "play":
         {
-          if (!text) return reply("🎵 再生したい曲のタイトルを入力してください！\n例：.play 夜に駆ける");
+          if (!text) return reply("🎵 Please enter a song title to play!\nExample: .play Racing into the night");
 
-          // 🔍 YouTube検索
+          // 🔍 YouTube Search
           let searchUrl = `https://api.siputzx.my.id/api/s/youtube?query=${encodeURIComponent(text)}`;
           let searchRes;
 
@@ -2685,14 +2685,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
             searchRes = await fetch(searchUrl).then(res => res.json());
           } catch (e) {
             console.error(e);
-            return m.reply("❌ 曲の検索中にエラーが発生しました。");
+            return m.reply("❌ An error occurred while searching for the song.");
           }
 
-          if (!searchRes.status || !searchRes.data) return m.reply("❌ 検索結果が見つかりませんでした。");
+          if (!searchRes.status || !searchRes.data) return m.reply("❌ No search results found.");
 
-          // 🎬 最初の動画タイプを取得
+          // 🎬 Get first video
           let video = searchRes.data.find(v => v.type === "video");
-          if (!video) return m.reply("❌ 該当する動画が見つかりませんでした。");
+          if (!video) return m.reply("❌ No matching video found.");
           // api
           const cheerio = require("cheerio");
           function extractVideoId(url) {
@@ -2778,7 +2778,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             throw "ga ada link download.";
           }
 
-          // 📥 MP3をダウンロード
+          // 📥 Download MP3
           let dlUrl = `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(video.url)}`;
           let dlRes;
 
@@ -2786,20 +2786,20 @@ module.exports = async (sock, m, chatUpdate, store) => {
             dlRes = await ytmp3(video.url);
           } catch (e) {
             console.error(e);
-            return m.reply("❌ オーディオのダウンロードに失敗しました。");
+            return m.reply("❌ Failed to download audio.");
           }
 
-          if (!dlRes.link) return m.reply("❌ オーディオが見つからないか、失敗しました。");
+          if (!dlRes.link) return m.reply("❌ Audio not found or download failed.");
 
-          // 🎶 曲情報送信
+          // 🎶 Send song info
           await sock.sendMessage(
             from,
             {
-              text: `🎶 *タイトル:* ${video.title}\n` + `👤 *チャンネル:* ${video.author?.name}\n` + `⏱️ *再生時間:* ${video.duration?.timestamp}\n` + `🔗 *リンク:* ${video.url}`,
+              text: `🎶 *Title:* ${video.title}\n` + `👤 *Channel:* ${video.author?.name}\n` + `⏱️ *Duration:* ${video.duration?.timestamp}\n` + `🔗 *Link:* ${video.url}`,
               contextInfo: {
                 externalAdReply: {
                   title: video.title,
-                  body: `アップローダー：${video.author?.name}`,
+                  body: `Uploader: ${video.author?.name}`,
                   thumbnailUrl: video.thumbnail,
                   mediaType: 1,
                   renderLargerThumbnail: true
@@ -2809,7 +2809,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             { quoted: m }
           );
 
-          // 🎧 MP3音楽ファイル送信
+          // 🎧 Send MP3 file
           await sock.sendMessage(
             from,
             {
@@ -2825,15 +2825,15 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
         break;
       case "terabox": {
-        if (!text) return reply(`🔗 TeraboxのURLを送ってください！\n例: ${prefix}terabox https://1024terabox.com/s/1zCxxxx`);
-        if (!FUNC.isUrl(args[0]) && !args[0].includes("terabox.com")) return "リンクが無効です!";
+        if (!text) return reply(`🔗 Please provide a Terabox URL!\nExample: ${prefix}terabox https://1024terabox.com/s/1zCxxxx`);
+        if (!FUNC.isUrl(args[0]) && !args[0].includes("terabox.com")) return "Invalid link!";
         try {
-          await reply("⏳ ダウンロードリンクを取得中...");
+          await reply("⏳ Fetching download link...");
 
           const res = await fetch(`https://zenz.biz.id/downloader/terabox?url=${encodeURIComponent(text)}`);
           const data = await res.json();
 
-          if (!data.status || !data.result) return reply("❌ 無効なURL、またはデータの取得に失敗しました。");
+          if (!data.status || !data.result) return reply("❌ Invalid URL or failed to fetch data.");
 
           const { filename, size, thumb, direct_url } = data.result;
           const sizeMB = Number(size) / 1024 / 1024;
@@ -2845,12 +2845,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 document: { url: direct_url },
                 mimetype: "application/octet-stream",
                 fileName: filename,
-                caption: `📁 *Terabox ダウンロード*\n\n📄 ファイル名: ${filename}\n📦 サイズ: ${sizeMB.toFixed(2)} MB`
+                caption: `📁 *Terabox Download*\n\n📄 File Name: ${filename}\n📦 Size: ${sizeMB.toFixed(2)} MB`
               },
               { quoted: m }
             );
           } else {
-            const caption = `📁 *Terabox ダウンローダー*\n\n📄 ファイル名: ${filename}\n📦 サイズ: ${sizeMB.toFixed(2)} MB\n\n⚠️ *ファイルサイズが50MBを超えているため、直接送信できません。*\n\n🔗 ダウンロードはこちら:\n${direct_url}`;
+            const caption = `📁 *Terabox Downloader*\n\n📄 File Name: ${filename}\n📦 Size: ${sizeMB.toFixed(2)} MB\n\n⚠️ *File size exceeds 50MB and cannot be sent directly.*\n\n🔗 Download link:\n${direct_url}`;
 
             await sock.sendMessage(
               m.chat,
@@ -2859,7 +2859,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 contextInfo: {
                   externalAdReply: {
                     title: filename,
-                    body: "Teraboxからダウンロード",
+                    body: "Download from Terabox",
                     thumbnailUrl: thumb,
                     sourceUrl: direct_url,
                     mediaType: 1,
@@ -2872,14 +2872,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
           }
         } catch (e) {
           console.error(e);
-          reply("⚠️ エラーが発生しました。もう一度お試しください。");
+          reply("⚠️ An error occurred. Please try again.");
         }
         break;
       }
 
       case "tourl":
         {
-          if (!/video/.test(mime) && !/image/.test(mime)) return reply(`*キャプション付きのビデオ/画像を送信/返信する* ${prefix + command}`);
+          if (!/video/.test(mime) && !/image/.test(mime)) return reply(`Please send or reply to an image/video with caption ${prefix + command}`);
           let { TelegraPh } = require("./all/scrape/uploader.js");
           let media = await sock.downloadAndSaveMediaMessage(quoted);
           let anu = await TelegraPh(media);
@@ -2905,7 +2905,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "tomp4":
       case "tovideo":
         {
-          if (!quoted) reply(`${prefix + command} でアニメーションステッカーに返信する`);
+          if (!quoted) reply(`${prefix + command} reply to an animated sticker with`);
           if (/video/.test(mime)) {
             let { TelegraPh } = require("./all/scrape/uploader.js");
             let media = await sock.downloadAndSaveMediaMessage(quoted);
@@ -2915,7 +2915,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               {
                 video: {
                   url: util.format(ehe),
-                  caption: "Webpをビデオに変換する"
+                  caption: "Convert WebP to video"
                 }
               },
               { quoted: fkontak }
@@ -2947,7 +2947,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "upswteks":
         {
           if (!isCreator) return;
-          if (!text) return reply("ステータスを更新するためのテキストを入力してください。");
+          if (!text) return reply("Please enter text for status update.");
           try {
             await sock.sendMessage(
               "status@broadcast",
@@ -2960,8 +2960,8 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
             reply(msg.done);
           } catch (error) {
-            console.error("メッセージの送信中にエラーが発生しました:", error);
-            return reply("ステータスの更新に失敗しました。");
+            console.error("An error occurred while sending message:", error);
+            return reply("Failed to update status.");
           }
         }
         break;
@@ -2974,7 +2974,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             await sock.sendMessage("status@broadcast", { video: { url: videosw }, caption: text || "" }, { statusJidList: jidAllList });
             await reply(msg.done);
           } else {
-            reply("動画への返信");
+            reply("Please reply to a video");
           }
         }
         break;
@@ -2988,7 +2988,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             await sock.sendMessage("status@broadcast", { image: { url: imagesw }, caption: text || "" }, { statusJidList: jidAllList });
             await reply(msg.done);
           } else {
-            reply("画像への返信");
+            reply("Please reply to an image");
           }
         }
         break;
@@ -3012,15 +3012,15 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
             await reply(msg.done);
           } else {
-            reply("音声に返信");
+            reply("Please reply to an audio");
           }
         }
         break;
       case "toaudio":
       case "audio":
         {
-          if (!/video/.test(mime) && !/audio/.test(mime)) reply(`*キャプション付きオーディオとして使用したいビデオ/オーディオを送信/返信* ${prefix + command}`);
-          if (!m.quoted) reply(`*キャプション付きオーディオとして使用したいビデオ/オーディオを送信/返信* ${prefix + command}`);
+          if (!/video/.test(mime) && !/audio/.test(mime)) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
+          if (!m.quoted) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
           let media = await sock.downloadMediaMessage(quoted);
           let { toAudio } = require("./all/library/converter.js");
           let audio = await toAudio(media, "mp4");
@@ -3030,8 +3030,8 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "tovn":
       case "voice":
         {
-          if (!/video/.test(mime) && !/audio/.test(mime)) reply(`*VNにしたいビデオ/オーディオにキャプションを付けて返信* ${prefix + command}`);
-          if (!m.quoted) reply(`*VNにしたいビデオ/オーディオにキャプションを付けて返信* ${prefix + command}`);
+          if (!/video/.test(mime) && !/audio/.test(mime)) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
+          if (!m.quoted) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
           let media = await quoted.download();
           let { toPTT } = require("./all/library/converter.js");
           let audio = await toPTT(media, "mp4");
@@ -3088,7 +3088,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               }
             });
             let { fileName, sizeBytes, downloadUrl } = JSON.parse((await res.text()).slice(4));
-            if (!downloadUrl) return reply("リンクのダウンロード制限！");
+            if (!downloadUrl) return reply("Download limit reached for link!");
             let data = await fetch(downloadUrl);
             if (data.status !== 200) throw data.statusText;
             return {
@@ -3100,7 +3100,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           }
           try {
             let kanjuttgede = await GDriveDl(text);
-            let bjirrbang = `*Google Drive*\n\n名前: ${kanjuttgede.fileName}\nリンク: ${kanjuttgede.downloadUrl}`;
+            let bjirrbang = `*Google Drive*\n\nName: ${kanjuttgede.fileName}\nLink: ${kanjuttgede.downloadUrl}`;
             reply(bjirrbang);
             await sock.sendMessage(
               m.chat,
@@ -3113,7 +3113,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
           } catch (error) {
             console.log(error.message);
-            reply("問題が発生しました。プライベートファイルかフォルダリンクの可能性があります。");
+            reply("An issue occurred. The file might be private or a folder link.");
           }
         }
         break;
@@ -3126,8 +3126,8 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "insta":
       case "instadl":
         {
-          if (!text) return m.reply("Instagramの投稿、リール、または画像のURLを入力してください。");
-          if (!FUNC.isUrl(args[0]) && !args[0].includes("instagram.com")) return "リンクが無効です!";
+          if (!text) return m.reply("Please enter an Instagram post, reel, or image URL.");
+          if (!FUNC.isUrl(args[0]) && !args[0].includes("instagram.com")) return "Invalid link!";
           try {
             if (!(await useLimit(m.sender, isPremium, 5))) return reply(msg.endLimit);
             const response = await axios.get(`https://api.neekoi.me/api/igdl?url=${text}`);
@@ -3175,10 +3175,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 });
               }
             } else {
-              m.reply("メディアが見つかりませんでした。");
+              m.reply("Media not found.");
             }
           } catch (error) {
-            m.reply("エラーが発生しました: " + error.message);
+            m.reply("An error occurred: " + error.message);
           }
         }
         break;
@@ -3190,18 +3190,18 @@ module.exports = async (sock, m, chatUpdate, store) => {
             if (!args[0]) {
               return m.reply(example("https://fb.watch/xxx"));
             }
-            if ((!FUNC.isUrl(args[0]) && !args[0].includes("facebook.com")) || !args[0].includes("fb.watch")) return "リンクが無効です!";
+            if ((!FUNC.isUrl(args[0]) && !args[0].includes("facebook.com")) || !args[0].includes("fb.watch")) return "Invalid link!";
             if (!(await useLimit(m.sender, isPremium, 10))) return reply(msg.endLimit);
             const url = args[0];
             const response = await fetch(`https://api.neekoi.me/api/fbdl?url=${encodeURIComponent(url)}`);
             if (!response.ok) {
-              return m.reply(`リンクを確認してもう一度お試しください。`);
+              return m.reply(`Please check the link and try again.`);
             }
             const data = await response.json();
             if (!data.status || !data.result || !data.result.data || data.result.data.length === 0) {
-              return m.reply(`リンクが有効であることを確認してください。`);
+              return m.reply(`Please make sure the link is valid.`);
             }
-            const messageText = `*[ Facebookビデオダウンローダー ]*`;
+            const messageText = `*[ Facebook Video Downloader ]*`;
             await sock.sendMessage(
               m.chat,
               {
@@ -3212,7 +3212,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             );
           } catch (error) {
             console.error(error);
-            m.reply(`ビデオの取得中にエラーが発生しました`);
+            m.reply(`An error occurred while retrieving the video.`);
           }
         }
         break;
@@ -3225,13 +3225,13 @@ module.exports = async (sock, m, chatUpdate, store) => {
             .slice(0)
             .map(entry => entry[1]);
           let anu = groups.map(v => v.id);
-          let teks = `*[ グループリスト ]*`;
+          let teks = `*[ GROUP LIST ]*`;
           for (let x of anu) {
             let metadata2 = await sock.groupMetadata(x);
             teks += `\n•─ ─────────── ─•\n`;
-            teks += `⟡ 名前 : ${metadata2.subject}\n`;
-            teks += `⟡ 私 : ${metadata2.id}\n`;
-            teks += `⟡ メンバー : ${metadata2.participants.length}\n`;
+            teks += `⟡ Name : ${metadata2.subject}\n`;
+            teks += `⟡ ID : ${metadata2.id}\n`;
+            teks += `⟡ Members : ${metadata2.participants.length}\n`;
             teks += `•─ ─────────── ─•\n`;
           }
           reply(teks);
@@ -3240,14 +3240,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "pushkontak":
         {
           if (!isOwner) return;
-          if (!text) return m.reply(example("jid|メッセージ "));
-          if (!text.split("|")) return m.reply(example("jid|メッセージ "));
+          if (!text) return m.reply(example("jid|message "));
+          if (!text.split("|")) return m.reply(example("jid|message "));
           const [idgc, pes] = text.split("|");
           const teks = pes;
           const jidawal = m.chat;
           const data = await sock.groupMetadata(id);
           const halls = await data.participants.filter(v => v.id.endsWith(".net")).map(v => v.id);
-          await m.reply(`*pushcontact* をグループ *${data.subject}* に処理しています`);
+          await m.reply(`*pushcontact* to group *${data.subject}* is being processed`);
           for (let mem of halls) {
             if (mem !== botNumber && mem.split("@")[0] !== global.owner) {
               const vcard = "BEGIN:VCARD\n" + "VERSION:3.0\n" + `FN:${ownerName}\n` + "ORG:Developer;\n" + `TEL;type=CELL;type=VOICE;waid=${global.owner}:${global.owner}\n` + "END:VCARD";
@@ -3264,7 +3264,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           await sock.sendMessage(
             jidawal,
             {
-              text: `*Pushcontact が成功しました ✅*\nメッセージを送信できたメンバーの総数: ${halls.length}`
+              text: `*Pushcontact Successful ✅*\nTotal members messaged: ${halls.length}`
             },
             { quoted: m }
           );
@@ -3300,10 +3300,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (!(await useLimit(m.sender, isPremium, 5))) return reply(msg.endLimit);
           const data = await YTDL(text, "mp3");
           if (!data || !data.downloadUrl) {
-            return reply("❌ APIからデータを取得できませんでした。YouTube URLが有効であることを確認してください。");
+            return reply("❌ Failed to fetch data from API. Please ensure the YouTube URL is valid.");
           }
           if (data.duration > 900) {
-            return reply("❌ ビデオの長さが 15 分を超えています。");
+            return reply("❌ Video duration exceeds 15 minutes.");
           }
           await sock.sendMessage(
             m.chat,
@@ -3313,7 +3313,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               ptt: false,
               contextInfo: {
                 externalAdReply: {
-                  title: data.title || "無題",
+                  title: data.title || "Untitled",
                   thumbnailUrl: data.thumbnail,
                   mediaType: 1,
                   renderLargerThumbnail: true
@@ -3324,7 +3324,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           );
         } catch (e) {
           console.error(e);
-          reply("❌ リクエストの処理中にエラーが発生しました。");
+          reply("❌ An error occurred while processing your request.");
         }
         break;
       }
@@ -3338,11 +3338,11 @@ module.exports = async (sock, m, chatUpdate, store) => {
           const data = await YTDL(text, "1080");
 
           if (!data || !data.downloadUrl) {
-            return reply("❌ APIからデータを取得できませんでした。YouTube URLが有効であることを確認してください。");
+            return reply("❌ Failed to fetch data from API. Please ensure the YouTube URL is valid.");
           }
 
           if (data.duration > 900) {
-            return reply("❌ ビデオの長さが 15 分を超えています。");
+            return reply("❌ Video duration exceeds 15 minutes.");
           }
 
           await sock.sendMessage(
@@ -3354,7 +3354,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               caption: data.title || "",
               contextInfo: {
                 externalAdReply: {
-                  title: data.title || "無題",
+                  title: data.title || "Untitled",
                   thumbnailUrl: data.thumbnail,
                   mediaType: 1,
                   renderLargerThumbnail: true
@@ -3365,7 +3365,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           );
         } catch (e) {
           console.error(e);
-          reply("❌ ビデオのダウンロード中にエラーが発生しました。");
+          reply("❌ An error occurred while downloading the video.");
         }
         break;
       }
@@ -3382,7 +3382,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         {
           if (!isPremium) return react("❌");
           if (!text) return m.reply(example("https://chat.whatsapp.com/xxxx"));
-          if (!FUNC.isUrl(args[0]) && !args[0].includes("whatsapp.com")) return "リンクが無効です!";
+          if (!FUNC.isUrl(args[0]) && !args[0].includes("whatsapp.com")) return "Invalid link!";
           let result = args[0].split("https://chat.whatsapp.com/")[1];
           await sock
             .groupAcceptInvite(result)
@@ -3396,14 +3396,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (!isAdmin) return reply(msg.admin);
           if (!isBotAdmin) return reply(msg.adminbot);
           if (text == "on") {
-            if (chatdb.welcomer) return reply("ウェルカムユーザーはすでにアクティブです");
+            if (chatdb.welcomer) return reply("Welcomer is already active.");
             chatdb.welcomer = true;
-            let teksnya = `*ウェルカムが正常に有効化されました ✅*`;
+            let teksnya = `*Welcomer successfully enabled ✅*`;
             reply(teksnya);
           } else if (text == "off") {
-            if (chatdb.welcomer == false) return reply("このグループはデータベースに登録されていません");
+            if (chatdb.welcomer == false) return reply("This group is not registered in the database.");
             chatdb.welcomer = false;
-            let teksnya = `*welcomer が正常に無効化されました ✅*`;
+            let teksnya = `*Welcomer successfully disabled ✅*`;
             reply(teksnya);
           }
         }
@@ -3415,10 +3415,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (!isBotAdmin) return reply(msg.adminbot);
           if (!text)
             return reply(
-              "カスタムのウェルカムメッセージを入力してください。\n使用できるタグ:\n@user : ログイン/ログアウトしたユーザーにメンション\n@group : グループ名\n@desc : グループの説明\n@readmore : 「続きを読む」を挿入して、メッセージを折りたたむ\n@member : メンバーの人数"
+              "Please enter a custom welcome message.\nAvailable tags:\n@user : Mention the user\n@group : Group name\n@desc : Group description\n@readmore : Readmore separator\n@member : Member count"
             );
           chatdb.welcometxt = m.text.replace(cmd + " ", "");
-          await reply(`終わり..`);
+          await reply(`Done..`);
         }
         break;
       case "setleft":
@@ -3428,10 +3428,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (!isBotAdmin) return reply(msg.adminbot);
           if (!text)
             return reply(
-              "カスタムのウェルカムメッセージを入力してください。\n使用できるタグ:\n@user : ログイン/ログアウトしたユーザーにメンション\n@group : グループ名\n@desc : グループの説明\n@readmore : 「続きを読む」を挿入して、メッセージを折りたたむ\n@member : メンバーの人数"
+              "Please enter a custom welcome message.\nAvailable tags:\n@user : Mention the user\n@group : Group name\n@desc : Group description\n@readmore : Readmore separator\n@member : Member count"
             );
           chatdb.leftxt = m.text.replace(cmd + " ", "");
-          await reply(`終わり..`);
+          await reply(`Done..`);
         }
         break;
       case "everyone":
@@ -3483,10 +3483,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (args.length < 1) return reply("on/off?");
           if (args[0] === "on") {
             db.data.chats[from].antilink = true;
-            reply(`${command} 有効になっています`);
+            reply(`${command} is enabled`);
           } else if (args[0] === "off") {
             db.data.chats[from].antilink = false;
-            reply(`${command} 無効になっています`);
+            reply(`${command} is disabled`);
           }
         }
         break;
@@ -3498,10 +3498,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (args.length < 1) return reply("on/off?");
           if (args[0] === "on") {
             db.data.chats[from].antilinkgc = true;
-            reply(`${command} 有効になっています`);
+            reply(`${command} is enabled`);
           } else if (args[0] === "off") {
             db.data.chats[from].antilinkgc = false;
-            reply(`${command} 無効になっています`);
+            reply(`${command} is disabled`);
           }
         }
         break;
@@ -3513,10 +3513,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (args.length < 1) return reply("on/off?");
           if (args[0] === "on") {
             db.data.chats[from].antisticker = true;
-            reply(`${command} 有効になっています`);
+            reply(`${command} is enabled`);
           } else if (args[0] === "off") {
             db.data.chats[from].antisticker = false;
-            reply(`${command} 無効になっています`);
+            reply(`${command} is disabled`);
           }
         }
         break;
@@ -3533,7 +3533,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 sock.sendMessage(
                   m.chat,
                   {
-                    text: `@${users.split("@")[0]} を正常に出力しました`,
+                    text: `@${users.split("@")[0]} has been kicked successfully.`,
                     mentions: [`${users}`]
                   },
                   { quoted: fkontak }
@@ -3555,9 +3555,9 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "translate": {
         let teks = m.quoted ? m.quoted.text : m.text.replace(cmd + " ", "");
-        if (!teks) return reply(`❌ 翻訳するテキストを入力してください。\n\n例: *${prefix}translate おはよう|en*`);
+        if (!teks) return reply(`❌ Please enter text to translate.\n\nExample: *${prefix}translate Hello|id*`);
         let [query, target] = teks.split("|").map(v => v.trim());
-        if (!query) return reply(`❌ 翻訳するテキストが見つかりません。\n\n例: *${prefix}translate おはよう|en*`);
+        if (!query) return reply(`❌ Text to translate not found.\n\nExample: *${prefix}translate Hello|id*`);
         if (!target) target = "id";
 
         try {
@@ -3565,13 +3565,13 @@ module.exports = async (sock, m, chatUpdate, store) => {
           const json = await res.json();
 
           if (!json.success || !json.translatedText) {
-            throw new Error("翻訳に失敗しました。");
+            throw new Error("Translation failed.");
           }
 
           reply(json.translatedText);
         } catch (err) {
           console.error(err);
-          reply("❌ エラーが発生しました。翻訳できませんでした。");
+          reply("❌ An error occurred. Could not translate.");
         }
         break;
       }
@@ -3658,22 +3658,22 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "owner":
       case "creator":
       case "crator":
-      case "オーナー":
-      case "製作者":
+      case "owner":
+      case "developer":
         {
           await sock.sendContact(
             m.chat,
             [
               {
                 number: "62881026950162",
-                name: "🌸 フラン (Franklin)",
-                title: "👨‍💻 開発者 (Kaihatsusha - Developer Bot)",
+                name: "🌸 Franklin",
+                title: "👨‍💻 Bot Developer",
                 org: "Deep Technology Inc."
               },
               {
                 number: "6282334226291",
-                name: "🍁 カエデ (Kaede)",
-                title: "👑 グループ管理者 (Gurūpu Kanrisha - Admin Group)",
+                name: "🍁 Kaede",
+                title: "👑 Group Admin",
                 org: "Sekai-Team"
               }
             ],
@@ -3688,12 +3688,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
           if (!text) {
             reply2(example("on"));
           } else if (["on", "enable", "1"].includes(args[0])) {
-            if (userdb.autoai == true) return m.reply(`すでにオンライン`);
-            reply2("シルビアが有効になりました✔️");
+            if (userdb.autoai == true) return m.reply(`Already online`);
+            reply2("Silvia has been enabled ✔️");
             userdb.autoai = true;
           } else if (["off", "disable", "0"].includes(args[0])) {
-            if (userdb.autoai == false) return m.reply(`さようなら👋`);
-            reply2("さようなら👋");
+            if (userdb.autoai == false) return m.reply(`Goodbye 👋`);
+            reply2("Goodbye 👋");
             userdb.autoai = false;
           }
         }
@@ -3701,7 +3701,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "spam-pairing":
         {
           if (!isOwner) return reply(mesg.owner);
-          if (!text) return reply(`*例：* ${prefix + command} +628xxxxxx|150`);
+          if (!text) return reply(`*Example:* ${prefix + command} +628xxxxxx|150`);
           reply(msg.wait);
           let [peenis, pepekk = "200"] = text.split("|");
           let target = peenis.replace(/[^0-9]/g, "").trim();
@@ -3717,7 +3717,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           for (let i = 0; i < pepekk; i++) {
             await FUNC.sleep(1500);
             let prc = await sucked.requestPairingCode(target);
-            await console.log(`_スパムペアリング成功コード - 番号: ${target} - コード: ${prc}_`);
+            await console.log(`_Spam pairing success - Number: ${target} - Code: ${prc}_`);
           }
           await FUNC.sleep(15000);
         }
@@ -3739,7 +3739,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
               contextInfo: {
                 isForwarded: false,
                 externalAdReply: {
-                  title: "から " + pushname,
+                  title: "From " + pushname,
                   thumbnailUrl: ppnyauser,
                   mediaType: 1,
                   renderLargerThumbnail: false
@@ -3755,17 +3755,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       // ============================== //
       case "siapakahaku":
-      case "誰":
+      case "siapakahaku":
       case "whosme":
         {
-          if (!isGroup) return reply("グループ内でのみ使用できます！");
-          if (isPlayingGame(m.sender)) return reply("🎮 まだ他のクイズをプレイ中です！");
-          if (m.sender in whosmegame) return reply("❗ まだ終わっていないゲームがあります！");
+          if (!isGroup) return reply("This command can only be used in groups!");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (m.sender in whosmegame) return reply("❗ You have an unfinished game!");
 
           const data = JSON.parse(fs.readFileSync("./all/json/game/whosme.json"));
           const { soal, jawaban } = FUNC.pickRandom(data);
           console.log("Jawaban : " + jawaban);
-          const teks = `🎮 *誰でしょう？ゲーム*\n${soal}\n⏰ 制限時間: ${gamewaktu} 秒`;
+          const teks = `🎮 *Who Am I? Game*\n${soal}\n⏰ Time limit: ${gamewaktu} seconds`;
           await reply(teks);
 
           whosmegame[m.sender] = {
@@ -3773,7 +3773,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             jawaban: jawaban.toLowerCase(),
             waktu: setTimeout(() => {
               if (whosmegame[m.sender]) {
-                m.reply(`⏰ 時間切れ！\n✅ 正解は: ${whosmegame[m.sender].jawaban}`);
+                m.reply(`⏰ Time's up!\n✅ Correct answer: ${whosmegame[m.sender].jawaban}`);
                 delete whosmegame[m.sender];
               }
             }, gamewaktu * 1000)
@@ -3782,17 +3782,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "susunkata":
       case "wordpuzzle":
-      case "ことばをならべて":
+      case "susunkata":
         {
-          if (!isGroup) return reply("⚠️ このコマンドはグループチャットでのみ使用できます。");
-          if (isPlayingGame(m.sender)) return reply("🎮 現在、他のクイズをプレイ中です！");
-          if (m.sender in scrambleword) return m.reply("❗ まだ終了していないゲームがあります！");
+          if (!isGroup) return reply("⚠️ This command can only be used in group chats.");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (m.sender in scrambleword) return m.reply("❗ You have an unfinished game!");
 
           const data = JSON.parse(fs.readFileSync("./all/json/game/scrambleword.json"));
           const { scrambled, answer, type } = FUNC.pickRandom(data);
-          console.log("答え: " + answer);
+          console.log("Answer: " + answer);
 
-          let teks = `🎮 *ことばを並べよう！*\n\n🔤 シャッフルされた単語: ${scrambled}\n📚 種類: ${type}\n⏰ 制限時間: ${gamewaktu} 秒`;
+          let teks = `🎮 *Word Puzzle!*\n\n🔤 Scrambled word: ${scrambled}\n📚 Category: ${type}\n⏰ Time limit: ${gamewaktu} seconds`;
           await sock.sendMessage(m.chat, { text: teks }, { quoted: fkontak });
 
           scrambleword[m.sender] = {
@@ -3801,7 +3801,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             hadiah: FUNC.randomNomor(10, 20),
             waktu: setTimeout(() => {
               if (scrambleword[m.sender]) {
-                m.reply(`⏰ タイムアップ！\n✅ 正解: ${scrambleword[m.sender].answer}`);
+                m.reply(`⏰ Time's up!\n✅ Correct answer: ${scrambleword[m.sender].answer}`);
                 delete scrambleword[m.sender];
               }
             }, gamewaktu * 1000)
@@ -3809,17 +3809,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
         break;
       case "tebakkata":
-      case "アナグラム":
+      case "tebakkata":
       case "guessword":
         {
-          if (!isGroup) return reply("⚠️ このコマンドはグループチャットでのみ使用できます。");
-          if (isPlayingGame(m.sender)) return reply("🎮 現在、他のクイズをプレイ中です！");
-          if (m.sender in guesswordgame) return reply("❗ まだ終了していないゲームがあります！");
+          if (!isGroup) return reply("⚠️ This command can only be used in group chats.");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (m.sender in guesswordgame) return reply("❗ You have an unfinished game!");
 
           const data = JSON.parse(fs.readFileSync("./all/json/game/wordans.json"));
           const { soal, jawaban } = FUNC.pickRandom(data);
-          console.log("答え: " + jawaban);
-          const teks = `🎮 *ことばあそびゲーム*\n🔤 お題: ${soal}\n⏰ 制限時間: ${gamewaktu} 秒`;
+          console.log("Answer: " + jawaban);
+          const teks = `🎮 *Guess The Word*\n🔤 Clue: ${soal}\n⏰ Time limit: ${gamewaktu} seconds`;
           await reply(teks);
 
           guesswordgame[m.sender] = {
@@ -3827,7 +3827,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             jawaban: jawaban.toLowerCase(),
             waktu: setTimeout(() => {
               if (guesswordgame[m.sender]) {
-                m.reply(`⏰ タイムアップ！\n✅ 正解: ${guesswordgame[m.sender].jawaban}`);
+                m.reply(`⏰ Time's up!\n✅ Correct answer: ${guesswordgame[m.sender].jawaban}`);
                 delete guesswordgame[m.sender];
               }
             }, gamewaktu * 1000)
@@ -3836,17 +3836,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
 
       case "tebakkalimat":
-      case "文書シャッフル":
+      case "tebakkalimat":
       case "guessentence":
         {
-          if (!isGroup) return reply("⚠️ このコマンドはグループチャットでのみ使用できます。");
-          if (isPlayingGame(m.sender)) return reply("🎮 現在、他のクイズをプレイ中です！");
-          if (m.sender in guesswordgame) return reply("❗ まだ終了していないゲームがあります！");
+          if (!isGroup) return reply("⚠️ This command can only be used in group chats.");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (m.sender in guesswordgame) return reply("❗ You have an unfinished game!");
 
           const data = JSON.parse(fs.readFileSync("./all/json/game/wordsans.json"));
           const { soal, jawaban } = FUNC.pickRandom(data);
-          console.log("答え: " + jawaban);
-          const teks = `🎮 *ぶんしょうクイズ*\n📜 お題: ${soal}\n⏰ 制限時間: ${gamewaktu} 秒`;
+          console.log("Answer: " + jawaban);
+          const teks = `🎮 *Guess The Sentence*\n📜 Clue: ${soal}\n⏰ Time limit: ${gamewaktu} seconds`;
           await reply(teks);
 
           guesswordgame[m.sender] = {
@@ -3854,7 +3854,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             jawaban: jawaban.toLowerCase(),
             waktu: setTimeout(() => {
               if (guesswordgame[m.sender]) {
-                m.reply(`⏰ タイムアップ！\n✅ 正解: ${guesswordgame[m.sender].jawaban}`);
+                m.reply(`⏰ Time's up!\n✅ Correct answer: ${guesswordgame[m.sender].jawaban}`);
                 delete guesswordgame[m.sender];
               }
             }, gamewaktu * 1000)
@@ -3864,17 +3864,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       case "trivia":
       case "quiz":
-      case "クイズ":
+      case "triviaquiz":
       case "kuis":
         {
-          if (!isGroup) return reply("⚠️ このコマンドはグループチャットでのみ使用できます。");
-          if (isPlayingGame(m.sender)) return reply("🎮 現在、他のクイズをプレイ中です！");
-          if (m.sender in triviaquizgame) return reply("❗ まだ終了していないゲームがあります！");
+          if (!isGroup) return reply("⚠️ This command can only be used in group chats.");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (m.sender in triviaquizgame) return reply("❗ You have an unfinished game!");
 
           const data = JSON.parse(fs.readFileSync("./all/json/game/quiz.json"));
           const { soal, jawaban } = FUNC.pickRandom(data);
-          console.log("答え: " + jawaban);
-          const teks = `🎮 *トリビアクイズ*\n❓ 質問: ${soal}\n⏰ 制限時間: ${gamewaktu} 秒`;
+          console.log("Answer: " + jawaban);
+          const teks = `🎮 *Trivia Quiz*\n❓ Question: ${soal}\n⏰ Time limit: ${gamewaktu} seconds`;
           await reply(teks);
 
           triviaquizgame[m.sender] = {
@@ -3882,7 +3882,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             jawaban: jawaban.toLowerCase(),
             waktu: setTimeout(() => {
               if (triviaquizgame[m.sender]) {
-                m.reply(`⏰ タイムアップ！\n✅ 正解: ${triviaquizgame[m.sender].jawaban}`);
+                m.reply(`⏰ Time's up!\n✅ Correct answer: ${triviaquizgame[m.sender].jawaban}`);
                 delete triviaquizgame[m.sender];
               }
             }, gamewaktu * 1000)
@@ -3893,16 +3893,16 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "guesselement":
       case "chemistry":
       case "tebakkimia":
-      case "かがくクイズ":
+      case "tebakkimia":
         {
-          if (!isGroup) return reply("⚠️ このコマンドはグループチャットでのみ使用できます。");
-          if (isPlayingGame(m.sender)) return reply("🎮 現在、他のクイズをプレイ中です！");
-          if (m.sender in guesselementgame) return reply("❗ まだ終了していないゲームがあります！");
+          if (!isGroup) return reply("⚠️ This command can only be used in group chats.");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (m.sender in guesselementgame) return reply("❗ You have an unfinished game!");
 
           const data = JSON.parse(fs.readFileSync("./all/json/game/chemistry.json"));
           const { element, answer } = FUNC.pickRandom(data);
-          console.log("答え: " + answer);
-          const teks = `🧪 *化学クイズ*\n🔬 お題: ${element}\n⏰ 制限時間: ${gamewaktu} 秒`;
+          console.log("Answer: " + answer);
+          const teks = `🧪 *Chemistry Quiz*\n🔬 Element: ${element}\n⏰ Time limit: ${gamewaktu} seconds`;
           await reply(teks);
 
           guesselementgame[m.sender] = {
@@ -3910,7 +3910,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
             jawaban: answer.toLowerCase(),
             waktu: setTimeout(() => {
               if (guesselementgame[m.sender]) {
-                m.reply(`⏰ タイムアップ！\n✅ 正解: ${guesselementgame[m.sender].answer}`);
+                m.reply(`⏰ Time's up!\n✅ Correct answer: ${guesselementgame[m.sender].answer}`);
                 delete guesselementgame[m.sender];
               }
             }, gamewaktu * 1000)
@@ -3919,27 +3919,27 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "mathquiz":
       case "math":
-      case "けいさん":
+      case "quizmath":
       case "quizmath":
         {
-          if (!isGroup) return reply("グループ内でのみ使用できます！");
-          if (isPlayingGame(m.sender)) return reply("🎮 まだ他のクイズをプレイ中です！");
-          if (kuismath[m.sender]) return reply("まだ終わっていないクイズがあります！");
+          if (!isGroup) return reply("This command can only be used in groups!");
+          if (isPlayingGame(m.sender)) return reply("🎮 You are currently playing another quiz!");
+          if (kuismath[m.sender]) return reply("You have an unfinished math quiz!");
 
           let { genMath, modes } = require("./all/json/game/math");
           if (!text)
-            return reply(`📘 モード一覧: ${Object.keys(modes).join(" | ")}
-📌 使い方の例: ${prefix}math medium`);
+            return reply(`📘 Available Modes: ${Object.keys(modes).join(" | ")}
+📌 Example: ${prefix}math medium`);
 
           let result = await genMath(text.toLowerCase());
-          sock.sendText(m.chat, `🧮 *次の計算式の答えは？*\n\n「 ${result.soal} 」\n⏰ 制限時間: ${(result.waktu / 1000).toFixed(2)} 秒`, m);
+          sock.sendText(m.chat, `🧮 *What is the answer to this equation?*\n\n「 ${result.soal} 」\n⏰ Time limit: ${(result.waktu / 1000).toFixed(2)} seconds`, m);
 
           math[m.sender] = result.hadiah;
           kuismath[m.sender] = result.jawaban;
 
           await FUNC.sleep(result.waktu);
           if (kuismath[m.sender]) {
-            reply(`⏰ 時間切れ！\n✅ 正解は: ${kuismath[m.sender]}`);
+            reply(`⏰ Time's up!\n✅ Correct answer: ${kuismath[m.sender]}`);
             delete kuismath[m.sender];
             delete math[m.sender];
           }
@@ -3971,59 +3971,58 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "donate":
       case "donasi":
-      case "寄付":
+      case "donasi":
         {
           let donasi = "";
-          donasi += "🍁 ようこそ、楓の寄付ページへ 🍁\n";
-          donasi += "静かに色づく紅葉のように、あなたの支援が私たちの活動を暖かく彩ります。\n\n";
-          donasi += "🗾 あなたの「応援」が、未来の力に。\n";
-          donasi += "このページでは、プロジェクトの成長、配信・開発の継続、そして新しいアイデアの実現のために、あなたのご支援を受け付けています。\n\n";
-          donasi += "💖 ご支援いただいた方へ感謝を込めて：\n";
-          donasi += "– 特別なお礼メッセージ\n";
-          donasi += "– クレジット／支援者リストにお名前を記載（希望者のみ）\n";
-          donasi += "– 将来の限定コンテンツまたは先行アクセス　など！\n\n";
-          donasi += "🍂 「一枚一枚、落ちる楓に想いを込めて。」\n";
-          donasi += "小さなひとしずくが、大きな変化を生み出します。\n\n";
-          donasi += "🔗 支援リンクはこちらから：\n";
-          donasi += `🍁 Sociabuzzで支援する\n- ${global.sociabuzz}\n`;
-          donasi += `🍁 Saweriaで応援する\n- ${global.saweria}\n`;
-          donasi += `🍁 Trakteerで支援する\n- ${global.trakteer}\n\n`;
-          donasi += "🔗 サポート番号はこちらです：\n";
-          donasi += `🍁 *Dana* ナンバー\n- ${global.dana}\n`;
-          donasi += `🍁 *Gopay* ナンバー\n- ${global.gopay}\n`;
+          donasi += "🍁 Welcome to Kaede's Donation Page 🍁\n";
+          donasi += "Like autumn leaves warmly coloring the world, your support enriches our development.\n\n";
+          donasi += "🗾 Your Support Drives Our Future.\n";
+          donasi += "This page accepts support to keep the project growing, maintain server stability, and realize new ideas.\n\n";
+          donasi += "💖 Special thanks to all supporters:\n";
+          donasi += "– Heartfelt thank you message\n";
+          donasi += "– Name included in supporter credits (optional)\n";
+          donasi += "– Early access to upcoming features!\n\n";
+          donasi += "🍂 Every contribution makes a huge difference.\n\n";
+          donasi += "🔗 Donation Links:\n";
+          donasi += `🍁 Support via Sociabuzz\n- ${global.sociabuzz}\n`;
+          donasi += `🍁 Support via Saweria\n- ${global.saweria}\n`;
+          donasi += `🍁 Support via Trakteer\n- ${global.trakteer}\n\n`;
+          donasi += "🔗 E-Wallet Support:\n";
+          donasi += `🍁 *Dana* Number\n- ${global.dana}\n`;
+          donasi += `🍁 *Gopay* Number\n- ${global.gopay}\n`;
           reply2(donasi);
         }
         break;
-      case "ボットインフォ":
+      case "botinfo":
       case "botinfo":
       case "infobot":
         {
           let info = "";
-          info += "🌸 *楓（Kaede）について* 🌸\n\n";
-          info += "日々進化を続ける「Kaede（楓）」は、\n";
-          info += "日常的な対話から情報提供、エンタメ機能まで、\n";
-          info += "あなたの活動を優しくサポートします。\n\n";
+          info += "🌸 *About Kaede* 🌸\n\n";
+          info += "Kaede is an evolving multi-functional bot,\n";
+          info += "providing features from daily conversation to info search and entertainment,\n";
+          info += "supporting your daily activities smoothly.\n\n";
 
-          info += "🧠 *内部アシスタント：Silvia（シルビア）*\n";
-          info += "Silviaは、高度な自然言語処理技術に基づいて設計されたAIです。\n";
-          info += "文脈を理解した対話、感情に寄り添う応答、継続学習によって、\n";
-          info += "より人間らしい体験を実現します。\n";
-          info += "彼女の進化は、Ara、Rein、そして*Silvia自身*による継続的なトレーニングによって支えられています。\n\n";
+          info += "🧠 *Internal Assistant: Silvia*\n";
+          info += "Silvia is an AI designed with natural language processing technology.\n";
+          info += "Delivering context-aware conversations and natural interactions.\n";
+          info += "Creating a more engaging, human-like experience.\n";
+          info += "Supported and developed continuously by Ara, Rein, and Silvia.\n\n";
 
-          info += "📌 *システム概要*\n";
-          info += "• 🤖 ボット名：Kaede（楓）\n";
-          info += "• 🧠 AIモジュール：Silvia\n";
-          info += "• 🌐 対応言語：日本語・英語\n\n";
+          info += "📌 *System Overview*\n";
+          info += "• 🤖 Bot Name: Kaede\n";
+          info += "• 🧠 AI Module: Silvia\n";
+          info += "• 🌐 Languages: English / Indonesian / Japanese\n\n";
 
-          info += "🎁 *支援リンク*\n";
-          info += "ご支援は今後の開発や安定稼働に活用されます：\n";
-          info += `🍁 Sociabuzzで支援する\n- ${global.sociabuzz}\n`;
-          info += `🍁 Saweriaで応援する\n- ${global.saweria}\n`;
-          info += `🍁 Trakteerで支援する\n- ${global.trakteer}\n\n`;
+          info += "🎁 *Donation Links*\n";
+          info += "Support helps ensure server stability and ongoing development:\n";
+          info += `🍁 Support on Sociabuzz\n- ${global.sociabuzz}\n`;
+          info += `🍁 Support on Saweria\n- ${global.saweria}\n`;
+          info += `🍁 Support on Trakteer\n- ${global.trakteer}\n\n`;
 
-          info += "📣 *メッセージ*\n";
-          info += "「小さな桜の花びらが、静かに世界を彩るように」\n";
-          info += "KaedeとSilviaは、あなたの日常をそっと豊かに彩れる存在でありたいと願っています。";
+          info += "📣 *Message*\n";
+          info += "\"Like cherry blossoms gently coloring the world,\"\n";
+          info += "Kaede and Silvia are here to assist and brighten your daily activities.";
 
           reply2(info);
         }

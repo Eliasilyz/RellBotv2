@@ -1,84 +1,84 @@
 global.menuOwner = `
-╔══ ❖  👑 開発者コマンド ❖ ══
+╔══ ❖  👑 OWNER COMMANDS ❖ ══
 ║ ⤷ banchat / unbanchat @user
-║ ⤷ upch / upchv2 <テキスト>
-║ ⤷ spam-pairing <番号|番号>
-║ ⤷ broadcast <テキスト>
+║ ⤷ upch / upchv2 <text>
+║ ⤷ spam-pairing <number|number>
+║ ⤷ broadcast <text>
 ║ ⤷ restart / shutdown
 ║ ⤷ ban / unban @user
 ║ ⤷ autoread <on/off>
-║ ⤷ setppbot <画像>
+║ ⤷ setppbot <image>
 ║ ⤷ getsession
 ║ ⤷ mode
 ╚═══════❖
 `;
-// 🔍 検索メニュー
-global.menuSearch = `╔❖  🔍 検索メニュー ❖ 
-║ ⤷ pinterest <キーワード>
-║ ⤷ lightnovel <タイトル>
-║ ⤷ spotify <キーワード>
-║ ⤷ anime <タイトル>
-║ ⤷ manga <タイトル>
-║ ⤷ swaifu <名前>
-║ ⤷ play <曲名>
+// 🔍 Search Menu
+global.menuSearch = `╔❖  🔍 SEARCH MENU ❖ 
+║ ⤷ pinterest <query>
+║ ⤷ lightnovel <title>
+║ ⤷ spotify <query>
+║ ⤷ anime <title>
+║ ⤷ manga <title>
+║ ⤷ swaifu <name>
+║ ⤷ play <query>
 ╚═══════❖
 `;
 
-// 📥 ダウンロード
-global.menuDownload = `╔❖  📥 ダウンロード ❖ 
-║ ⤷ googledrive <リンク>
-║ ⤷ instadl <リンク>
-║ ⤷ tiktok <リンク>
-║ ⤷ videy <リンク>
-║ ⤷ ytmp3 <リンク>
-║ ⤷ ytmp4 <リンク>
-║ ⤷ fbdl <リンク>
+// 📥 Download Menu
+global.menuDownload = `╔❖  📥 DOWNLOAD MENU ❖ 
+║ ⤷ googledrive <url>
+║ ⤷ instadl <url>
+║ ⤷ tiktok <url>
+║ ⤷ videy <url>
+║ ⤷ ytmp3 <url>
+║ ⤷ ytmp4 <url>
+║ ⤷ fbdl <url>
 ╚═══════❖
 `;
 
-// 🤖 AI アシスタント
-global.menuAI = `╔❖  🤖 AI アシスタント ❖ 
-║ ⤷ ai <プロンプト>
-║ ⤷ autoai <オン/オフ>
+// 🤖 AI Assistant
+global.menuAI = `╔❖  🤖 AI ASSISTANT ❖ 
+║ ⤷ ai <prompt>
+║ ⤷ autoai <on/off>
 ╚═══════❖
 `;
 
-// 🛠️ ツール
-global.menuTools = `╔❖  🛠️ ツール ❖ 
-║ ⤷ ghstalk <ユーザー名>
-║ ⤷ igstalk <ユーザー名>
-║ ⤷ ttstalk <ユーザー名>
-║ ⤷ tovideo <返信>
-║ ⤷ toaudio <返信>
-║ ⤷ remini <返信>
-║ ⤷ tourl <返信>
-║ ⤷ toimg <返信>
-║ ⤷ tomp3 <返信>
-║ ⤷ tovn <返信>
+// 🛠️ Tools Menu
+global.menuTools = `╔❖  🛠️ TOOLS MENU ❖ 
+║ ⤷ ghstalk <username>
+║ ⤷ igstalk <username>
+║ ⤷ ttstalk <username>
+║ ⤷ tovideo <reply>
+║ ⤷ toaudio <reply>
+║ ⤷ remini <reply>
+║ ⤷ tourl <reply>
+║ ⤷ toimg <reply>
+║ ⤷ tomp3 <reply>
+║ ⤷ tovn <reply>
 ╚═══════❖
 `;
 
-// 👥 グループ管理
-global.menuGroup = `╔❖  👥 グループ管理 ❖ 
-║ ⤷ antisticker <オン/オフ>
-║ ⤷ antilinkgc <オン/オフ>
-║ ⤷ setwelcome <テキスト>
-║ ⤷ antilink <オン/オフ>
-║ ⤷ welcome <オン/オフ>
-║ ⤷ setleft <テキスト>
-║ ⤷ hidetag <テキスト>
-║ ⤷ promote @ユーザー
-║ ⤷ demote @ユーザー
-║ ⤷ here <テキスト>
-║ ⤷ kick @ユーザー
-║ ⤷ delete <返信>
+// 👥 Group Management
+global.menuGroup = `╔❖  👥 GROUP MENU ❖ 
+║ ⤷ antisticker <on/off>
+║ ⤷ antilinkgc <on/off>
+║ ⤷ setwelcome <text>
+║ ⤷ antilink <on/off>
+║ ⤷ welcome <on/off>
+║ ⤷ setleft <text>
+║ ⤷ hidetag <text>
+║ ⤷ promote @user
+║ ⤷ demote @user
+║ ⤷ here <text>
+║ ⤷ kick @user
+║ ⤷ delete <reply>
 ║ ⤷ open
 ║ ⤷ close
 ╚═══════❖
 `;
 
-// 🎮 ゲーム
-global.menuGames = `╔❖  🎮 ゲーム ❖ 
+// 🎮 Games Menu
+global.menuGames = `╔❖  🎮 GAMES MENU ❖ 
 ║ ⤷ guessentence
 ║ ⤷ wordpuzzle
 ║ ⤷ guessword
@@ -89,26 +89,26 @@ global.menuGames = `╔❖  🎮 ゲーム ❖
 ╚═══════❖
 `;
 
-// 🔗 その他
-global.menuEtc = `╔❖  🔗 その他 ❖ 
+// 🔗 Others Menu
+global.menuEtc = `╔❖  🔗 OTHERS MENU ❖ 
 ║ ⤷ translate
 ║ ⤷ menfes
 ╚═══════❖
 `;
 
-// 🎨 メーカー
-global.menuMaker = `╔❖  🎨 メーカー ❖ 
-║ ⤷ deepimg <プロンプト｜スタイル>
-║ ⤷ swm <パック|作者>
-║ ⤷ brat <テキスト>
-║ ⤷ sticker <返信>
-║ ⤷ smeme <上|下>
-║ ⤷ qc <テキスト>
+// 🎨 Maker Menu
+global.menuMaker = `╔❖  🎨 MAKER MENU ❖ 
+║ ⤷ deepimg <prompt|style>
+║ ⤷ swm <pack|author>
+║ ⤷ brat <text>
+║ ⤷ sticker <reply>
+║ ⤷ smeme <top|bottom>
+║ ⤷ qc <text>
 ╚═══════❖
 `;
 
-// 💖 ハーレムコマンド
-global.menuHarem = `╔❖  💖 ハーレム ❖ 
+// 💖 Harem Menu
+global.menuHarem = `╔❖  💖 HAREM MENU ❖ 
 ║ ⤷ trade @user
 ║ ⤷ profile
 ║ ⤷ mymarry

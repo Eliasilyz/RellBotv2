@@ -7,6 +7,7 @@ const moment = require("moment-timezone");
 global.owner = "6282334226291";
 global.ownerName = "Farel Hanafi";
 global.namabot = "楓「Kaede」";
+global.namabot2 = "楓「Kaede」2k26";
 global.mail = "farellh12@gmail.com";
 global.idsaluran = "120363400223227222@newsletter";
 
@@ -36,17 +37,17 @@ global.GROQ_API = process.env.GROQ_API;
 
 // ========== RESPONSE MESSAGES ========== //
 global.msg = {
-    done: "[🤗] 操作が正常に完了しました！",
-    wait: "[⏳] 少々お待ちください、リクエストを処理中です...",
-    admin: "[❌] このコマンドはグループ管理者のみが使用できます。",
-    adminbot: "[❌] この操作にはボットが管理者である必要があります。",
-    group: "[❌] この機能はグループチャットでのみ使用できます。",
-    acces: "[❌] このコマンドへのアクセス権がありません。",
-    private: "[❌] この機能はプライベートチャットでのみ利用可能です。",
-    endLimit: "[🕊️] 上限に達しました！最大50個、5分ごとに1個回復。プレミアムなら無制限！",
-    error: "[❌] エラーが発生しました。1分後にもう一度お試しください。",
-    prem: "[❌] この機能はプレミアムユーザー専用です。",
-    owner: "[❌] このコマンドはボット所有者専用です。",
+    done: "[🤗] Successfully completed!",
+    wait: "[⏳] Please wait, processing your request...",
+    admin: "[❌] This command can only be used by group admins.",
+    adminbot: "[❌] The bot must be an admin to perform this action.",
+    group: "[❌] This feature can only be used in group chats.",
+    acces: "[❌] You do not have permission to use this command.",
+    private: "[❌] This feature is only available in private chats.",
+    endLimit: "[🕊️] You have reached your limit! Max 50, recovers 1 every 5 minutes. Unlimited for Premium!",
+    error: "[❌] An error occurred. Please try again in 1 minute.",
+    prem: "[❌] This feature is for Premium users only.",
+    owner: "[❌] This command is only for the bot owner.",
 };
 
 // ========== HOT-RELOAD ========== //

@@ -119,11 +119,11 @@ async function levelup(sender, m, sock, qkontak, pushname) {
   await user.save();
 
   if (leveledUp) {
-   const teks = `*${safeName}* レベルアップしました！🎉
-リーダーボードユーザー.toplevel
-┌───⊷ *ステータス*
-│ ◦ *進捗* : ${user.level - 1} ➠ ${user.level}
-│ ◦ *ランク* : ${user.rank}
+   const teks = `*${safeName}* Leveled up! 🎉
+Check leaderboard: .toplevel
+┌───⊷ *STATUS*
+│ ◦ *Progress* : ${user.level - 1} ➠ ${user.level}
+│ ◦ *Rank* : ${user.rank}
 └───────────────`;
 
    await sock.sendMessage(
@@ -138,7 +138,7 @@ async function levelup(sender, m, sock, qkontak, pushname) {
       },
       forwardedNewsletterMessageInfo: {
        newsletterJid: global.idsaluran,
-       newsletterName: `こんにちは ${safeName} ✨`,
+       newsletterName: `Hello ${safeName} ✨`,
       },
      },
     },

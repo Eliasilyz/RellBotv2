@@ -79,7 +79,7 @@ async function handleDailyGacha(userId) {
  return {
   status: true,
   data: waifu,
-  message: `「.claim」で受け取る、「.skip」でスキップ。`,
+  message: `Type ".claim" to claim, ".skip" to skip.`,
  };
 }
 
@@ -91,7 +91,7 @@ async function handleClaim(userId) {
  user.tempGacha = null;
  await user.save();
 
- return { message: "🎉 ワイフを追加しました！" };
+ return { message: "🎉 Waifu added to your collection!" };
 }
 
 async function handleSkip(userId) {
@@ -99,7 +99,7 @@ async function handleSkip(userId) {
  if (!user?.tempGacha) return { error: "No waifu to skip." };
  user.tempGacha = null;
  await user.save();
- return { message: "⏩ スキップしました。" };
+ return { message: "⏩ Skipped." };
 }
 
 async function rerollGacha(userId) {
@@ -167,23 +167,23 @@ async function addTicket(userId, amount = 1) {
 async function addWaifu(data) {
  const waifu = new Waifu(data);
  await waifu.save();
- return { message: `追加成功: ${waifu.name}` };
+ return { message: `Successfully added: ${waifu.name}` };
 }
 
 async function addWaifuImage(userId, imageUrl) {
  const user = await User.findOne({ phone_number: userId });
- if (!user?.tempGacha) return { error: "Tidak ada waifu yang sedang di-gacha." };
+ if (!user?.tempGacha) return { error: "No waifu currently being rolled." };
 
  const waifu = await Waifu.findById(user.tempGacha);
  waifu.image = imageUrl;
  await waifu.save();
 
- return { message: `📷 Gambar waifu ${waifu.name} diperbarui.` };
+ return { message: `📷 Image of ${waifu.name} updated.` };
 }
 
 // Step 1: A (premium) offer trade
 async function initiateTrade(fromPhone, toPhone, waifuName) {
- const isPremium = !!(await USERSTATUS.getPremiumStatus(userId));
+ const isPremium = !!(await USERSTATUS.getPremiumStatus(fromPhone));
  const fromUser = await User.findOne({ phone_number: fromPhone });
  const toUser = await User.findOne({ phone_number: toPhone });
  if (!isPremium) return { error: "Only premium users can initiate trades." };
@@ -315,14 +315,14 @@ async function swaifu(query) {
   if (!char) {
    return {
     success: false,
-    message: `文字「${query}」が見つかりません。`,
+    message: `Character "${query}" not found.`,
    };
   }
 
   const birthDate = char.dateOfBirth;
-  const formattedBirthDate = birthDate?.day && birthDate?.month ? `${birthDate.day}-${birthDate.month}` + (birthDate.year ? `-${birthDate.year}` : "") : "未知";
+  const formattedBirthDate = birthDate?.day && birthDate?.month ? `${birthDate.day}-${birthDate.month}` + (birthDate.year ? `-${birthDate.year}` : "") : "Unknown";
 
-  const cleanDesc = (char.description || "説明はありません。").replace(/<[^>]+>/g, "").split("\n")[0];
+  const cleanDesc = (char.description || "No description available.").replace(/<[^>]+>/g, "").split("\n")[0];
 
   const relatedMedia = char.media.nodes.map((m) => ({
    id: m.id,
@@ -338,7 +338,7 @@ async function swaifu(query) {
     native: char.name.native,
     alternative: char.name.alternative,
    },
-   gender: char.gender || "未知",
+   gender: char.gender || "Unknown",
    image: {
     large: char.image.large,
     medium: char.image.medium,
@@ -355,7 +355,7 @@ async function swaifu(query) {
   console.error(err.message);
   return {
    success: false,
-   message: "AniList からデータを取得中にエラーが発生しました。",
+   message: "An error occurred while fetching data from AniList.",
   };
  }
 }
