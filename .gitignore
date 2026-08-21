@@ -10,9 +10,6 @@ session/
 # Local JSON database (runtime data)
 all/json/database.json
 
-# Temporary / generated media files
-media/
-
 # OS & Editor artifacts
 .DS_Store
 Thumbs.db
