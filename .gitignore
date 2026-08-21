@@ -1,3 +1,21 @@
-node_modules/*
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables (contains secrets — never commit!)
 .env
+
+# Baileys session files (regenerated on each login)
+session/
+
+# Local JSON database (runtime data)
+all/json/database.json
+
+# Temporary / generated media files
+media/
+
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/

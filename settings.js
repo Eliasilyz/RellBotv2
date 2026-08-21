@@ -1,50 +1,59 @@
-const fs = require('fs')
-const chalk = require('chalk')
+require("dotenv").config();
+const fs = require("fs");
+const chalk = require("chalk");
+const moment = require("moment-timezone");
 
-//owner vcard
-global.ytname = "YT: Rein"
-global.socialm = "GH: FarelHanafi"
-global.location = "indonesia"
+// ========== GLOBAL SETTINGS ========== //
+global.owner = "6282334226291";
+global.ownerName = "Farel Hanafi";
+global.namabot = "楓「Kaede」";
+global.mail = "farellh12@gmail.com";
+global.idsaluran = "120363400223227222@newsletter";
 
-//global settings
-global.botname = 'Rell-MD'
-global.ownernumber = ''
-global.ownername = 'Rell'
-global.websitex = "https://特別な人"
-global.wagc = "https://chat.whatsapp.com/JKzk65yY1b54uQujtmSQFg"
-global.themeemoji = '🪀'
-global.wm = "Rell-MD."
-global.packname = "Sticker By"
-global.author = "Rell-MD\n+62 823-3422-6291"
-global.creator = "62881026950162@s.whatsapp.net"
-global.xprefix = '.'
-global.premium = ["62881026950162"]
-global.hituet = 0
+global.packname = "楓「Kaede」";
+global.author = `Date: ${moment.tz("Asia/Tokyo").format("DD/MM/YY")}\nBot: 0823-3422-6291`;
 
-global.lann = ''
-global.lolkey = ""
+// ========== BEHAVIOR SETTINGS ========== //
+global.autoread = true;
+global.anticall = true;
+global.autoreadsw = true;
 
-global.APIKeys = {
-  'https://api.betabotz.eu.org': '',
-  'https://api.lolhuman.xyz': ''
-}
-//database
-global.MONGODB = "mongodb://tess:koclok890@ac-whbyauf-shard-00-00.cblvjgh.mongodb.net:27017,ac-whbyauf-shard-00-01.cblvjgh.mongodb.net:27017,ac-whbyauf-shard-00-02.cblvjgh.mongodb.net:27017/?ssl=true&replicaSet=atlas-p4jmck-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0"
-//bot sett
-global.autoblocknumber = ''
-global.antiforeignnumber = ''
-global.welcome = true
-global.antiswview = true
-global.anticall = true
-global.autoswview = true
-global.adminevent = false
-global.groupevent = false
-global.thumb = fs.readFileSync('./media/theme/cheemspic.jpg')
+// ========== MEDIA ========== //
+global.imgreply = "https://files.catbox.moe/zv3f14.jpg";
+global.thumb = "https://files.catbox.moe/rva3ue.png";
 
+// ========== PAYMENT ========== //
+global.dana = "0881-0269-50162";
+global.gopay = "0881-0269-50162";
+global.saweria = "https://saweria.co/rein122";
+global.trakteer = "https://trakteer.id/rein122";
+global.sociabuzz = "https://sociabuzz.com/franklinelias/tribe";
+
+// ========== SECRETS ========== //
+global.mongoDB = process.env.MONGO_URL;
+
+global.GROQ_API = process.env.GROQ_API;
+
+// ========== RESPONSE MESSAGES ========== //
+global.msg = {
+    done: "[🤗] 操作が正常に完了しました！",
+    wait: "[⏳] 少々お待ちください、リクエストを処理中です...",
+    admin: "[❌] このコマンドはグループ管理者のみが使用できます。",
+    adminbot: "[❌] この操作にはボットが管理者である必要があります。",
+    group: "[❌] この機能はグループチャットでのみ使用できます。",
+    acces: "[❌] このコマンドへのアクセス権がありません。",
+    private: "[❌] この機能はプライベートチャットでのみ利用可能です。",
+    endLimit: "[🕊️] 上限に達しました！最大50個、5分ごとに1個回復。プレミアムなら無制限！",
+    error: "[❌] エラーが発生しました。1分後にもう一度お試しください。",
+    prem: "[❌] この機能はプレミアムユーザー専用です。",
+    owner: "[❌] このコマンドはボット所有者専用です。",
+};
+
+// ========== HOT-RELOAD ========== //
 let file = require.resolve(__filename);
 fs.watchFile(file, () => {
-  fs.unwatchFile(file);
-  console.log(chalk.green(`FILE UPDATED => ${__filename}`));
-  delete require.cache[file];
-  require(file);
+    fs.unwatchFile(file);
+    console.log(chalk.redBright(`↻ Update detected in '${__filename}'`));
+    delete require.cache[file];
+    require(file);
 });

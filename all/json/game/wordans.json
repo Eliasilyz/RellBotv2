@@ -1,0 +1,1252 @@
+[
+ {
+  "index": 0,
+  "soal": "fruit, red, sweet, tree, vitamin c",
+  "jawaban": "APPLE"
+ },
+ {
+  "index": 1,
+  "soal": "nihon shoku, gohan, nama sakana, wasabi, maki",
+  "jawaban": "SUSHI"
+ },
+ {
+  "index": 2,
+  "soal": "fruit, yellow, tropical, fiber, snack",
+  "jawaban": "BANANA"
+ },
+ {
+  "index": 3,
+  "soal": "hana, haru, hanami, nihon, tree",
+  "jawaban": "SAKURA"
+ },
+ {
+  "index": 4,
+  "soal": "electronic, keyboard, monitor, internet, processor",
+  "jawaban": "COMPUTER"
+ },
+ {
+  "index": 5,
+  "soal": "stealth, shinobi, ken, japan, warrior",
+  "jawaban": "NINJA"
+ },
+ {
+  "index": 6,
+  "soal": "electronic, call, sms, touchscreen, app",
+  "jawaban": "PHONE"
+ },
+ {
+  "index": 7,
+  "soal": "yama, takai, nihon, pīku, ikon",
+  "jawaban": "FUJISAN"
+ },
+ {
+  "index": 8,
+  "soal": "furniture, surface, legs, dining, workspace",
+  "jawaban": "TABLE"
+ },
+ {
+  "index": 9,
+  "soal": "shinto, omikuji, norito, torii, prayer",
+  "jawaban": "JINJA"
+ },
+ {
+  "index": 10,
+  "soal": "furniture, seat, backrest, comfortable, room",
+  "jawaban": "CHAIR"
+ },
+ {
+  "index": 11,
+  "soal": "tradisional, nihon, fabric, festival, wear",
+  "jawaban": "KIMONO"
+ },
+ {
+  "index": 12,
+  "soal": "place, learning, teacher, student, class",
+  "jawaban": "SCHOOL"
+ },
+ {
+  "index": 13,
+  "soal": "deep-fry, ebi, yasai, nihon, crisp",
+  "jawaban": "TEMPURA"
+ },
+ {
+  "index": 14,
+  "soal": "water, flow, bridge, irrigation, stream",
+  "jawaban": "RIVER"
+ },
+ {
+  "index": 15,
+  "soal": "hot spring, relax, onsen, nihon, yama",
+  "jawaban": "ONSEN"
+ },
+ {
+  "index": 16,
+  "soal": "high, hiking, peak, slope, nature",
+  "jawaban": "MOUNTAIN"
+ },
+ {
+  "index": 17,
+  "soal": "bushi, katana, bushidō, warrior, nihon",
+  "jawaban": "SAMURAI"
+ },
+ {
+  "index": 18,
+  "soal": "print, pages, knowledge, reading, library",
+  "jawaban": "BOOK"
+ },
+ {
+  "index": 19,
+  "soal": "festival, mikoshi, taiko, nihon, celebration",
+  "jawaban": "MATSURI"
+ },
+ {
+  "index": 20,
+  "soal": "writing, ink, paper, hand, note",
+  "jawaban": "PEN"
+ },
+ {
+  "index": 21,
+  "soal": "casual kimono, summer, festival, hanabi, wear",
+  "jawaban": "YUKATA"
+ },
+ {
+  "index": 22,
+  "soal": "writing, graphite, eraser, sketch, draw",
+  "jawaban": "PENCIL"
+ },
+ {
+  "index": 23,
+  "soal": "poetry, 5-7-5, short, nature, nihon",
+  "jawaban": "HAIKU"
+ },
+ {
+  "index": 24,
+  "soal": "light, night, electricity, desk, bright",
+  "jawaban": "LAMP"
+ },
+ {
+  "index": 25,
+  "soal": "floor, mat, house, nihon, lounge",
+  "jawaban": "TATAMI"
+ },
+ {
+  "index": 26,
+  "soal": "drink, glass, cap, liquid, container",
+  "jawaban": "BOTTLE"
+ },
+ {
+  "index": 27,
+  "soal": "teahouse, matcha, break, nihon, drink",
+  "jawaban": "CHAYA"
+ },
+ {
+  "index": 28,
+  "soal": "opening, glass, view, ventilation, frame",
+  "jawaban": "WINDOW"
+ },
+ {
+  "index": 29,
+  "soal": "wind chime, summer, sound, nihon, breeze",
+  "jawaban": "FUURIN"
+ },
+ {
+  "index": 30,
+  "soal": "entry, exit, hinge, handle, building",
+  "jawaban": "DOOR"
+ },
+ {
+  "index": 31,
+  "soal": "train, rail, station, commute, nihon",
+  "jawaban": "DENSHA"
+ },
+ {
+  "index": 32,
+  "soal": "wood, leaf, root, nature, forest",
+  "jawaban": "TREE"
+ },
+ {
+  "index": 33,
+  "soal": "bicycle, pedal, transport, commute, nihon",
+  "jawaban": "JITENSHA"
+ },
+ {
+  "index": 34,
+  "soal": "bloom, petal, fragrance, garden, color",
+  "jawaban": "FLOWER"
+ },
+ {
+  "index": 35,
+  "soal": "library, books, study, silence, nihon",
+  "jawaban": "TOSHOKAN"
+ },
+ {
+  "index": 36,
+  "soal": "nature, plants, flowers, relax, outdoor",
+  "jawaban": "GARDEN"
+ },
+ {
+  "index": 37,
+  "soal": "cinema, movie, screen, seat, nihon",
+  "jawaban": "EIGAKAN"
+ },
+ {
+  "index": 38,
+  "soal": "sound, melody, rhythm, instrument, listen",
+  "jawaban": "MUSIC"
+ },
+ {
+  "index": 39,
+  "soal": "market, stalls, food, bargain, nihon",
+  "jawaban": "ICHIBA"
+ },
+ {
+  "index": 40,
+  "soal": "film, screen, cinema, director, actor",
+  "jawaban": "MOVIE"
+ },
+ {
+  "index": 41,
+  "soal": "museum, art, gallery, exhibit, nihon",
+  "jawaban": "BIJUTSUKAN"
+ },
+ {
+  "index": 42,
+  "soal": "two wheels, pedal, transport, helmet, ride",
+  "jawaban": "BICYCLE"
+ },
+ {
+  "index": 43,
+  "soal": "sushi restaurant, gohan, seafood, nihon, dining",
+  "jawaban": "SUSHIYA"
+ },
+ {
+  "index": 44,
+  "soal": "fly, airport, wing, pilot, passenger",
+  "jawaban": "AIRPLANE"
+ },
+ {
+  "index": 45,
+  "soal": "newspaper, print, news, read, nihon",
+  "jawaban": "SHINBUN"
+ },
+ {
+  "index": 46,
+  "soal": "rail, station, carriage, transport, track",
+  "jawaban": "TRAIN"
+ },
+ {
+  "index": 47,
+  "soal": "education, school, learning, student, nihon",
+  "jawaban": "KYOIKU"
+ },
+ {
+  "index": 48,
+  "soal": "photo, lens, memory, shoot, image",
+  "jawaban": "CAMERA"
+ },
+ {
+  "index": 49,
+  "soal": "economy, finance, market, business, nihon",
+  "jawaban": "KEIZAI"
+ },
+ {
+  "index": 50,
+  "soal": "time, wrist, analog, digital, minute",
+  "jawaban": "WATCH"
+ },
+ {
+  "index": 51,
+  "soal": "nature, environment, landscape, conservation, nihon",
+  "jawaban": "SHIZEN"
+ },
+ {
+  "index": 52,
+  "soal": "clothing, sleeves, button, top, garment",
+  "jawaban": "SHIRT"
+ },
+ {
+  "index": 53,
+  "soal": "culture, tradition, heritage, art, nihon",
+  "jawaban": "BUNKA"
+ },
+ {
+  "index": 54,
+  "soal": "clothing, legs, waist, pocket, bottom",
+  "jawaban": "PANTS"
+ },
+ {
+  "index": 55,
+  "soal": "music, sound, instrument, concert, nihon",
+  "jawaban": "ONGAKU"
+ },
+ {
+  "index": 56,
+  "soal": "footwear, lace, walk, protect, sole",
+  "jawaban": "SHOES"
+ },
+ {
+  "index": 57,
+  "soal": "film, movie, story, director, nihon",
+  "jawaban": "EIGA"
+ },
+ {
+  "index": 58,
+  "soal": "eat, utensil, soup, metal, spoon",
+  "jawaban": "SPOON"
+ },
+ {
+  "index": 59,
+  "soal": "photography, camera, image, memory, nihon",
+  "jawaban": "SHASHIN"
+ },
+ {
+  "index": 60,
+  "soal": "eat, utensil, prongs, food, table",
+  "jawaban": "FORK"
+ },
+ {
+  "index": 61,
+  "soal": "school, class, learning, student, nihon",
+  "jawaban": "GAKKOU"
+ },
+ {
+  "index": 62,
+  "soal": "cut, utensil, sharp, blade, kitchen",
+  "jawaban": "KNIFE"
+ },
+ {
+  "index": 63,
+  "soal": "park, play, nature, family, nihon",
+  "jawaban": "KOUEN"
+ },
+ {
+  "index": 64,
+  "soal": "drink, mug, beverage, handle, ceramic",
+  "jawaban": "CUP"
+ },
+ {
+  "index": 65,
+  "soal": "sea, ocean, beach, wave, nihon",
+  "jawaban": "UMI"
+ },
+ {
+  "index": 66,
+  "soal": "dish, serve, food, ceramic, table",
+  "jawaban": "PLATE"
+ },
+ {
+  "index": 67,
+  "soal": "mountain, hiking, peak, nature, nihon",
+  "jawaban": "YAMA"
+ },
+ {
+  "index": 68,
+  "soal": "computer, type, keys, input, device",
+  "jawaban": "KEYBOARD"
+ },
+ {
+  "index": 69,
+  "soal": "river, water, bridge, flow, nihon",
+  "jawaban": "KAWA"
+ },
+ {
+  "index": 70,
+  "soal": "computer, cursor, click, device, usb",
+  "jawaban": "MOUSE"
+ },
+ {
+  "index": 71,
+  "soal": "forest, trees, wildlife, nature, nihon",
+  "jawaban": "MORI"
+ },
+ {
+  "index": 72,
+  "soal": "computer, display, screen, resolution, visual",
+  "jawaban": "MONITOR"
+ },
+ {
+  "index": 73,
+  "soal": "island, sea, tourism, beach, nihon",
+  "jawaban": "SHIMA"
+ },
+ {
+  "index": 74,
+  "soal": "computer, print, paper, ink, document",
+  "jawaban": "PRINTER"
+ },
+ {
+  "index": 75,
+  "soal": "nihon shoku, gohan, nama sakana, wasabi, maki",
+  "jawaban": "SUSHI"
+ },
+ {
+  "index": 76,
+  "soal": "time, wall, analog, digital, hour",
+  "jawaban": "CLOCK"
+ },
+ {
+  "index": 77,
+  "soal": "hana, haru, hanami, nihon, tree",
+  "jawaban": "SAKURA"
+ },
+ {
+  "index": 78,
+  "soal": "sleep, pillow, blanket, rest, bedroom",
+  "jawaban": "BED"
+ },
+ {
+  "index": 79,
+  "soal": "stealth, shinobi, ken, japan, warrior",
+  "jawaban": "NINJA"
+ },
+ {
+  "index": 80,
+  "soal": "sleep, head, soft, comfortable, bed",
+  "jawaban": "PILLOW"
+ },
+ {
+  "index": 81,
+  "soal": "yama, takai, nihon, pīku, ikon",
+  "jawaban": "FUJISAN"
+ },
+ {
+  "index": 82,
+  "soal": "warm, cover, sleep, rest, fabric",
+  "jawaban": "BLANKET"
+ },
+ {
+  "index": 83,
+  "soal": "shinto, omikuji, norito, torii, prayer",
+  "jawaban": "JINJA"
+ },
+ {
+  "index": 84,
+  "soal": "furniture, sit, living room, cushion, relax",
+  "jawaban": "SOFA"
+ },
+ {
+  "index": 85,
+  "soal": "tradisional, nihon, fabric, festival, wear",
+  "jawaban": "KIMONO"
+ },
+ {
+  "index": 86,
+  "soal": "furniture, work, study, computer, surface",
+  "jawaban": "DESK"
+ },
+ {
+  "index": 87,
+  "soal": "deep-fry, ebi, yasai, nihon, crisp",
+  "jawaban": "TEMPURA"
+ },
+ {
+  "index": 88,
+  "soal": "bag, shoulder, travel, school, carry",
+  "jawaban": "BACKPACK"
+ },
+ {
+  "index": 89,
+  "soal": "hot spring, relax, onsen, nihon, yama",
+  "jawaban": "ONSEN"
+ },
+ {
+  "index": 90,
+  "soal": "money, card, pocket, leather, finance",
+  "jawaban": "WALLET"
+ },
+ {
+  "index": 91,
+  "soal": "bushi, katana, bushidō, warrior, nihon",
+  "jawaban": "SAMURAI"
+ },
+ {
+  "index": 92,
+  "soal": "lock, unlock, metal, security, door",
+  "jawaban": "KEY"
+ },
+ {
+  "index": 93,
+  "soal": "festival, mikoshi, taiko, nihon, celebration",
+  "jawaban": "MATSURI"
+ },
+ {
+  "index": 94,
+  "soal": "instrument, strings, music, pick, performance",
+  "jawaban": "GUITAR"
+ },
+ {
+  "index": 95,
+  "soal": "casual kimono, summer, festival, hanabi, wear",
+  "jawaban": "YUKATA"
+ },
+ {
+  "index": 96,
+  "soal": "instrument, keys, melody, classical, concert",
+  "jawaban": "PIANO"
+ },
+ {
+  "index": 97,
+  "soal": "poetry, 5-7-5, short, nature, nihon",
+  "jawaban": "HAIKU"
+ },
+ {
+  "index": 98,
+  "soal": "instrument, strings, bow, orchestra, sound",
+  "jawaban": "VIOLIN"
+ },
+ {
+  "index": 99,
+  "soal": "floor, mat, house, nihon, lounge",
+  "jawaban": "TATAMI"
+ },
+ {
+  "index": 100,
+  "soal": "animal, large, trunk, tusk, mammal",
+  "jawaban": "ELEPHANT"
+ },
+ {
+  "index": 101,
+  "soal": "teahouse, matcha, break, nihon, drink",
+  "jawaban": "CHAYA"
+ },
+ {
+  "index": 102,
+  "soal": "animal, stripe, carnivore, jungle, fierce",
+  "jawaban": "TIGER"
+ },
+ {
+  "index": 103,
+  "soal": "wind chime, summer, sound, nihon, breeze",
+  "jawaban": "FUURIN"
+ },
+ {
+  "index": 104,
+  "soal": "animal, king, mane, pride, savannah",
+  "jawaban": "LION"
+ },
+ {
+  "index": 105,
+  "soal": "train, rail, station, commute, nihon",
+  "jawaban": "DENSHA"
+ },
+ {
+  "index": 106,
+  "soal": "animal, stripe, horse, savannah, wild",
+  "jawaban": "ZEBRA"
+ },
+ {
+  "index": 107,
+  "soal": "bicycle, pedal, transport, commute, nihon",
+  "jawaban": "JITENSHA"
+ },
+ {
+  "index": 108,
+  "soal": "animal, tall, neck, africa, leaf",
+  "jawaban": "GIRAFFE"
+ },
+ {
+  "index": 109,
+  "soal": "library, books, study, silence, nihon",
+  "jawaban": "TOSHOKAN"
+ },
+ {
+  "index": 110,
+  "soal": "animal, australia, pouch, jump, marsupial",
+  "jawaban": "KANGAROO"
+ },
+ {
+  "index": 111,
+  "soal": "cinema, movie, screen, seat, nihon",
+  "jawaban": "EIGAKAN"
+ },
+ {
+  "index": 112,
+  "soal": "animal, primate, banana, jungle, smart",
+  "jawaban": "MONKEY"
+ },
+ {
+  "index": 113,
+  "soal": "market, stalls, food, bargain, nihon",
+  "jawaban": "ICHIBA"
+ },
+ {
+  "index": 114,
+  "soal": "animal, black white, bamboo, china, cute",
+  "jawaban": "PANDA"
+ },
+ {
+  "index": 115,
+  "soal": "museum, art, gallery, exhibit, nihon",
+  "jawaban": "BIJUTSUKAN"
+ },
+ {
+  "index": 116,
+  "soal": "animal, australia, eucalyptus, marsupial, cute",
+  "jawaban": "KOALA"
+ },
+ {
+  "index": 117,
+  "soal": "sushi restaurant, gohan, seafood, nihon, dining",
+  "jawaban": "SUSHIYA"
+ },
+ {
+  "index": 118,
+  "soal": "animal, ear, hop, carrot, pet",
+  "jawaban": "RABBIT"
+ },
+ {
+  "index": 119,
+  "soal": "newspaper, print, news, read, nihon",
+  "jawaban": "SHINBUN"
+ },
+ {
+  "index": 120,
+  "soal": "animal, bark, pet, loyal, canine",
+  "jawaban": "DOG"
+ },
+ {
+  "index": 121,
+  "soal": "education, school, learning, student, nihon",
+  "jawaban": "KYOIKU"
+ },
+ {
+  "index": 122,
+  "soal": "animal, meow, pet, feline, whisker",
+  "jawaban": "CAT"
+ },
+ {
+  "index": 123,
+  "soal": "economy, finance, market, business, nihon",
+  "jawaban": "KEIZAI"
+ },
+ {
+  "index": 124,
+  "soal": "animal, water, swim, gill, aquatic",
+  "jawaban": "FISH"
+ },
+ {
+  "index": 125,
+  "soal": "nature, environment, landscape, conservation, nihon",
+  "jawaban": "SHIZEN"
+ },
+ {
+  "index": 126,
+  "soal": "animal, ocean, mammal, large, swim",
+  "jawaban": "WHALE"
+ },
+ {
+  "index": 127,
+  "soal": "culture, tradition, heritage, art, nihon",
+  "jawaban": "BUNKA"
+ },
+ {
+  "index": 128,
+  "soal": "animal, intelligent, ocean, mammal, swim",
+  "jawaban": "DOLPHIN"
+ },
+ {
+  "index": 129,
+  "soal": "music, sound, instrument, concert, nihon",
+  "jawaban": "ONGAKU"
+ },
+ {
+  "index": 130,
+  "soal": "animal, ocean, predator, teeth, swim",
+  "jawaban": "SHARK"
+ },
+ {
+  "index": 131,
+  "soal": "film, movie, story, director, nihon",
+  "jawaban": "EIGA"
+ },
+ {
+  "index": 132,
+  "soal": "animal, shell, slow, reptile, water",
+  "jawaban": "TURTLE"
+ },
+ {
+  "index": 133,
+  "soal": "photography, camera, image, memory, nihon",
+  "jawaban": "SHASHIN"
+ },
+ {
+  "index": 134,
+  "soal": "animal, amphibian, jump, croak, pond",
+  "jawaban": "FROG"
+ },
+ {
+  "index": 135,
+  "soal": "school, class, learning, student, nihon",
+  "jawaban": "GAKKOU"
+ },
+ {
+  "index": 136,
+  "soal": "animal, reptile, slither, venom, scales",
+  "jawaban": "SNAKE"
+ },
+ {
+  "index": 137,
+  "soal": "park, play, nature, family, nihon",
+  "jawaban": "KOUEN"
+ },
+ {
+  "index": 138,
+  "soal": "insect, wing, color, flutter, garden",
+  "jawaban": "BUTTERFLY"
+ },
+ {
+  "index": 139,
+  "soal": "sea, ocean, beach, wave, nihon",
+  "jawaban": "UMI"
+ },
+ {
+  "index": 140,
+  "soal": "arthropod, web, eight legs, insect, catch",
+  "jawaban": "SPIDER"
+ },
+ {
+  "index": 141,
+  "soal": "mountain, hiking, peak, nature, nihon",
+  "jawaban": "YAMA"
+ },
+ {
+  "index": 142,
+  "soal": "insect, colony, small, work, food",
+  "jawaban": "ANT"
+ },
+ {
+  "index": 143,
+  "soal": "river, water, bridge, flow, nihon",
+  "jawaban": "KAWA"
+ },
+ {
+  "index": 144,
+  "soal": "insect, honey, sting, flower, buzz",
+  "jawaban": "BEE"
+ },
+ {
+  "index": 145,
+  "soal": "forest, trees, wildlife, nature, nihon",
+  "jawaban": "MORI"
+ },
+ {
+  "index": 146,
+  "soal": "animal, shell, claw, beach, seafood",
+  "jawaban": "CRAB"
+ },
+ {
+  "index": 147,
+  "soal": "island, sea, tourism, beach, nihon",
+  "jawaban": "SHIMA"
+ },
+ {
+  "index": 148,
+  "soal": "animal, shell, seafood, small, prawn",
+  "jawaban": "SHRIMP"
+ },
+ {
+  "index": 149,
+  "soal": "nihon shoku, gohan, nama sakana, wasabi, maki",
+  "jawaban": "SUSHI"
+ },
+ {
+  "index": 150,
+  "soal": "flower, thorn, fragrance, garden, red",
+  "jawaban": "ROSE"
+ },
+ {
+  "index": 151,
+  "soal": "hana, haru, hanami, nihon, tree",
+  "jawaban": "SAKURA"
+ },
+ {
+  "index": 152,
+  "soal": "flower, spring, color, garden, bulb",
+  "jawaban": "TULIP"
+ },
+ {
+  "index": 153,
+  "soal": "stealth, shinobi, ken, japan, warrior",
+  "jawaban": "NINJA"
+ },
+ {
+  "index": 154,
+  "soal": "tree, wood, leaf, forest, hardwood",
+  "jawaban": "OAK"
+ },
+ {
+  "index": 155,
+  "soal": "yama, takai, nihon, pīku, ikon",
+  "jawaban": "FUJISAN"
+ },
+ {
+  "index": 156,
+  "soal": "tree, needle, forest, evergreen, cone",
+  "jawaban": "PINE"
+ },
+ {
+  "index": 157,
+  "soal": "shinto, omikuji, norito, torii, prayer",
+  "jawaban": "JINJA"
+ },
+ {
+  "index": 158,
+  "soal": "tree, leaf, syrup, autumn, hardwood",
+  "jawaban": "MAPLE"
+ },
+ {
+  "index": 159,
+  "soal": "tradisional, nihon, fabric, festival, wear",
+  "jawaban": "KIMONO"
+ },
+ {
+  "index": 160,
+  "soal": "plant, wood, asia, sustainable, stem",
+  "jawaban": "BAMBOO"
+ },
+ {
+  "index": 161,
+  "soal": "deep-fry, ebi, yasai, nihon, crisp",
+  "jawaban": "TEMPURA"
+ },
+ {
+  "index": 162,
+  "soal": "fruit, red, spring, tree, stone fruit",
+  "jawaban": "CHERRY"
+ },
+ {
+  "index": 163,
+  "soal": "hot spring, relax, onsen, nihon, yama",
+  "jawaban": "ONSEN"
+ },
+ {
+  "index": 164,
+  "soal": "fruit, tropical, sweet, orange, vitamin c",
+  "jawaban": "MANGO"
+ },
+ {
+  "index": 165,
+  "soal": "bushi, katana, bushidō, warrior, nihon",
+  "jawaban": "SAMURAI"
+ },
+ {
+  "index": 166,
+  "soal": "fruit, sour, yellow, citrus, drink",
+  "jawaban": "LEMON"
+ },
+ {
+  "index": 167,
+  "soal": "festival, mikoshi, taiko, nihon, celebration",
+  "jawaban": "MATSURI"
+ },
+ {
+  "index": 168,
+  "soal": "fruit, citrus, vitamin c, juice, peel",
+  "jawaban": "ORANGE"
+ },
+ {
+  "index": 169,
+  "soal": "casual kimono, summer, festival, hanabi, wear",
+  "jawaban": "YUKATA"
+ },
+ {
+  "index": 170,
+  "soal": "fruit, vine, sweet, wine, cluster",
+  "jawaban": "GRAPE"
+ },
+ {
+  "index": 171,
+  "soal": "poetry, 5-7-5, short, nature, nihon",
+  "jawaban": "HAIKU"
+ },
+ {
+  "index": 172,
+  "soal": "fruit, red, sweet, tree, vitamin c",
+  "jawaban": "APPLE"
+ },
+ {
+  "index": 173,
+  "soal": "floor, mat, house, nihon, lounge",
+  "jawaban": "TATAMI"
+ },
+ {
+  "index": 174,
+  "soal": "fruit, yellow, tropical, fiber, snack",
+  "jawaban": "BANANA"
+ },
+ {
+  "index": 175,
+  "soal": "teahouse, matcha, break, nihon, drink",
+  "jawaban": "CHAYA"
+ },
+ {
+  "index": 176,
+  "soal": "electronic, keyboard, monitor, internet, processor",
+  "jawaban": "COMPUTER"
+ },
+ {
+  "index": 177,
+  "soal": "wind chime, summer, sound, nihon, breeze",
+  "jawaban": "FUURIN"
+ },
+ {
+  "index": 178,
+  "soal": "electronic, call, sms, touchscreen, app",
+  "jawaban": "PHONE"
+ },
+ {
+  "index": 179,
+  "soal": "train, rail, station, commute, nihon",
+  "jawaban": "DENSHA"
+ },
+ {
+  "index": 180,
+  "soal": "furniture, surface, legs, dining, workspace",
+  "jawaban": "TABLE"
+ },
+ {
+  "index": 181,
+  "soal": "bicycle, pedal, transport, commute, nihon",
+  "jawaban": "JITENSHA"
+ },
+ {
+  "index": 182,
+  "soal": "furniture, seat, backrest, comfortable, room",
+  "jawaban": "CHAIR"
+ },
+ {
+  "index": 183,
+  "soal": "library, books, study, silence, nihon",
+  "jawaban": "TOSHOKAN"
+ },
+ {
+  "index": 184,
+  "soal": "place, learning, teacher, student, class",
+  "jawaban": "SCHOOL"
+ },
+ {
+  "index": 185,
+  "soal": "cinema, movie, screen, seat, nihon",
+  "jawaban": "EIGAKAN"
+ },
+ {
+  "index": 186,
+  "soal": "water, flow, bridge, irrigation, stream",
+  "jawaban": "RIVER"
+ },
+ {
+  "index": 187,
+  "soal": "market, stalls, food, bargain, nihon",
+  "jawaban": "ICHIBA"
+ },
+ {
+  "index": 188,
+  "soal": "high, hiking, peak, slope, nature",
+  "jawaban": "MOUNTAIN"
+ },
+ {
+  "index": 189,
+  "soal": "museum, art, gallery, exhibit, nihon",
+  "jawaban": "BIJUTSUKAN"
+ },
+ {
+  "index": 190,
+  "soal": "print, pages, knowledge, reading, library",
+  "jawaban": "BOOK"
+ },
+ {
+  "index": 191,
+  "soal": "sushi restaurant, gohan, seafood, nihon, dining",
+  "jawaban": "SUSHIYA"
+ },
+ {
+  "index": 192,
+  "soal": "writing, ink, paper, hand, note",
+  "jawaban": "PEN"
+ },
+ {
+  "index": 193,
+  "soal": "newspaper, print, news, read, nihon",
+  "jawaban": "SHINBUN"
+ },
+ {
+  "index": 194,
+  "soal": "writing, graphite, eraser, sketch, draw",
+  "jawaban": "PENCIL"
+ },
+ {
+  "index": 195,
+  "soal": "education, school, learning, student, nihon",
+  "jawaban": "KYOIKU"
+ },
+ {
+  "index": 196,
+  "soal": "light, night, electricity, desk, bright",
+  "jawaban": "LAMP"
+ },
+ {
+  "index": 197,
+  "soal": "economy, finance, market, business, nihon",
+  "jawaban": "KEIZAI"
+ },
+ {
+  "index": 198,
+  "soal": "drink, glass, cap, liquid, container",
+  "jawaban": "BOTTLE"
+ },
+ {
+  "index": 199,
+  "soal": "nature, environment, landscape, conservation, nihon",
+  "jawaban": "SHIZEN"
+ },
+ {
+  "index": 200,
+  "soal": "opening, glass, view, ventilation, frame",
+  "jawaban": "WINDOW"
+ },
+ {
+  "index": 201,
+  "soal": "culture, tradition, heritage, art, nihon",
+  "jawaban": "BUNKA"
+ },
+ {
+  "index": 202,
+  "soal": "entry, exit, hinge, handle, building",
+  "jawaban": "DOOR"
+ },
+ {
+  "index": 203,
+  "soal": "music, sound, instrument, concert, nihon",
+  "jawaban": "ONGAKU"
+ },
+ {
+  "index": 204,
+  "soal": "wood, leaf, root, nature, forest",
+  "jawaban": "TREE"
+ },
+ {
+  "index": 205,
+  "soal": "film, movie, story, director, nihon",
+  "jawaban": "EIGA"
+ },
+ {
+  "index": 206,
+  "soal": "bloom, petal, fragrance, garden, color",
+  "jawaban": "FLOWER"
+ },
+ {
+  "index": 207,
+  "soal": "photography, camera, image, memory, nihon",
+  "jawaban": "SHASHIN"
+ },
+ {
+  "index": 208,
+  "soal": "nature, plants, flowers, relax, outdoor",
+  "jawaban": "GARDEN"
+ },
+ {
+  "index": 209,
+  "soal": "school, class, learning, student, nihon",
+  "jawaban": "GAKKOU"
+ },
+ {
+  "index": 210,
+  "soal": "sound, melody, rhythm, instrument, listen",
+  "jawaban": "MUSIC"
+ },
+ {
+  "index": 211,
+  "soal": "park, play, nature, family, nihon",
+  "jawaban": "KOUEN"
+ },
+ {
+  "index": 212,
+  "soal": "film, screen, cinema, director, actor",
+  "jawaban": "MOVIE"
+ },
+ {
+  "index": 213,
+  "soal": "sea, ocean, beach, wave, nihon",
+  "jawaban": "UMI"
+ },
+ {
+  "index": 214,
+  "soal": "two wheels, pedal, transport, helmet, ride",
+  "jawaban": "BICYCLE"
+ },
+ {
+  "index": 215,
+  "soal": "mountain, hiking, peak, nature, nihon",
+  "jawaban": "YAMA"
+ },
+ {
+  "index": 216,
+  "soal": "fly, airport, wing, pilot, passenger",
+  "jawaban": "AIRPLANE"
+ },
+ {
+  "index": 217,
+  "soal": "river, water, bridge, flow, nihon",
+  "jawaban": "KAWA"
+ },
+ {
+  "index": 218,
+  "soal": "rail, station, carriage, transport, track",
+  "jawaban": "TRAIN"
+ },
+ {
+  "index": 219,
+  "soal": "forest, trees, wildlife, nature, nihon",
+  "jawaban": "MORI"
+ },
+ {
+  "index": 220,
+  "soal": "photo, lens, memory, shoot, image",
+  "jawaban": "CAMERA"
+ },
+ {
+  "index": 221,
+  "soal": "island, sea, tourism, beach, nihon",
+  "jawaban": "SHIMA"
+ },
+ {
+  "index": 222,
+  "soal": "time, wrist, analog, digital, minute",
+  "jawaban": "WATCH"
+ },
+ {
+  "index": 223,
+  "soal": "nihon shoku, gohan, nama sakana, wasabi, maki",
+  "jawaban": "SUSHI"
+ },
+ {
+  "index": 224,
+  "soal": "clothing, sleeves, button, top, garment",
+  "jawaban": "SHIRT"
+ },
+ {
+  "index": 225,
+  "soal": "hana, haru, hanami, nihon, tree",
+  "jawaban": "SAKURA"
+ },
+ {
+  "index": 226,
+  "soal": "clothing, legs, waist, pocket, bottom",
+  "jawaban": "PANTS"
+ },
+ {
+  "index": 227,
+  "soal": "stealth, shinobi, ken, japan, warrior",
+  "jawaban": "NINJA"
+ },
+ {
+  "index": 228,
+  "soal": "footwear, lace, walk, protect, sole",
+  "jawaban": "SHOES"
+ },
+ {
+  "index": 229,
+  "soal": "yama, takai, nihon, pīku, ikon",
+  "jawaban": "FUJISAN"
+ },
+ {
+  "index": 230,
+  "soal": "eat, utensil, soup, metal, spoon",
+  "jawaban": "SPOON"
+ },
+ {
+  "index": 231,
+  "soal": "shinto, omikuji, norito, torii, prayer",
+  "jawaban": "JINJA"
+ },
+ {
+  "index": 232,
+  "soal": "eat, utensil, prongs, food, table",
+  "jawaban": "FORK"
+ },
+ {
+  "index": 233,
+  "soal": "tradisional, nihon, fabric, festival, wear",
+  "jawaban": "KIMONO"
+ },
+ {
+  "index": 234,
+  "soal": "cut, utensil, sharp, blade, kitchen",
+  "jawaban": "KNIFE"
+ },
+ {
+  "index": 235,
+  "soal": "deep-fry, ebi, yasai, nihon, crisp",
+  "jawaban": "TEMPURA"
+ },
+ {
+  "index": 236,
+  "soal": "drink, mug, beverage, handle, ceramic",
+  "jawaban": "CUP"
+ },
+ {
+  "index": 237,
+  "soal": "hot spring, relax, onsen, nihon, yama",
+  "jawaban": "ONSEN"
+ },
+ {
+  "index": 238,
+  "soal": "dish, serve, food, ceramic, table",
+  "jawaban": "PLATE"
+ },
+ {
+  "index": 239,
+  "soal": "bushi, katana, bushidō, warrior, nihon",
+  "jawaban": "SAMURAI"
+ },
+ {
+  "index": 240,
+  "soal": "computer, type, keys, input, device",
+  "jawaban": "KEYBOARD"
+ },
+ {
+  "index": 241,
+  "soal": "festival, mikoshi, taiko, nihon, celebration",
+  "jawaban": "MATSURI"
+ },
+ {
+  "index": 242,
+  "soal": "computer, cursor, click, device, usb",
+  "jawaban": "MOUSE"
+ },
+ {
+  "index": 243,
+  "soal": "casual kimono, summer, festival, hanabi, wear",
+  "jawaban": "YUKATA"
+ },
+ {
+  "index": 244,
+  "soal": "computer, display, screen, resolution, visual",
+  "jawaban": "MONITOR"
+ },
+ {
+  "index": 245,
+  "soal": "poetry, 5-7-5, short, nature, nihon",
+  "jawaban": "HAIKU"
+ },
+ {
+  "index": 246,
+  "soal": "computer, print, paper, ink, document",
+  "jawaban": "PRINTER"
+ },
+ {
+  "index": 247,
+  "soal": "floor, mat, house, nihon, lounge",
+  "jawaban": "TATAMI"
+ },
+ {
+  "index": 248,
+  "soal": "time, wall, analog, digital, hour",
+  "jawaban": "CLOCK"
+ },
+ {
+  "index": 249,
+  "soal": "teahouse, matcha, break, nihon, drink",
+  "jawaban": "CHAYA"
+ }
+]
