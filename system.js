@@ -182,50 +182,51 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
       }
     };
-    const reply2 = async (teks) => {
-      const url = global.imgreply;
+    // const reply2 = async (teks) => {
+    //   const url = global.imgreply;
 
-      await sock.sendMessage(
-        m.chat,
-        {
-          text: teks,
-          contextInfo: {
-            showAdAttribution: true,
-            forwardingScore: 1,
-            isForwarded: true,
-            mentionedJid: [m.sender],
+    //   await sock.sendMessage(
+    //     m.chat,
+    //     {
+    //       text: teks,
+    //       contextInfo: {
+    //         showAdAttribution: true,
+    //         forwardingScore: 1,
+    //         isForwarded: true,
+    //         mentionedJid: [m.sender],
 
-            linkPreview: {
-              'matched-text': url,
-              title: "楓 (Kaede) 2K25",
-              description: teks,
-              previewType: 0,
-              jpegThumbnail: fs.readFileSync('./media/Menu.jpg'),
-              highQualityThumbnail: global.thumb,
-            },
-            externalAdReply: {
-              title: FUNC.Greetings() + " " + pushname,
-              body: "楓 (Kaede) 2K25",
-              // previewType: "PHOTO",
-              // thumbnailUrl: global.thumb,
-              thumbnail: fs.readFileSync('./media/Menu.jpg'),
-              sourceUrl: global.thumb,
-            },
-            businessMessageForwardInfo: {
-              businessOwnerJid: sock.decodeJid(sock.user.id)
-            },
-            forwardedNewsletterMessageInfo: {
-              newsletterJid: global.idsaluran,
-              serverMessageId: null,
-              newsletterName: `${FUNC.Greetings()} ${pushname} 👋`
-            }
-          }
-        },
-        {
-          quoted: fsaluran
-        }
-      );
-    };
+    //         linkPreview: {
+    //           'matched-text': url,
+    //           title: "楓 (Kaede) 2K25",
+    //           description: teks,
+    //           previewType: 0,
+    //           jpegThumbnail: fs.readFileSync('./media/Menu.jpg'),
+    //           highQualityThumbnail: global.thumb,
+    //         },
+    //         externalAdReply: {
+    //           title: FUNC.Greetings() + " " + pushname,
+    //           body: "楓 (Kaede) 2K25",
+    //           // previewType: "PHOTO",
+    //           // thumbnailUrl: global.thumb,
+    //           thumbnail: fs.readFileSync('./media/Menu.jpg'),
+    //           sourceUrl: global.thumb,
+    //         },
+    //         businessMessageForwardInfo: {
+    //           businessOwnerJid: sock.decodeJid(sock.user.id)
+    //         },
+    //         forwardedNewsletterMessageInfo: {
+    //           newsletterJid: global.idsaluran,
+    //           serverMessageId: null,
+    //           newsletterName: `${FUNC.Greetings()} ${pushname} 👋`
+    //         }
+    //       }
+    //     },
+    //     {
+    //       quoted: fsaluran
+    //     }
+    //   );
+    // };
+    const reply2 = teks => m.reply(teks);
     const reply = teks => m.reply(teks);
     async function react(emoji) {
       try {
