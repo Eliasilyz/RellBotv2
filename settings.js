@@ -24,7 +24,7 @@ global.hituet = 0
 global.lann = ''
 global.lolkey = ""
 
-global.APIKeys = { 
+global.APIKeys = {
   'https://api.betabotz.eu.org': '',
   'https://api.lolhuman.xyz': ''
 }
@@ -39,7 +39,7 @@ global.anticall = true
 global.autoswview = true
 global.adminevent = false
 global.groupevent = false
-global.thumb = fs.readFileSync('./RellMedia/theme/cheemspic.jpg')
+global.thumb = fs.readFileSync('./media/theme/cheemspic.jpg')
 
 let file = require.resolve(__filename);
 fs.watchFile(file, () => {
