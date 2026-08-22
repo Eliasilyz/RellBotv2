@@ -69,9 +69,9 @@ const getBuffer = async (url, options) => {
 };
 
 exports.makeWASocket = (connectionOptions, options = {}) => {
-  const RuzXD = makeWASocket(connectionOptions);
+  const sock = makeWASocket(connectionOptions);
 
-  RuzXD.inspectLink = async (code) => {
+  sock.inspectLink = async (code) => {
     const extractGroupInviteMetadata = (content) => {
       const group = getBinaryNodeChild(content, "group");
       const descChild = getBinaryNodeChild(group, "description");
@@ -91,7 +91,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       };
       return metadata;
     };
-    let results = await RuzXD.query({
+    let results = await sock.query({
       tag: "iq",
       attrs: {
         type: "get",
@@ -106,9 +106,9 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
   function updateNameToDb(contacts) {
     if (!contacts) return;
     for (let contact of contacts) {
-      let id = RuzXD.decodeJid(contact.id);
+      let id = sock.decodeJid(contact.id);
       if (!id) continue;
-      let chats = RuzXD.contacts[id];
+      let chats = sock.contacts[id];
       if (!chats) chats = { id };
       let chat = {
         ...chats,
@@ -118,20 +118,20 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
           ...(id.endsWith("@g.us") ? { subject: contact.subject || chats.subject || "" } : { name: contact.notify || chats.name || chats.notify || "" }),
         } || {}),
       };
-      RuzXD.contacts[id] = chat;
+      sock.contacts[id] = chat;
     }
   }
 
-  RuzXD.ev.on("contacts.upsert", updateNameToDb);
-  RuzXD.ev.on("groups.update", updateNameToDb);
+  sock.ev.on("contacts.upsert", updateNameToDb);
+  sock.ev.on("groups.update", updateNameToDb);
 
-  RuzXD.loadMessage = (messageID) => {
-    return Object.entries(RuzXD.chats)
+  sock.loadMessage = (messageID) => {
+    return Object.entries(sock.chats)
       .filter(([_, { messages }]) => typeof messages === "object")
       .find(([_, { messages }]) => Object.entries(messages).find(([k, v]) => k === messageID || v.key?.id === messageID))?.[1].messages?.[messageID];
   };
 
-  RuzXD.decodeJid = (jid) => {
+  sock.decodeJid = (jid) => {
     if (!jid) return jid;
     if (global.lidToPnMap && global.lidToPnMap[jid]) {
       return global.lidToPnMap[jid];
@@ -148,28 +148,22 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     } else return jid;
   };
 
-  if (RuzXD.user && RuzXD.user.id) RuzXD.user.jid = RuzXD.decodeJid(RuzXD.user.id);
-  RuzXD.chats = {};
-  RuzXD.contacts = {};
+  if (sock.user && sock.user.id) sock.user.jid = sock.decodeJid(sock.user.id);
+  sock.chats = {};
+  sock.contacts = {};
 
-  RuzXD.sendMessageV2 = async (chatId, message, options = {}) => {
+  sock.sendMessageV2 = async (chatId, message, options = {}) => {
     let targetJid = chatId;
 
     if (chatId?.endsWith('@lid')) {
       const mappedPn =
-        await RuzXD.signalRepository?.lidMapping?.getPNForLID(chatId);
+        await sock.signalRepository?.lidMapping?.getPNForLID(chatId);
 
       if (mappedPn) {
         targetJid = `${mappedPn}@s.whatsapp.net`;
       }
     }
 
-    console.log('[sendMessageV2]', {
-      chatId,
-      targetJid
-    });
-
-    // Jangan pakai targetJid sebagai key generate
     const generate = await generateWAMessage(
       chatId,
       message,
@@ -190,7 +184,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       generate.message[type].contextInfo = message.contextInfo;
     }
 
-    return await RuzXD.relayMessage(
+    return await sock.relayMessage(
       targetJid,
       generate.message,
       {
@@ -201,8 +195,8 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
 
 
 
-  RuzXD.logger = {
-    ...RuzXD.logger,
+  sock.logger = {
+    ...sock.logger,
     info(...args) {
       console.log(chalk.bold.rgb(57, 183, 16)(`INFO [${chalk.rgb(255, 255, 255)(new Date())}]:`), chalk.cyan(...args));
     },
@@ -214,7 +208,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     },
   };
 
-  RuzXD.getFile = async (PATH, returnAsFilename) => {
+  sock.getFile = async (PATH, returnAsFilename) => {
     let res, filename;
     let data = Buffer.isBuffer(PATH)
       ? PATH
@@ -241,28 +235,28 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     };
   };
 
-  RuzXD.waitEvent = (eventName, is = () => true, maxTries = 25) => {
+  sock.waitEvent = (eventName, is = () => true, maxTries = 25) => {
     return new Promise((resolve, reject) => {
       let tries = 0;
       let on = (...args) => {
         if (++tries > maxTries) reject("Max tries reached");
         else if (is()) {
-          RuzXD.ev.off(eventName, on);
+          sock.ev.off(eventName, on);
           resolve(...args);
         }
       };
-      RuzXD.ev.on(eventName, on);
+      sock.ev.on(eventName, on);
     });
   };
 
-  RuzXD.sendMedia = async (jid, path, quoted, options = {}) => {
-    let { ext, mime, data } = await RuzXD.getFile(path);
+  sock.sendMedia = async (jid, path, quoted, options = {}) => {
+    let { ext, mime, data } = await sock.getFile(path);
     messageType = mime.split("/")[0];
     pase = messageType.replace("application", "document") || messageType;
-    return await RuzXD.sendMessage(jid, { [`${pase}`]: data, mimetype: mime, ...options }, { quoted });
+    return await sock.sendMessage(jid, { [`${pase}`]: data, mimetype: mime, ...options }, { quoted });
   };
 
-  RuzXD.sendContact = async (jid, contacts = [], quoted = "", opts = {}) => {
+  sock.sendContact = async (jid, contacts = [], quoted = "", opts = {}) => {
     const list = contacts.map((contact) => {
       const {
         number,
@@ -279,7 +273,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       };
     });
 
-    await RuzXD.sendMessage(
+    await sock.sendMessage(
       jid,
       {
         contacts: {
@@ -292,8 +286,8 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     );
   };
 
-  RuzXD.setStatus = async (status) => {
-    return await RuzXD.query({
+  sock.setStatus = async (status) => {
+    return await sock.query({
       tag: "iq",
       attrs: {
         to: "s.whatsapp.net",
@@ -310,11 +304,11 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     });
   };
 
-  RuzXD.reply = (jid, text = "", quoted, options) => {
-    return Buffer.isBuffer(text) ? this.sendFile(jid, text, "file", "", quoted, false, options) : RuzXD.sendMessage(jid, { ...options, text }, { quoted, ...options });
+  sock.reply = (jid, text = "", quoted, options) => {
+    return Buffer.isBuffer(text) ? this.sendFile(jid, text, "file", "", quoted, false, options) : sock.sendMessage(jid, { ...options, text }, { quoted, ...options });
   };
 
-  RuzXD.sendStimg = async (jid, path, quoted, options = {}) => {
+  sock.sendStimg = async (jid, path, quoted, options = {}) => {
     let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], "base64") : /^https?:\/\//.test(path) ? await (await fetch(path)).buffer() : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0);
     let buffer;
     if (options && (options.packname || options.author)) {
@@ -322,11 +316,11 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     } else {
       buffer = await imageToWebp(buff);
     }
-    await RuzXD.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
+    await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
     return buffer;
   };
 
-  RuzXD.sendStvid = async (jid, path, quoted, options = {}) => {
+  sock.sendStvid = async (jid, path, quoted, options = {}) => {
     let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], "base64") : /^https?:\/\//.test(path) ? await getBuffer(path) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0);
     let buffer;
     if (options && (options.packname || options.author)) {
@@ -334,11 +328,11 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     } else {
       buffer = await videoToWebp(buff);
     }
-    await RuzXD.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
+    await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
     return buffer;
   };
 
-  RuzXD.sendGroupV4Invite = async (jid, participant, inviteCode, inviteExpiration, groupName = "unknown subject", caption = "Invitation to join my WhatsApp group", options = {}) => {
+  sock.sendGroupV4Invite = async (jid, participant, inviteCode, inviteExpiration, groupName = "unknown subject", caption = "Invitation to join my WhatsApp group", options = {}) => {
     let msg = proto.Message.fromObject({
       groupInviteMessage: proto.GroupInviteMessage.fromObject({
         inviteCode,
@@ -353,7 +347,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return message;
   };
 
-  RuzXD.cMod = async (jid, message, text = "", sender = RuzXD.user.jid, options = {}) => {
+  sock.cMod = async (jid, message, text = "", sender = sock.user.jid, options = {}) => {
     if (options.mentions && !Array.isArray(options.mentions)) options.mentions = [options.mentions];
     let copy = message.toJSON();
     delete copy.message.messageContextInfo;
@@ -376,20 +370,20 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     if (copy.key.remoteJid.includes("@s.whatsapp.net")) sender = sender || copy.key.remoteJid;
     else if (copy.key.remoteJid.includes("@broadcast")) sender = sender || copy.key.remoteJid;
     copy.key.remoteJid = jid;
-    copy.key.fromMe = areJidsSameUser(sender, RuzXD.user.id) || false;
+    copy.key.fromMe = areJidsSameUser(sender, sock.user.id) || false;
     return proto.WebMessageInfo.fromObject(copy);
   };
 
-  RuzXD.copyNForward = async (jid, message, forwardingScore = true, options = {}) => {
+  sock.copyNForward = async (jid, message, forwardingScore = true, options = {}) => {
     let m = generateForwardMessageContent(message, !!forwardingScore);
     let mtype = Object.keys(m)[0];
     if (forwardingScore && typeof forwardingScore == "number" && forwardingScore > 1) m[mtype].contextInfo.forwardingScore += forwardingScore;
-    m = generateWAMessageFromContent(jid, m, { ...options, userJid: RuzXD.user.id });
-    await RuzXD.relayMessage(jid, m.message, { messageId: m.key.id, additionalAttributes: { ...options } });
+    m = generateWAMessageFromContent(jid, m, { ...options, userJid: sock.user.id });
+    await sock.relayMessage(jid, m.message, { messageId: m.key.id, additionalAttributes: { ...options } });
     return m;
   };
 
-  RuzXD.downloadM = async (m, type, filename = "") => {
+  sock.downloadM = async (m, type, filename = "") => {
     if (!m || !(m.url || m.directPath)) return Buffer.alloc(0);
     const stream = await downloadContentFromMessage(m, type);
     let buffer = Buffer.from([]);
@@ -400,7 +394,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return filename && fs.existsSync(filename) ? filename : buffer;
   };
 
-  RuzXD.downloadMed = async (message, filename, attachExtension = true) => {
+  sock.downloadMed = async (message, filename, attachExtension = true) => {
     let mime = (message.msg || message).mimetype || "";
     let messageType = mime.split("/")[0].replace("application", "document") ? mime.split("/")[0].replace("application", "document") : mime.split("/")[0];
     const stream = await downloadContentFromMessage(message, messageType);
@@ -414,29 +408,29 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return trueFileName;
   };
 
-  RuzXD.chatRead = async (jid, participant, messageID) => {
-    return await RuzXD.sendReadReceipt(jid, participant, [messageID]);
+  sock.chatRead = async (jid, participant, messageID) => {
+    return await sock.sendReadReceipt(jid, participant, [messageID]);
   };
 
-  RuzXD.parseMention = (text = "") => {
+  sock.parseMention = (text = "") => {
     return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map((v) => v[1] + "@s.whatsapp.net");
   };
 
-  RuzXD.saveName = async (id, name = "") => {
+  sock.saveName = async (id, name = "") => {
     if (!id) return;
-    id = RuzXD.decodeJid(id);
+    id = sock.decodeJid(id);
     let isGroup = id.endsWith("@g.us");
-    if (id in RuzXD.contacts && RuzXD.contacts[id][isGroup ? "subject" : "name"] && id in RuzXD.chats) return;
+    if (id in sock.contacts && sock.contacts[id][isGroup ? "subject" : "name"] && id in sock.chats) return;
     let metadata = {};
-    if (isGroup) metadata = await RuzXD.groupMetadata(id);
-    let chat = { ...(RuzXD.contacts[id] || {}), id, ...(isGroup ? { subject: metadata.subject, desc: metadata.desc } : { name }) };
-    RuzXD.contacts[id] = chat;
-    RuzXD.chats[id] = chat;
+    if (isGroup) metadata = await sock.groupMetadata(id);
+    let chat = { ...(sock.contacts[id] || {}), id, ...(isGroup ? { subject: metadata.subject, desc: metadata.desc } : { name }) };
+    sock.contacts[id] = chat;
+    sock.chats[id] = chat;
   };
 
-  RuzXD.processMessageStubType = async (m) => {
+  sock.processMessageStubType = async (m) => {
     if (!m.messageStubType) return;
-    const chat = RuzXD.decodeJid(m.key.remoteJid || m.message?.senderKeyDistributionMessage?.groupId || "");
+    const chat = sock.decodeJid(m.key.remoteJid || m.message?.senderKeyDistributionMessage?.groupId || "");
     if (!chat || chat === "status@broadcast") return;
     const emitGroupUpdate = (update) => {
       ev.emit("groups.update", [{ id: chat, ...update }]);
@@ -460,35 +454,35 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     }
     const isGroup = chat.endsWith("@g.us");
     if (!isGroup) return;
-    let chats = RuzXD.chats[chat];
-    if (!chats) chats = RuzXD.chats[chat] = { id: chat };
+    let chats = sock.chats[chat];
+    if (!chats) chats = sock.chats[chat] = { id: chat };
     chats.isChats = true;
-    const metadata = await RuzXD.groupMetadata(chat).catch((_) => null);
+    const metadata = await sock.groupMetadata(chat).catch((_) => null);
     if (!metadata) return;
     chats.subject = metadata.subject;
     chats.metadata = metadata;
   };
 
-  RuzXD.insertAllGroup = async () => {
-    const groups = (await RuzXD.groupFetchAllParticipating().catch((_) => null)) || {};
-    for (const group in groups) RuzXD.chats[group] = { ...(RuzXD.chats[group] || {}), id: group, subject: groups[group].subject, isChats: true, metadata: groups[group] };
-    return RuzXD.chats;
+  sock.insertAllGroup = async () => {
+    const groups = (await sock.groupFetchAllParticipating().catch((_) => null)) || {};
+    for (const group in groups) sock.chats[group] = { ...(sock.chats[group] || {}), id: group, subject: groups[group].subject, isChats: true, metadata: groups[group] };
+    return sock.chats;
   };
 
-  RuzXD.pushMessage = async (m) => {
+  sock.pushMessage = async (m) => {
     if (!m) return;
     if (!Array.isArray(m)) m = [m];
     for (const message of m) {
       try {
         if (!message) continue;
-        if (message.messageStubType && message.messageStubType != WAMessageStubType.CIPHERTEXT) RuzXD.processMessageStubType(message).catch(console.error);
+        if (message.messageStubType && message.messageStubType != WAMessageStubType.CIPHERTEXT) sock.processMessageStubType(message).catch(console.error);
         const _mtype = Object.keys(message.message || {});
         const mtype = (!["senderKeyDistributionMessage", "messageContextInfo"].includes(_mtype[0]) && _mtype[0]) || (_mtype.length >= 3 && _mtype[1] !== "messageContextInfo" && _mtype[1]) || _mtype[_mtype.length - 1];
-        const chat = RuzXD.decodeJid(message.key.remoteJid || message.message?.senderKeyDistributionMessage?.groupId || "");
+        const chat = sock.decodeJid(message.key.remoteJid || message.message?.senderKeyDistributionMessage?.groupId || "");
         if (message.message?.[mtype]?.contextInfo?.quotedMessage) {
           let context = message.message[mtype].contextInfo;
-          let participant = RuzXD.decodeJid(context.participant);
-          const remoteJid = RuzXD.decodeJid(context.remoteJid || participant);
+          let participant = sock.decodeJid(context.participant);
+          const remoteJid = sock.decodeJid(context.remoteJid || participant);
           let quoted = message.message[mtype].contextInfo.quotedMessage;
           if (remoteJid && remoteJid !== "status@broadcast" && quoted) {
             let qMtype = Object.keys(quoted)[0];
@@ -504,15 +498,15 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
             const qM = {
               key: {
                 remoteJid,
-                fromMe: areJidsSameUser(RuzXD.user.jid, remoteJid),
+                fromMe: areJidsSameUser(sock.user.jid, remoteJid),
                 id: context.stanzaId,
                 participant,
               },
               message: JSON.parse(JSON.stringify(quoted)),
               ...(isGroup ? { participant } : {}),
             };
-            let qChats = RuzXD.chats[participant];
-            if (!qChats) qChats = RuzXD.chats[participant] = { id: participant, isChats: !isGroup };
+            let qChats = sock.chats[participant];
+            if (!qChats) qChats = sock.chats[participant] = { id: participant, isChats: !isGroup };
             if (!qChats.messages) qChats.messages = {};
             if (!qChats.messages[context.stanzaId] && !qM.key.fromMe) qChats.messages[context.stanzaId] = qM;
             let qChatsMessages;
@@ -521,29 +515,29 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         }
         if (!chat || chat === "status@broadcast") continue;
         const isGroup = chat.endsWith("@g.us");
-        let chats = RuzXD.chats[chat];
+        let chats = sock.chats[chat];
         if (!chats) {
-          if (isGroup) await RuzXD.insertAllGroup().catch(console.error);
-          chats = RuzXD.chats[chat] = { id: chat, isChats: true, ...(RuzXD.chats[chat] || {}) };
+          if (isGroup) await sock.insertAllGroup().catch(console.error);
+          chats = sock.chats[chat] = { id: chat, isChats: true, ...(sock.chats[chat] || {}) };
         }
         let metadata, sender;
         if (isGroup) {
           if (!chats.subject || !chats.metadata) {
-            metadata = (await RuzXD.groupMetadata(chat).catch((_) => ({}))) || {};
+            metadata = (await sock.groupMetadata(chat).catch((_) => ({}))) || {};
             if (!chats.subject) chats.subject = metadata.subject || "";
             if (!chats.metadata) chats.metadata = metadata;
           }
-          sender = RuzXD.decodeJid((message.key?.fromMe && RuzXD.user.id) || message.participant || message.key?.participant || chat || "");
+          sender = sock.decodeJid((message.key?.fromMe && sock.user.id) || message.participant || message.key?.participant || chat || "");
           if (sender !== chat) {
-            let chats = RuzXD.chats[sender];
-            if (!chats) chats = RuzXD.chats[sender] = { id: sender };
+            let chats = sock.chats[sender];
+            if (!chats) chats = sock.chats[sender] = { id: sender };
             if (!chats.name) chats.name = message.pushName || chats.name || "";
           }
         } else if (!chats.name) chats.name = message.pushName || chats.name || "";
         if (["senderKeyDistributionMessage", "messageContextInfo"].includes(mtype)) continue;
         chats.isChats = true;
         if (!chats.messages) chats.messages = {};
-        const fromMe = message.key.fromMe || areJidsSameUser(sender || chat, RuzXD.user.id);
+        const fromMe = message.key.fromMe || areJidsSameUser(sender || chat, sock.user.id);
         if (!["protocolMessage"].includes(mtype) && !fromMe && message.messageStubType != WAMessageStubType.CIPHERTEXT && message.message) {
           delete message.message.messageContextInfo;
           delete message.message.senderKeyDistributionMessage;
@@ -557,8 +551,8 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     }
   };
 
-  RuzXD.getBusinessProfile = async (jid) => {
-    const results = await RuzXD.query({
+  sock.getBusinessProfile = async (jid) => {
+    const results = await sock.query({
       tag: "iq",
       attrs: {
         to: "s.whatsapp.net",
@@ -595,7 +589,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     };
   };
 
-  RuzXD.msToDate = (ms) => {
+  sock.msToDate = (ms) => {
     let days = Math.floor(ms / (24 * 60 * 60 * 1000));
     let daysms = ms % (24 * 60 * 60 * 1000);
     let hours = Math.floor(daysms / (60 * 60 * 1000));
@@ -606,36 +600,36 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return days + " Hari " + hours + " Jam " + minutes + " Menit";
   };
 
-  RuzXD.msToTime = (ms) => {
+  sock.msToTime = (ms) => {
     let h = isNaN(ms) ? "--" : Math.floor(ms / 3600000);
     let m = isNaN(ms) ? "--" : Math.floor(ms / 60000) % 60;
     let s = isNaN(ms) ? "--" : Math.floor(ms / 1000) % 60;
     return [h + " Jam ", m + " Menit ", s + " Detik"].map((v) => v.toString().padStart(2, 0)).join(" ");
   };
 
-  RuzXD.msToHour = (ms) => {
+  sock.msToHour = (ms) => {
     let h = isNaN(ms) ? "--" : Math.floor(ms / 3600000);
     return [h + " Jam "].map((v) => v.toString().padStart(2, 0)).join(" ");
   };
 
-  RuzXD.msToMinute = (ms) => {
+  sock.msToMinute = (ms) => {
     let m = isNaN(ms) ? "--" : Math.floor(ms / 60000) % 60;
     return [m + " Menit "].map((v) => v.toString().padStart(2, 0)).join(" ");
   };
 
-  RuzXD.msToSecond = (ms) => {
+  sock.msToSecond = (ms) => {
     let s = isNaN(ms) ? "--" : Math.floor(ms / 1000) % 60;
     return [s + " Detik"].map((v) => v.toString().padStart(2, 0)).join(" ");
   };
 
-  RuzXD.clockString = (ms) => {
+  sock.clockString = (ms) => {
     let h = isNaN(ms) ? "--" : Math.floor(ms / 3600000);
     let m = isNaN(ms) ? "--" : Math.floor(ms / 60000) % 60;
     let s = isNaN(ms) ? "--" : Math.floor(ms / 1000) % 60;
     return [h + " Jam ", m + " Menit ", s + " Detik"].map((v) => v.toString().padStart(2, 0)).join(" ");
   };
 
-  RuzXD.join = (arr) => {
+  sock.join = (arr) => {
     let construct = [];
     for (let i = 0; i < arr.length; i++) {
       construct = construct.concat(arr[i]);
@@ -643,15 +637,15 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return construct;
   };
 
-  RuzXD.pickRandom = (list) => {
+  sock.pickRandom = (list) => {
     return list[Math.floor(list.length * Math.random())];
   };
 
-  RuzXD.delay = (ms) => {
+  sock.delay = (ms) => {
     return new Promise((resolve, reject) => setTimeout(resolve, ms));
   };
 
-  RuzXD.filter = (text) => {
+  sock.filter = (text) => {
     let mati = ["q", "w", "r", "t", "y", "p", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m"];
     if (/[aiueo][aiueo]([qwrtypsdfghjklzxcvbnm])?$/i.test(text)) return text.substring(text.length - 1);
     else {
@@ -667,48 +661,48 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     }
   };
 
-  RuzXD.format = (...args) => {
+  sock.format = (...args) => {
     return util.format(...args);
   };
 
-  RuzXD.serializeM = (m) => {
-    return exports.smsg(RuzXD, m);
+  sock.serializeM = (m) => {
+    return exports.smsg(sock, m);
   };
 
-  RuzXD.sendText = (jid, text, quoted = "", options) => RuzXD.sendMessage(jid, { text: text, ...options }, { quoted });
+  sock.sendText = (jid, text, quoted = "", options) => sock.sendMessage(jid, { text: text, ...options }, { quoted });
 
-  RuzXD.sendImage = async (jid, path, caption = "", setquoted, options) => {
+  sock.sendImage = async (jid, path, caption = "", setquoted, options) => {
     let buffer = Buffer.isBuffer(path) ? path : await getBuffer(path);
-    return await RuzXD.sendMessage(jid, { image: buffer, caption: caption, ...options }, { quoted: setquoted });
+    return await sock.sendMessage(jid, { image: buffer, caption: caption, ...options }, { quoted: setquoted });
   };
 
-  RuzXD.sendVideo = async (jid, yo, caption = "", quoted = "", gif = false, options) => {
-    return await RuzXD.sendMessage(jid, { video: yo, caption: caption, gifPlayback: gif, ...options }, { quoted });
+  sock.sendVideo = async (jid, yo, caption = "", quoted = "", gif = false, options) => {
+    return await sock.sendMessage(jid, { video: yo, caption: caption, gifPlayback: gif, ...options }, { quoted });
   };
 
-  RuzXD.sendAudio = async (jid, path, quoted = "", ptt = false, options) => {
+  sock.sendAudio = async (jid, path, quoted = "", ptt = false, options) => {
     let buffer = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], "base64") : /^https?:\/\//.test(path) ? await await getBuffer(path) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0);
-    return await RuzXD.sendMessage(jid, { audio: buffer, ptt: ptt, ...options }, { quoted });
+    return await sock.sendMessage(jid, { audio: buffer, ptt: ptt, ...options }, { quoted });
   };
 
-  RuzXD.sendTextWithMentions = async (jid, text, quoted, options = {}) => RuzXD.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net") }, ...options }, { quoted });
+  sock.sendTextWithMentions = async (jid, text, quoted, options = {}) => sock.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map((v) => v[1] + "@s.whatsapp.net") }, ...options }, { quoted });
 
-  RuzXD.sendGroupV4Invite = async (jid, participant, inviteCode, inviteExpiration, groupName = "unknown subject", jpegThumbnail, caption = "Invitation to join my WhatsApp group", options = {}) => {
+  sock.sendGroupV4Invite = async (jid, participant, inviteCode, inviteExpiration, groupName = "unknown subject", jpegThumbnail, caption = "Invitation to join my WhatsApp group", options = {}) => {
     let msg = WAProto.Message.fromObject({
       groupInviteMessage: WAProto.GroupInviteMessage.fromObject({
         inviteCode,
         inviteExpiration: inviteExpiration ? parseInt(inviteExpiration) : +new Date(new Date() + 3 * 86400000),
         groupJid: jid,
-        groupName: groupName ? groupName : (await RuzXD.groupMetadata(jid)).subject,
+        groupName: groupName ? groupName : (await sock.groupMetadata(jid)).subject,
         jpegThumbnail: jpegThumbnail ? (await getBuffer(jpegThumbnail)).buffer : "",
         caption,
       }),
     });
     const m = generateWAMessageFromContent(participant, msg, options);
-    return await RuzXD.relayMessage(participant, m.message, { messageId: m.key.id });
+    return await sock.relayMessage(participant, m.message, { messageId: m.key.id });
   };
 
-  RuzXD.sendPoll = async (jid, title = "", but = []) => {
+  sock.sendPoll = async (jid, title = "", but = []) => {
     let pollCreation = generateWAMessageFromContent(
       jid,
       proto.Message.fromObject({
@@ -720,10 +714,10 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       }),
       { userJid: jid }
     );
-    return RuzXD.relayMessage(jid, pollCreation.message, { messageId: pollCreation.key.id });
+    return sock.relayMessage(jid, pollCreation.message, { messageId: pollCreation.key.id });
   };
 
-  RuzXD.sendOrder = async (jid, text, img, itcount, ammount, qnya = m) => {
+  sock.sendOrder = async (jid, text, img, itcount, ammount, qnya = m) => {
     const order = generateWAMessageFromContent(
       jid,
       proto.Message.fromObject({
@@ -746,10 +740,10 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       }),
       { userJid: m.sender, quoted: qnya }
     );
-    return RuzXD.relayMessage(jid, order.message, { messageId: order.key.id });
+    return sock.relayMessage(jid, order.message, { messageId: order.key.id });
   };
 
-  RuzXD.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+  sock.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
     let quoted = message.msg ? message.msg : message;
     let mime = (message.msg || message).mimetype || "";
     let messageType = message.mtype ? message.mtype.replace(/Message/gi, "") : mime.split("/")[0];
@@ -765,7 +759,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return trueFileName;
   };
 
-  RuzXD.downloadMediaMessage = async (message) => {
+  sock.downloadMediaMessage = async (message) => {
     let mime = (message.msg || message).mimetype || "";
     let messageType = message.type ? message.type.replace(/Message/gi, "") : mime.split("/")[0];
     const stream = await downloadContentFromMessage(message, messageType);
@@ -776,8 +770,8 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     return buffer;
   };
 
-  RuzXD.sendFile = async (jid, PATH, fileName, quoted = {}, options = {}) => {
-    let { filename, size, ext, mime, data } = await RuzXD.getFile(PATH, true);
+  sock.sendFile = async (jid, PATH, fileName, quoted = {}, options = {}) => {
+    let { filename, size, ext, mime, data } = await sock.getFile(PATH, true);
     let type = "";
     let mimetype = mime;
     let pathFile = filename;
@@ -798,11 +792,11 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     else if (/audio/.test(mime)) type = "audio";
     else type = "document";
 
-    await RuzXD.sendMessage(jid, { [type]: { url: pathFile }, mimetype, fileName, ...options }, { quoted, ...options });
+    await sock.sendMessage(jid, { [type]: { url: pathFile }, mimetype, fileName, ...options }, { quoted, ...options });
     return fs.promises.unlink(pathFile);
   };
 
-  RuzXD.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
+  sock.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
     let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.+;base64,/i.test(path) ? Buffer.from(path.split`,`[1], "base64") : /^https?:\/\//.test(path) ? await defaultGetBuffer(path) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0);
     let buffer;
     if (options.packname || options.author) {
@@ -810,11 +804,11 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     } else {
       buffer = await imageToWebp(buff);
     }
-    await RuzXD.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
+    await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
     return buffer;
   };
 
-  RuzXD.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
+  sock.sendVideoAsSticker = async (jid, path, quoted, options = {}) => {
     let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.+;base64,/i.test(path) ? Buffer.from(path.split`,`[1], "base64") : /^https?:\/\//.test(path) ? await defaultGetBuffer(path) : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0);
     let buffer;
     if (options.packname || options.author) {
@@ -822,11 +816,11 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     } else {
       buffer = await videoToWebp(buff);
     }
-    await RuzXD.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
+    await sock.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted });
     return buffer;
   };
 
-  RuzXD.sendAlbumMessage = async function (jid, medias = [], options = {}) {
+  sock.sendAlbumMessage = async function (jid, medias = [], options = {}) {
     if (!Array.isArray(medias) || medias.length < 2) throw new RangeError("Minimum 2 media");
     for (const media of medias) {
       if (!media.image && !media.video) throw new TypeError("Each media item must have an image or video property.");
@@ -835,7 +829,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     const quoted = options.quoted;
     delete options.delay;
     delete options.quoted;
-    const userJid = RuzXD.user.id;
+    const userJid = sock.user.id;
 
     const album = await generateWAMessageFromContent(
       jid,
@@ -848,7 +842,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       },
       { userJid, ...options }
     );
-    await RuzXD.relayMessage(jid, album.message, { messageId: album.key.id });
+    await sock.relayMessage(jid, album.message, { messageId: album.key.id });
 
     for (const media of medias) {
       const content = media.image ? { image: media.image } : { video: media.video };
@@ -858,7 +852,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         {
           userJid,
           upload: async (readStream, opts) => {
-            const up = await RuzXD.waUploadToServer(readStream, { ...opts, newsletter: isJidNewsletter(jid) });
+            const up = await sock.waUploadToServer(readStream, { ...opts, newsletter: isJidNewsletter(jid) });
             return up;
           },
           ...options,
@@ -868,19 +862,19 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         messageSecret: randomBytes(32),
         messageAssociation: { associationType: 1, parentMessageKey: album.key },
       };
-      await RuzXD.relayMessage(jid, msg.message, { messageId: msg.key.id, ...(quoted && { quoted }) });
+      await sock.relayMessage(jid, msg.message, { messageId: msg.key.id, ...(quoted && { quoted }) });
       await delay(time);
     }
     return album;
   };
 
-  Object.defineProperty(RuzXD, "name", {
+  Object.defineProperty(sock, "name", {
     value: { ...(options.chats || {}) },
     configurable: true,
   });
-  if (RuzXD.user?.id) RuzXD.user.jid = RuzXD.decodeJid(RuzXD.user.id);
-  store.bind(RuzXD.ev);
-  return RuzXD;
+  if (sock.user?.id) sock.user.jid = sock.decodeJid(sock.user.id);
+  store.bind(sock.ev);
+  return sock;
 };
 exports.smsg = (conn, m, store) => {
   if (!m) return m;
