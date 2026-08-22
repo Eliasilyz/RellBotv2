@@ -66,7 +66,7 @@ global.loadDatabase = async function loadDatabase() {
 };
 
 global.loadDatabase();
-loadUserList().catch(() => {});
+loadUserList().catch(() => { });
 
 process.on("uncaughtException", console.error);
 
@@ -88,6 +88,11 @@ const question = (text) => {
     rl.question(text, resolve);
   });
 };
+
+function getFormattedYear() {
+  const currentYear = new Date().getFullYear().toString();
+  return currentYear.replace('0', 'K');
+}
 
 async function startSesi() {
   await global.loadDatabase();
@@ -201,7 +206,7 @@ async function startSesi() {
       let m = chatUpdate.messages?.[0];
       if (!m || !m.message) return;
       const sender = sock.decodeJid(m.key.participantAlt || m.key.participant || m.key.remoteJidAlt || m.key.remoteJid || "");
-      await handleNewUser(sender).catch(() => {});
+      await handleNewUser(sender).catch(() => { });
       m.message = Object.keys(m.message)[0] === "ephemeralMessage" ? m.message.ephemeralMessage.message : m.message;
       if (m.key && m.key.remoteJid === "status@broadcast") {
         if (global.db?.data?.settings?.autoread) sock.readMessages([m.key]);
@@ -277,7 +282,7 @@ async function startSesi() {
             contextInfo: buildContextInfo({
               mentionedJid: tagList,
               title: userName,
-              body: global.namabot2,
+              body: global.namabot + " " + getFormattedYear(),
               thumbnailUrl: userPp,
             }),
           });
@@ -291,7 +296,7 @@ async function startSesi() {
             contextInfo: buildContextInfo({
               mentionedJid: tagList,
               title: userName,
-              body: global.namabot2,
+              body: global.namabot + " " + getFormattedYear(),
               thumbnailUrl: userPp,
             }),
           });
