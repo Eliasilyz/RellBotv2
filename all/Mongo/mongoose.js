@@ -1,14 +1,40 @@
 require("../global");
 const mongoose = require("mongoose");
 
-async function connectDB() {
- if (mongoose.connection.readyState === 1) return;
- await mongoose.connect(global.mongoDB, {
-  dbName: "mashadatabase",
- });
- console.log(color("[✔] DATABASE Ready"));
+function isMongoConnected() {
+ return mongoose.connection.readyState === 1;
 }
-connectDB();
+
+let isConnecting = false;
+
+async function connectDB() {
+ if (mongoose.connection.readyState === 1) return true;
+ if (isConnecting) return false;
+
+ const mongoUrl = (global.mongoDB || "").trim();
+ if (!mongoUrl || (!mongoUrl.startsWith("mongodb://") && !mongoUrl.startsWith("mongodb+srv://"))) {
+  console.log(color("[!] MONGO_URL not configured or invalid in .env. MongoDB features (waifu gacha, leveling, redeem) will be disabled.", "yellow"));
+  return false;
+ }
+
+ try {
+  isConnecting = true;
+  await mongoose.connect(mongoUrl, {
+   dbName: "mashadatabase",
+   serverSelectionTimeoutMS: 5000,
+  });
+  isConnecting = false;
+  console.log(color("[✔] DATABASE Ready"));
+  return true;
+ } catch (err) {
+  isConnecting = false;
+  console.log(color(`[✖] DATABASE Connection Failed: ${err.message}. Continuing without MongoDB.`, "red"));
+  return false;
+ }
+}
+
+// Attempt non-blocking connection
+connectDB().catch(() => {});
 
 // Schemas
 const userSchema = new mongoose.Schema(
@@ -115,6 +141,7 @@ const UserNumber = mongoose.model("UserNumber", userNumberSchema, "user_jid");
 
 module.exports = {
  connectDB,
+ isMongoConnected,
  User,
  UserData,
  RedeemCode,

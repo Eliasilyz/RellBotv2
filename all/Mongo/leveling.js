@@ -1,4 +1,4 @@
-const { UserData, connectDB } = require("./mongoose");
+const { UserData, connectDB, isMongoConnected } = require("./mongoose");
 
 const RANKS = [
  { name: "ʙᴇɢɪɴɴᴇʀ", minLevel: 1 },
@@ -78,52 +78,73 @@ function getNextRankByLevel(level) {
 
 async function levelup(sender, m, sock, qkontak, pushname) {
  try {
-  if (typeof sender !== "string") {
-   console.error("Invalid sender ID (should be string):", sender);
-   return;
-  }
-
-  // Amankan nama agar tidak error
+  if (!sender || typeof sender !== "string") return;
   const safeName = (typeof pushname === "string" && pushname.trim()) || "Unknown";
 
-  let user = await UserData.findById(sender);
-  if (!user) {
-   user = new UserData({
-    _id: sender,
-    name: typeof pushname === "string" ? pushname : "Unknown",
-    ppuser: null,
+  // Update local database (always fast & available)
+  if (!global.db?.data?.users) {
+   if (!global.db) global.db = {};
+   if (!global.db.data) global.db.data = {};
+   if (!global.db.data.users) global.db.data.users = {};
+  }
+  if (!global.db.data.users[sender]) {
+   global.db.data.users[sender] = {
+    name: safeName,
     exp: 0,
     level: 1,
     rank: getRankByLevel(1),
-   });
+   };
   }
+
+  const localUser = global.db.data.users[sender];
+  if (typeof localUser.exp !== "number") localUser.exp = 0;
+  if (typeof localUser.level !== "number") localUser.level = 1;
 
   const now = new Date();
-  const isActive = user.expMultiplierUntil && now < user.expMultiplierUntil;
-  const multiplier = isActive ? user.expMultiplier : 1;
-  if (user.expMultiplierUntil && now > user.expMultiplierUntil) {
-   user.expMultiplier = 1;
-   user.expMultiplierUntil = null;
-  }
+  const isActive = localUser.expMultiplierUntil && new Date(localUser.expMultiplierUntil) > now;
+  const multiplier = isActive ? localUser.expMultiplier || 1 : 1;
 
-  user.exp = Math.max(0, user.exp + 1 * multiplier);
+  localUser.exp = Math.max(0, localUser.exp + 1 * multiplier);
   let leveledUp = false;
 
-  while (user.exp >= getRequiredExp(user.level)) {
-   user.exp -= getRequiredExp(user.level);
-   user.level += 1;
+  while (localUser.exp >= getRequiredExp(localUser.level)) {
+   localUser.exp -= getRequiredExp(localUser.level);
+   localUser.level += 1;
    leveledUp = true;
   }
 
-  user.rank = getRankByLevel(user.level);
-  await user.save();
+  localUser.rank = getRankByLevel(localUser.level);
+  localUser.name = safeName;
+
+  // Sync to Mongo in background if available
+  if (isMongoConnected()) {
+   UserData.findById(sender)
+    .then(async (mongoUser) => {
+     if (!mongoUser) {
+      mongoUser = new UserData({
+       _id: sender,
+       name: safeName,
+       exp: localUser.exp,
+       level: localUser.level,
+       rank: localUser.rank,
+      });
+     } else {
+      mongoUser.name = safeName;
+      mongoUser.exp = localUser.exp;
+      mongoUser.level = localUser.level;
+      mongoUser.rank = localUser.rank;
+     }
+     await mongoUser.save();
+    })
+    .catch((e) => console.error("Mongo sync level error:", e.message));
+  }
 
   if (leveledUp) {
    const teks = `*${safeName}* Leveled up! 🎉
 Check leaderboard: .toplevel
 ┌───⊷ *STATUS*
-│ ◦ *Progress* : ${user.level - 1} ➠ ${user.level}
-│ ◦ *Rank* : ${user.rank}
+│ ◦ *Progress* : ${localUser.level - 1} ➠ ${localUser.level}
+│ ◦ *Rank* : ${localUser.rank}
 └───────────────`;
 
    await sock.sendMessage(

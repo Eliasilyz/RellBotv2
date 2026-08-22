@@ -31,9 +31,8 @@ global.trakteer = "https://trakteer.id/rein122";
 global.sociabuzz = "https://sociabuzz.com/franklinelias/tribe";
 
 // ========== SECRETS ========== //
-global.mongoDB = process.env.MONGO_URL;
-
-global.GROQ_API = process.env.GROQ_API;
+global.mongoDB = (process.env.MONGO_URL && process.env.MONGO_URL.trim()) || "";
+global.GROQ_API = (process.env.GROQ_API && process.env.GROQ_API.trim()) || "";
 
 // ========== RESPONSE MESSAGES ========== //
 global.msg = {
@@ -48,6 +47,8 @@ global.msg = {
     error: "[❌] An error occurred. Please try again in 1 minute.",
     prem: "[❌] This feature is for Premium users only.",
     owner: "[❌] This command is only for the bot owner.",
+    mongoRequired: "[❌] Feature unavailable: MongoDB is not connected. Please set MONGO_URL in .env.",
+    groqRequired: "[❌] Feature unavailable: GROQ_API key is not set. Please set GROQ_API in .env.",
 };
 
 // ========== HOT-RELOAD ========== //

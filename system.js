@@ -1,4 +1,5 @@
 require("./settings.js");
+const { isMongoConnected } = require("./all/Mongo/mongoose.js");
 const MONGO = require("./all/Mongo/user_status.js");
 const USERID = require("./all/Mongo/users_id.js");
 const USER = require("./all/Mongo/user_data.js");
@@ -18,7 +19,21 @@ const util = require("util");
 const fs = require("fs");
 const more = String.fromCharCode(8206);
 const readmore = more.repeat(4800);
-const groq = new Groq({ apiKey: global.GROQ_API });
+
+let groqClient = null;
+function getGroqClient() {
+  if (!global.GROQ_API) return null;
+  if (!groqClient) {
+    try {
+      groqClient = new Groq({ apiKey: global.GROQ_API });
+    } catch (err) {
+      console.error("Groq initialization error:", err.message);
+      return null;
+    }
+  }
+  return groqClient;
+}
+
 const gamewaktu = 30;
 module.exports = async (sock, m, chatUpdate, store) => {
   try {
@@ -134,28 +149,18 @@ module.exports = async (sock, m, chatUpdate, store) => {
     const participant_sender = participants?.find(v => v.id === m.sender) || {};
     const isBotAdmin = participant_bot?.admin != null;
     const isAdmin = participant_sender?.admin != null;
-    // Database checks
-    const jidAllList = await USERID.getAllNumbers();
-    const registered = await USER.getUser(sender);
-    const isRegistered = !!registered;
-    const isBanned = await MONGO.getBannedStatus(sender);
-    const isPremium = !!(await MONGO.getPremiumStatus(m.sender));
+    // Database checks (Fast synchronous local-first lookup)
+    const isBanned = MONGO.getBannedStatus(sender);
+    const isPremium = isCreator || MONGO.getPremiumStatus(m.sender) || !!userdb?.premium;
+    let ppuser = "https://telegra.ph/file/6880771a42bad09dd6087.jpg";
 
-    const ppuser = await sock.profilePictureUrl(m.sender, "image").catch(() => "https://telegra.ph/file/6880771a42bad09dd6087.jpg");
-
-    if (!isRegistered) {
-      if (sender.includes("@newsletter")) return;
-      if (sender.includes("@g.us")) return;
-      const newUser = {
-        phone_number: sender,
-        username: pushname
-      };
-      MONGO.addUser(newUser);
-      await USER.addUser({
-        _id: sender,
-        name: pushname,
-        ppuser: ppuser
-      });
+    if (!userdb.registered) {
+      userdb.registered = true;
+      userdb.name = pushname;
+      if (isMongoConnected() && !sender.includes("@newsletter") && !sender.includes("@g.us")) {
+        MONGO.addUser({ phone_number: sender, username: pushname }).catch(() => {});
+        USER.addUser({ _id: sender, name: pushname, ppuser }).catch(() => {});
+      }
     }
 
     const fsaluran = {
@@ -365,7 +370,9 @@ module.exports = async (sock, m, chatUpdate, store) => {
     if (isGroup) {
       if (m.key.fromMe) return;
       if (m.isBaileys) return;
-      LEVEL.levelup(sender, m, sock, fsaluran, pushname);
+      if (isMongoConnected()) {
+        LEVEL.levelup(sender, m, sock, fsaluran, pushname);
+      }
     }
 
     if (m.mtype === "interactiveResponseMessage") {
@@ -632,15 +639,16 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
     const example = teks => `*Command Usage:*\nType *${cmd}* ${teks}`;
     // leveling
-    const user = await USER.getUser(sender);
-    const required = await LEVEL.getRequiredExp(user.level);
+    const user = isMongoConnected() ? (await USER.getUser(sender)) : null;
+    const required = LEVEL.getRequiredExp(user?.level || 1);
     function generateProgressBar(current, total) {
-      const progress = Math.floor((current / total) * 12);
-      const empty = 12 - progress;
-      const bar = "█".repeat(progress) + "░".repeat(empty);
-      return `[${bar}] ${Math.floor((current / total) * 100)}%`;
+      if (!total || isNaN(total)) return "[░░░░░░░░░░░░] 0%";
+      const progress = Math.floor(((current || 0) / total) * 12);
+      const empty = Math.max(0, 12 - progress);
+      const bar = "█".repeat(Math.min(12, Math.max(0, progress))) + "░".repeat(empty);
+      return `[${bar}] ${Math.floor(((current || 0) / total) * 100)}%`;
     }
-    const progressBar = generateProgressBar(user.exp, required);
+    const progressBar = generateProgressBar(user?.exp || 0, required);
     switch (command) {
       case "confess":
       case "confes":
@@ -725,10 +733,11 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       //////////
       case "waifu": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const result = await gacha.handleDailyGacha(sender);
         const tickets = await gacha.checkTickets(sender);
-        if (!result.status) return sock.sendMessage(m.chat, { text: result.message }, { quoted: m });
-        const { name, source, rarity, image } = result.data;
+        if (!result.status) return sock.sendMessage(m.chat, { text: result.message || result.error }, { quoted: m });
+        const { name, source, rarity, image } = result.data || {};
         const caption = `💮 *TODAY'S WAIFU*\n\n🏷️ *Name:* ${name}\n📺 *Origin:* ${source}\n⭐ *Rarity:* ${rarity}\n\n${result.message}\n> ${tickets.message}`;
         sock.sendMessage(
           m.chat,
@@ -748,14 +757,15 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       }
       case "reroll": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const result = await gacha.rerollGacha(sender);
         const tickets = await gacha.checkTickets(sender);
 
         if (!result.status) {
-          return sock.sendMessage(m.chat, { text: result.message }, { quoted: m });
+          return sock.sendMessage(m.chat, { text: result.message || result.error }, { quoted: m });
         }
 
-        const { name, source, rarity, image } = result.data;
+        const { name, source, rarity, image } = result.data || {};
         const caption = `🎟️ *REROLL GACHA*\n\n🏷️ *Name:* ${name}\n📺 *Origin:* ${source}\n⭐ *Rarity:* ${rarity}\n\nType ".claim" to claim, ".skip" to skip.\n${result.message}\n> ${tickets.message}`;
 
         sock.sendMessage(
@@ -776,12 +786,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       }
       case "claim": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const result = await gacha.handleClaim(sender);
         sock.sendMessage(m.chat, { text: result.message || result.error }, { quoted: m });
         break;
       }
 
       case "skip": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const result = await gacha.handleSkip(sender);
         sock.sendMessage(m.chat, { text: result.message || result.error }, { quoted: m });
         break;
@@ -789,6 +801,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
 
       case "harem":
       case "mymarry": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         if (text) {
           try {
             const { waifu, user } = await gacha.getHaremChar(text);
@@ -896,6 +909,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
 
       case "trade": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const [target, ...waifuParts] = args;
         const waifuName = waifuParts.join(" ").trim();
         const result = await gacha.initiateTrade(sender, target, waifuName);
@@ -904,6 +918,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
 
       case "acctrade": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const [from, ...waifuParts] = args;
         const waifuName = waifuParts.join(" ").trim();
         const result = await gacha.acceptTrade(sender, from, waifuName);
@@ -912,12 +927,14 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
 
       case "tradeyes": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const result = await gacha.confirmTrade(sender);
         sock.sendMessage(m.chat, { text: result.error || result.message }, { quoted: m });
         break;
       }
 
       case "tradeno": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const [from, ...waifuParts] = args;
         const waifuName = waifuParts.join(" ").trim();
         const result = await gacha.rejectTrade(sender, from, waifuName);
@@ -1143,10 +1160,11 @@ module.exports = async (sock, m, chatUpdate, store) => {
         }
         break;
       case "hrevoke": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         if (!text) return reply("🔖 Enter the name of the waifu you want to remove. Example: .hrevoke Makima");
         const name = text.trim();
-        const result = gacha.revokeWaifu(sender, name);
-        const message = result.status ? result.message : result.message;
+        const result = await gacha.removeWaifu(sender, name);
+        const message = result.message || result.error || "Failed to remove waifu.";
         reply(message);
         break;
       }
@@ -1154,25 +1172,25 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "limit":
       case "profile":
         {
-          const user = await MONGO.getUser(sender);
-          const users = await USER.getUser(sender);
-          const haremCount = user.waifuCollection;
+          const user = (isMongoConnected() ? await MONGO.getUser(sender) : null) || {};
+          const users = (isMongoConnected() ? await USER.getUser(sender) : null) || {};
+          const haremCount = user.waifuCollection || [];
           const dummyUser = {
-            username: user.username,
-            id: user._id,
-            level: users.level,
-            exp: await FUNC.formatNumber2(users.exp),
-            requiredExp: await FUNC.formatNumber2(required),
+            username: user.username || pushname,
+            id: user._id || sender,
+            level: users.level || 1,
+            exp: await FUNC.formatNumber2(users.exp || 0),
+            requiredExp: await FUNC.formatNumber2(required || 100),
             haremCount: haremCount.length,
-            limit: userdb.limit,
+            limit: userdb?.limit ?? 50,
             limitMax: 50,
             tickets: isPremium ? 5 : 1,
-            rerollTickets: user.tickets,
-            gachaCount: user.gachaCount,
+            rerollTickets: user.tickets || 0,
+            gachaCount: user.gachaCount || 0,
             isPremium: isPremium,
-            premiumUntil: user.premiumUntil,
-            lastGacha: user.lastGacha,
-            registeredAt: user.createdAt
+            premiumUntil: user.premiumUntil || null,
+            lastGacha: user.lastGacha || null,
+            registeredAt: user.createdAt || new Date()
           };
 
           const profileText = FUNC.generateUserProfile(dummyUser);
@@ -1194,6 +1212,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "level":
       case "rank": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         if (!user) return react("❌");
         const Ranking = await USER.getUserRank(sender);
         let teks = "";
@@ -1213,6 +1232,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
       case "toprank":
       case "toplevel": {
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const top = await USER.topUsersLevel(5);
         if (!top.length) {
           await sendType("⚠️ No data found.");
@@ -1239,6 +1259,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
       case "addcode": {
         if (!isOwner) return;
+        if (!isMongoConnected()) return reply(msg.mongoRequired);
         const [code, rewardType, rawValue, maxUses, expiresIn] = args;
 
         if (!code || !rewardType || !rawValue) {
@@ -1271,6 +1292,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       }
       case "redeem":
         {
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           const codeInput = text;
           if (!codeInput) return reply(example("PREMIUM30"));
           const res = await REEDEM.redeemCode(sender, codeInput);
@@ -1280,6 +1302,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "listcode":
         {
           if (!isCreator) return;
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           const result = await REEDEM.listAllCodes();
           return reply(result);
         }
@@ -1300,21 +1323,21 @@ module.exports = async (sock, m, chatUpdate, store) => {
         break;
       case "menu":
         {
-          const users = await MONGO.getUser(sender);
-          const Ranking = await USER.getUserRank(sender);
+          const users = (isMongoConnected() ? await MONGO.getUser(sender) : null) || {};
+          const Ranking = isMongoConnected() ? await USER.getUserRank(sender) : null;
           let awal =
             `╭───〔 *👤 User Info* 〕\n` +
             `│ 🏷️ *Name*     : *${pushname}*\n` +
             `│ 👤 *Status*   : ${isCreator ? "👑 Creator" : isPremium ? "💸 Premium" : "🌟 Free Plan"}\n` +
-            `│ 🆙 *Level*    : ${user.level}\n` +
-            `│ ⭐ *EXP*      : ${FUNC.formatNumber2(user.exp)} / ${FUNC.formatNumber2(required)}\n` +
-            `│ 🏅 *Rank*     : ${user.rank}\n` +
+            `│ 🆙 *Level*    : ${user?.level || 1}\n` +
+            `│ ⭐ *EXP*      : ${FUNC.formatNumber2(user?.exp || 0)} / ${FUNC.formatNumber2(required || 100)}\n` +
+            `│ 🏅 *Rank*     : ${user?.rank || "Beginner"}\n` +
             `│ 🔝 Rank     : Top #${Ranking?.rank || "?"}\n` +
             `│ \n` +
             `│ 📊 *Progress* \n` +
             `│ ${progressBar}\n` +
             `│ \n` +
-            `│ 🎯 *Limit*       : ${isPremium ? "∞ Unlimited" : `${50 - userdb.limit}/50`}\n` +
+            `│ 🎯 *Limit*       : ${isPremium ? "∞ Unlimited" : `${50 - (userdb?.limit || 0)}/50`}\n` +
             `│ 👩‍❤️‍👩 *Harem*       : ${users.waifuCollection?.length || 0} waifus\n` +
             `│ 🎟️ *Tickets*     : ${users.tickets || 0}\n` +
             `╰──────────────•\n` +
@@ -1768,6 +1791,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "addprem":
         {
           if (!isCreator) return;
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
           if (!args[1]) return reply("How many days?");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
@@ -1780,14 +1804,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "delprem":
         {
           if (!isCreator) return;
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
           await MONGO.delPremium(blockwww);
+          reply("✅ Premium removed.");
         }
         break;
       case "ban":
         {
           if (!isCreator) return;
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
           if (!args[1]) return reply("How many days?");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
@@ -1797,16 +1824,17 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "unban":
         {
           if (!isCreator) return;
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
-          if (!args[1]) return reply("How many days?");
           let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
-          await MONGO.unBan(blockwww, args[1]).then(reply);
+          await MONGO.unBan(blockwww).then(reply);
         }
         break;
       case "listpremium":
       case "listprem":
         {
           if (!isCreator) return;
+          if (!isMongoConnected()) return reply(msg.mongoRequired);
           const premiumUsers = await MONGO.findPremiumUsers();
           let text = "🌸*『 Premium Users List 』*🌸\n";
           text += "Here is the list of premium users ✨\n\n";
@@ -1943,10 +1971,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
       case "gpt4":
       case "ai":
         {
+          const groq = getGroqClient();
+          if (!groq) return reply("❌ GROQ_API key belum diatur di file .env. Silakan atur GROQ_API.");
           if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
           if (!text) return m.reply(`Yes, how can I help you?`);
-          await groq.chat.completions
-            .create({
+          try {
+            const chatCompletion = await groq.chat.completions.create({
               messages: [
                 {
                   role: "user",
@@ -1954,10 +1984,12 @@ module.exports = async (sock, m, chatUpdate, store) => {
                 }
               ],
               model: "llama-3.3-70b-versatile"
-            })
-            .then(chatCompletion => {
-              sendType(chatCompletion.choices[0]?.message?.content || "");
             });
+            await sendType(chatCompletion.choices[0]?.message?.content || "Tidak ada respon.");
+          } catch (err) {
+            console.error("Groq AI Error:", err.message);
+            reply("❌ Terjadi kesalahan pada AI: " + err.message);
+          }
         }
         break;
       case "deepsek":

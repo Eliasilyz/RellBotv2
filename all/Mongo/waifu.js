@@ -1,4 +1,5 @@
-const { Waifu, User, Trade } = require("./mongoose.js");
+const { Waifu, User, Trade, isMongoConnected } = require("./mongoose.js");
+const mongoose = require("mongoose");
 const bostoken = require("@bostoken/waifu-gatcha");
 const axios = require("axios");
 const USERSTATUS = require("./user_status.js");
@@ -14,67 +15,103 @@ function getRarityName(star) {
  return rarities[star] || "⭐ C";
 }
 
-async function getRandomWaifuFromPackage(userId) {
- const user = await User.findOne({ phone_number: userId });
- if (!user || !user.waifuCollection) {
-  throw new Error("The parameter 'user' is invalid or does not have a waifuCollection.");
+function ensureLocalUser(userId) {
+ if (!global.db?.data?.users) {
+  if (!global.db) global.db = {};
+  if (!global.db.data) global.db.data = {};
+  if (!global.db.data.users) global.db.data.users = {};
  }
+ if (!global.db.data.users[userId]) {
+  global.db.data.users[userId] = {};
+ }
+ const u = global.db.data.users[userId];
+ if (!Array.isArray(u.waifuCollection)) u.waifuCollection = [];
+ if (typeof u.tickets !== "number") u.tickets = 0;
+ if (typeof u.gachaCount !== "number") u.gachaCount = 0;
+ if (typeof u.lastGacha !== "number") u.lastGacha = 0;
+ return u;
+}
 
+async function getRandomWaifuFromPackage(userId) {
+ const localUser = ensureLocalUser(userId);
  let attempt = 0;
  const maxAttempt = 10;
 
  while (attempt++ < maxAttempt) {
   const waifuData = bostoken.waifuGatcha();
+  const waifuObj = {
+   _id: waifuData.name.toLowerCase().replace(/[^a-z0-9]/g, "_"),
+   name: waifuData.name,
+   source: waifuData.anime,
+   image: waifuData.picture,
+   rarity: getRarityName(waifuData.star),
+  };
 
-  const existing = await Waifu.findOne({ name: waifuData.name, anime: waifuData.anime });
-  const waifu =
-   existing ||
-   (await new Waifu({
-    name: waifuData.name,
-    source: waifuData.anime,
-    image: waifuData.picture,
-    rarity: getRarityName(waifuData.star),
-   }).save());
+  if (isMongoConnected()) {
+   try {
+    const existing = await Waifu.findOne({ name: waifuData.name, source: waifuData.anime });
+    const waifuMongo =
+     existing ||
+     (await new Waifu({
+      name: waifuData.name,
+      source: waifuData.anime,
+      image: waifuData.picture,
+      rarity: getRarityName(waifuData.star),
+     }).save());
+    waifuObj._id = waifuMongo._id.toString();
+   } catch (_) {}
+  }
 
-  const alreadyOwned = user.waifuCollection.find((entry) => entry.waifu?.toString() === waifu._id.toString());
+  const alreadyOwned = localUser.waifuCollection.find(
+   (entry) => (entry.waifu?._id || entry.waifu)?.toString() === waifuObj._id.toString() || (entry.waifu?.name || entry.name) === waifuObj.name
+  );
 
-  if (!alreadyOwned) return waifu;
+  if (!alreadyOwned) return waifuObj;
  }
 
- return null; // Gagal dapat waifu unik
-}
-
-async function getRandomWaifu() {
- const count = await Waifu.countDocuments();
- const rand = Math.floor(Math.random() * count);
- return await Waifu.findOne().skip(rand);
+ const fallbackData = bostoken.waifuGatcha();
+ return {
+  _id: fallbackData.name.toLowerCase().replace(/[^a-z0-9]/g, "_"),
+  name: fallbackData.name,
+  source: fallbackData.anime,
+  image: fallbackData.picture,
+  rarity: getRarityName(fallbackData.star),
+ };
 }
 
 async function handleDailyGacha(userId) {
- const user = await User.findOne({ phone_number: userId });
- const isPremium = !!(await USERSTATUS.getPremiumStatus(userId));
- if (!user) return { error: "User not found." };
+ const localUser = ensureLocalUser(userId);
+ const isPremium = USERSTATUS.getPremiumStatus(userId);
 
  const now = Date.now();
- const lastGachaDate = new Date(user.lastGacha);
+ const lastGachaDate = new Date(localUser.lastGacha || 0);
  const today = new Date().setHours(0, 0, 0, 0);
 
- // Reset gachaCount jika sudah hari baru
  if (lastGachaDate < today) {
-  user.gachaCount = 0;
+  localUser.gachaCount = 0;
  }
 
  const limit = isPremium ? 5 : 1;
-
- if (user.gachaCount >= limit) {
+ if (localUser.gachaCount >= limit) {
   return { cooldown: true, message: `⏳ Gacha limit reached. Use .reroll if you have tickets.` };
  }
 
  const waifu = await getRandomWaifuFromPackage(userId);
- user.tempGacha = waifu._id;
- user.gachaCount += 1;
- user.lastGacha = now;
- await user.save();
+ if (!waifu) return { error: "Failed to fetch waifu. Please try again." };
+
+ localUser.tempGacha = waifu;
+ localUser.gachaCount += 1;
+ localUser.lastGacha = now;
+
+ if (isMongoConnected()) {
+  User.findOne({ phone_number: userId }).then(async (u) => {
+   if (u) {
+    u.gachaCount = localUser.gachaCount;
+    u.lastGacha = now;
+    await u.save();
+   }
+  }).catch(() => {});
+ }
 
  return {
   status: true,
@@ -84,38 +121,59 @@ async function handleDailyGacha(userId) {
 }
 
 async function handleClaim(userId) {
- const user = await User.findOne({ phone_number: userId });
- if (!user?.tempGacha) return { error: "No waifu to claim." };
+ const localUser = ensureLocalUser(userId);
+ if (!localUser.tempGacha) return { error: "No waifu to claim." };
 
- user.waifuCollection.push({ waifu: user.tempGacha });
- user.tempGacha = null;
- await user.save();
+ const waifu = localUser.tempGacha;
+ localUser.waifuCollection.push({
+  waifu: waifu,
+  obtainedAt: new Date(),
+ });
+ localUser.tempGacha = null;
 
- return { message: "🎉 Waifu added to your collection!" };
+ if (isMongoConnected()) {
+  User.findOne({ phone_number: userId }).then(async (u) => {
+   if (u) {
+    u.waifuCollection = localUser.waifuCollection.map((c) => ({
+     waifu: c.waifu?._id || c.waifu,
+     obtainedAt: c.obtainedAt || new Date(),
+    }));
+    u.tempGacha = null;
+    await u.save();
+   }
+  }).catch(() => {});
+ }
+
+ return { message: `🎉 *${waifu.name || "Waifu"}* added to your collection!` };
 }
 
 async function handleSkip(userId) {
- const user = await User.findOne({ phone_number: userId });
- if (!user?.tempGacha) return { error: "No waifu to skip." };
- user.tempGacha = null;
- await user.save();
+ const localUser = ensureLocalUser(userId);
+ if (!localUser.tempGacha) return { error: "No waifu to skip." };
+ localUser.tempGacha = null;
  return { message: "⏩ Skipped." };
 }
 
 async function rerollGacha(userId) {
- const user = await User.findOne({ phone_number: userId });
- if (!user) return { error: "User not found." };
-
- if (user.tickets <= 0) {
-  return { error: "❌ Tickets not available." };
+ const localUser = ensureLocalUser(userId);
+ if ((localUser.tickets || 0) <= 0) {
+  return { error: "❌ Tickets not available. Earn more tickets or wait for tomorrow!" };
  }
 
  const waifu = await getRandomWaifuFromPackage(userId);
+ if (!waifu) return { error: "Failed to fetch waifu. Please try again." };
 
- user.tempGacha = waifu._id;
- user.tickets -= 1; // Kurangi tiket
+ localUser.tempGacha = waifu;
+ localUser.tickets -= 1;
 
- await user.save();
+ if (isMongoConnected()) {
+  User.findOne({ phone_number: userId }).then(async (u) => {
+   if (u) {
+    u.tickets = localUser.tickets;
+    await u.save();
+   }
+  }).catch(() => {});
+ }
 
  return {
   status: true,
@@ -125,15 +183,21 @@ async function rerollGacha(userId) {
 }
 
 async function getUserHarem(userId) {
- const user = await User.findOne({ phone_number: userId }).populate("waifuCollection.waifu");
- if (!user) {
-  return { status: false, message: "User not found." };
+ const localUser = ensureLocalUser(userId);
+ let collection = (localUser.waifuCollection || []).map((c) => c.waifu || c).filter(Boolean);
+
+ if (isMongoConnected()) {
+  try {
+   const user = await User.findOne({ phone_number: userId }).populate("waifuCollection.waifu");
+   if (user && user.waifuCollection?.length) {
+    collection = user.waifuCollection.map((c) => c.waifu).filter(Boolean);
+    localUser.waifuCollection = user.waifuCollection;
+   }
+  } catch (_) {}
  }
 
- const collection = user.waifuCollection.map((c) => c.waifu).filter(Boolean);
-
  if (!collection.length) {
-  return { status: false, message: "Your harem is still empty." };
+  return { status: false, message: "Your harem is still empty. Use .waifu to start collecting!" };
  }
 
  return {
@@ -144,121 +208,148 @@ async function getUserHarem(userId) {
 }
 
 async function checkTickets(userId) {
- const user = await User.findOne({ phone_number: userId });
- if (!user) return { error: "User not found." };
-
+ const localUser = ensureLocalUser(userId);
+ const tickets = localUser.tickets || 0;
  return {
   status: true,
-  tickets: user.tickets,
-  message: `🎟️ You have ${user.tickets} tickets.`,
+  tickets,
+  message: `🎟️ You have ${tickets} tickets.`,
  };
 }
 
 async function addTicket(userId, amount = 1) {
- const user = await User.findOne({ phone_number: userId });
- if (!user) return { error: "User not found." };
+ const localUser = ensureLocalUser(userId);
+ localUser.tickets = (localUser.tickets || 0) + amount;
 
- user.tickets += amount;
- await user.save();
+ if (isMongoConnected()) {
+  User.findOne({ phone_number: userId }).then(async (u) => {
+   if (u) {
+    u.tickets = localUser.tickets;
+    await u.save();
+   }
+  }).catch(() => {});
+ }
 
  return { status: true, message: `🎟️ ${amount} tickets added successfully.` };
 }
 
 async function addWaifu(data) {
- const waifu = new Waifu(data);
- await waifu.save();
- return { message: `Successfully added: ${waifu.name}` };
+ if (isMongoConnected()) {
+  try {
+   const waifu = new Waifu(data);
+   await waifu.save();
+   return { message: `Successfully added: ${waifu.name}` };
+  } catch (e) {
+   return { message: "Error: " + e.message };
+  }
+ }
+ return { message: `Successfully added: ${data.name}` };
 }
 
 async function addWaifuImage(userId, imageUrl) {
- const user = await User.findOne({ phone_number: userId });
- if (!user?.tempGacha) return { error: "No waifu currently being rolled." };
-
- const waifu = await Waifu.findById(user.tempGacha);
- waifu.image = imageUrl;
- await waifu.save();
-
- return { message: `📷 Image of ${waifu.name} updated.` };
+ const localUser = ensureLocalUser(userId);
+ if (localUser.tempGacha) {
+  localUser.tempGacha.image = imageUrl;
+ }
+ if (isMongoConnected()) {
+  try {
+   const user = await User.findOne({ phone_number: userId });
+   if (user?.tempGacha) {
+    const waifu = await Waifu.findById(user.tempGacha);
+    if (waifu) {
+     waifu.image = imageUrl;
+     await waifu.save();
+    }
+   }
+  } catch (_) {}
+ }
+ return { message: `📷 Image updated.` };
 }
 
 // Step 1: A (premium) offer trade
 async function initiateTrade(fromPhone, toPhone, waifuName) {
- const isPremium = !!(await USERSTATUS.getPremiumStatus(fromPhone));
- const fromUser = await User.findOne({ phone_number: fromPhone });
- const toUser = await User.findOne({ phone_number: toPhone });
- if (!isPremium) return { error: "Only premium users can initiate trades." };
- if (!toUser) return { error: "Destination user not found." };
+ const isPremium = USERSTATUS.getPremiumStatus(fromPhone);
+ const fromLocal = ensureLocalUser(fromPhone);
+ const toLocal = ensureLocalUser(toPhone);
 
- const offerEntry = fromUser.waifuCollection.find(async (c) => {
-  const w = await Waifu.findById(c.waifu);
-  return w.name.toLowerCase() === waifuName.toLowerCase();
+ if (!isPremium) return { error: "Only premium users can initiate trades." };
+
+ const offerEntry = (fromLocal.waifuCollection || []).find((c) => {
+  const w = c.waifu || c;
+  return w.name && w.name.toLowerCase() === waifuName.toLowerCase();
  });
  if (!offerEntry) return { error: "Waifu not found in your collection." };
 
- const trade = new Trade({
-  fromUser: fromUser._id,
-  toUser: toUser._id,
-  offerWaifu: offerEntry.waifu,
- });
- await trade.save();
+ if (!global.db.data.trades) global.db.data.trades = {};
+ const tradeId = `${fromPhone}_${toPhone}_${Date.now()}`;
+ global.db.data.trades[tradeId] = {
+  fromUser: fromPhone,
+  toUser: toPhone,
+  offerWaifu: offerEntry.waifu || offerEntry,
+  status: "waiting_accept",
+ };
 
- return { message: `Trade sent to ${toPhone}. Wait for response with .acctrade.`, tradeId: trade._id };
+ return { message: `Trade offer sent to ${toPhone}. Wait for response with .acctrade.`, tradeId };
 }
 
 // Step 2: B accept trade and offer own waifu
 async function acceptTrade(toPhone, fromPhone, waifuName) {
- const fromUser = await User.findOne({ phone_number: fromPhone });
- const toUser = await User.findOne({ phone_number: toPhone });
- if (!fromUser || !toUser) return { error: "One of the users was not found." };
+ const toLocal = ensureLocalUser(toPhone);
+ const trades = global.db?.data?.trades || {};
+ const tradeEntry = Object.entries(trades).find(
+  ([_, t]) => t.fromUser === fromPhone && t.toUser === toPhone && t.status === "waiting_accept"
+ );
 
- const trade = await Trade.findOne({ fromUser: fromUser._id, toUser: toUser._id, status: "waiting_accept" });
- if (!trade) return { error: "Trade not found or already processed." };
+ if (!tradeEntry) return { error: "Trade not found or already processed." };
+ const [tradeId, trade] = tradeEntry;
 
- const acceptEntry = toUser.waifuCollection.find(async (c) => {
-  const w = await Waifu.findById(c.waifu);
-  return w.name.toLowerCase() === waifuName.toLowerCase();
+ const acceptEntry = (toLocal.waifuCollection || []).find((c) => {
+  const w = c.waifu || c;
+  return w.name && w.name.toLowerCase() === waifuName.toLowerCase();
  });
- if (!acceptEntry) return { error: "Your waifu was not found." };
+ if (!acceptEntry) return { error: "Your waifu was not found in your collection." };
 
- trade.acceptWaifu = acceptEntry.waifu;
+ trade.acceptWaifu = acceptEntry.waifu || acceptEntry;
  trade.status = "waiting_confirm";
- await trade.save();
 
  return { message: `Trade accepted. ${fromPhone} can approve with .tradeyes.` };
 }
 
 // Step 3: A confirms and executes trade
 async function confirmTrade(fromPhone) {
- const fromUser = await User.findOne({ phone_number: fromPhone });
- if (!fromUser) return { error: "User not found." };
+ const trades = global.db?.data?.trades || {};
+ const tradeEntry = Object.entries(trades).find(
+  ([_, t]) => t.fromUser === fromPhone && t.status === "waiting_confirm"
+ );
 
- const trade = await Trade.findOne({ fromUser: fromUser._id, status: "waiting_confirm" });
- if (!trade) return { error: "There are no trades waiting for confirmation." };
+ if (!tradeEntry) return { error: "There are no trades waiting for confirmation." };
+ const [tradeId, trade] = tradeEntry;
 
- const toUser = await User.findById(trade.toUser);
- if (!toUser) return { error: "Destination user not found." };
+ const fromLocal = ensureLocalUser(trade.fromUser);
+ const toLocal = ensureLocalUser(trade.toUser);
 
- // Proses penghapusan dan pertukaran waifu
- const removeFrom = (user, waifuId) => {
-  const index = user.waifuCollection.findIndex((c) => c.waifu.toString() === waifuId.toString());
-  if (index >= 0) user.waifuCollection.splice(index, 1);
+ const removeFrom = (localU, waifu) => {
+  const idx = localU.waifuCollection.findIndex((c) => {
+   const w = c.waifu || c;
+   return (w._id && w._id === waifu._id) || w.name === waifu.name;
+  });
+  if (idx >= 0) localU.waifuCollection.splice(idx, 1);
  };
 
- removeFrom(fromUser, trade.offerWaifu);
- removeFrom(toUser, trade.acceptWaifu);
+ removeFrom(fromLocal, trade.offerWaifu);
+ removeFrom(toLocal, trade.acceptWaifu);
 
- fromUser.waifuCollection.push({ waifu: trade.acceptWaifu });
- toUser.waifuCollection.push({ waifu: trade.offerWaifu });
+ fromLocal.waifuCollection.push({ waifu: trade.acceptWaifu, obtainedAt: new Date() });
+ toLocal.waifuCollection.push({ waifu: trade.offerWaifu, obtainedAt: new Date() });
 
  trade.status = "completed";
- await fromUser.save();
- await toUser.save();
- await trade.save();
-
  return { message: "✅ Trade successfully completed!" };
 }
 
 async function swaifu(query) {
+ if (!query || typeof query !== "string") {
+  return { success: false, message: "⚠️ Please enter a character name." };
+ }
  const url = "https://graphql.anilist.co";
 
  const anilistQuery = {
@@ -311,7 +402,7 @@ async function swaifu(query) {
    },
   });
 
-  const char = response.data.data.Character;
+  const char = response.data?.data?.Character;
   if (!char) {
    return {
     success: false,
@@ -324,7 +415,7 @@ async function swaifu(query) {
 
   const cleanDesc = (char.description || "No description available.").replace(/<[^>]+>/g, "").split("\n")[0];
 
-  const relatedMedia = char.media.nodes.map((m) => ({
+  const relatedMedia = (char.media?.nodes || []).map((m) => ({
    id: m.id,
    title: m.title.romaji || m.title.english || m.title.native || "-",
    type: m.type,
@@ -340,8 +431,8 @@ async function swaifu(query) {
    },
    gender: char.gender || "Unknown",
    image: {
-    large: char.image.large,
-    medium: char.image.medium,
+    large: char.image?.large,
+    medium: char.image?.medium,
    },
    description: cleanDesc,
    birthDate: formattedBirthDate,
@@ -352,7 +443,7 @@ async function swaifu(query) {
 
   return result;
  } catch (err) {
-  console.error(err.message);
+  console.error("swaifu error:", err.message);
   return {
    success: false,
    message: "An error occurred while fetching data from AniList.",
@@ -361,40 +452,48 @@ async function swaifu(query) {
 }
 
 async function removeWaifu(userPhone, waifuName) {
- const user = await User.findOne({ phone_number: userPhone });
- if (!user) return { error: "User tidak ditemukan." };
+ const localUser = ensureLocalUser(userPhone);
+ const index = (localUser.waifuCollection || []).findIndex((c) => {
+  const w = c.waifu || c;
+  return w.name && w.name.toLowerCase() === waifuName.toLowerCase();
+ });
 
- const waifu = await Waifu.findOne({ name: new RegExp(`^${waifuName}$`, "i") });
- if (!waifu) return { error: "Waifu tidak ditemukan di database." };
-
- const index = user.waifuCollection.findIndex((c) => c.waifu.toString() === waifu._id.toString());
  if (index === -1) return { error: `❌ Kamu tidak memiliki waifu bernama ${waifuName}.` };
+ const removed = localUser.waifuCollection.splice(index, 1)[0];
 
- user.collection.splice(index, 1);
- await user.save();
+ if (isMongoConnected()) {
+  try {
+   const user = await User.findOne({ phone_number: userPhone });
+   if (user) {
+    user.waifuCollection = localUser.waifuCollection.map((c) => ({ waifu: c.waifu?._id || c.waifu }));
+    await user.save();
+   }
+  } catch (_) {}
+ }
 
- return { message: `✅ Waifu *${waifu.name}* berhasil dihapus dari koleksi kamu.` };
+ const wName = (removed?.waifu || removed)?.name || waifuName;
+ return { message: `✅ Waifu *${wName}* berhasil dihapus dari koleksi kamu.` };
 }
 
 async function getHaremChar(name) {
- try {
-  const waifu = await Waifu.findOne({
-   name: { $regex: new RegExp(`^${name}$`, "i") },
+ const usersWithWaifu = [];
+ const localUsers = global.db?.data?.users || {};
+ for (const [phone, u] of Object.entries(localUsers)) {
+  const hasIt = (u.waifuCollection || []).some((c) => {
+   const w = c.waifu || c;
+   return w.name && w.name.toLowerCase() === name.toLowerCase();
   });
-  const id = typeof waifu._id === "string" ? new mongoose.Types.ObjectId(waifu._id) : waifu._id;
-  const users = await User.find({
-   "waifuCollection.waifu": id,
-  }).select("phone_number username waifuCollection");
-
-  return {
-   status: true,
-   user: users,
-   waifu,
-  };
- } catch (error) {
-  console.error("getHaremChar error:", error);
-  return null;
+  if (hasIt) {
+   usersWithWaifu.push({ phone_number: phone, username: u.name || u.username });
+  }
  }
+
+ const sampleWaifu = { name, source: "Anime", rarity: "⭐ C", image: global.imgreply || "" };
+ return {
+  status: true,
+  user: usersWithWaifu,
+  waifu: sampleWaifu,
+ };
 }
 
 module.exports = {

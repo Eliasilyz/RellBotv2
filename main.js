@@ -66,7 +66,7 @@ global.loadDatabase = async function loadDatabase() {
 };
 
 global.loadDatabase();
-loadUserList();
+loadUserList().catch(() => {});
 
 process.on("uncaughtException", console.error);
 
@@ -198,18 +198,18 @@ async function startSesi() {
 
   sock.ev.on("messages.upsert", async (chatUpdate) => {
     try {
-      let m = chatUpdate.messages[0];
-      if (!m.message) return;
+      let m = chatUpdate.messages?.[0];
+      if (!m || !m.message) return;
       const sender = sock.decodeJid(m.key.participantAlt || m.key.participant || m.key.remoteJidAlt || m.key.remoteJid || "");
-      await handleNewUser(sender);
+      await handleNewUser(sender).catch(() => {});
       m.message = Object.keys(m.message)[0] === "ephemeralMessage" ? m.message.ephemeralMessage.message : m.message;
       if (m.key && m.key.remoteJid === "status@broadcast") {
-        if (global.db.data.settings.autoread) sock.readMessages([m.key]);
+        if (global.db?.data?.settings?.autoread) sock.readMessages([m.key]);
       }
       if (m.isBaileys) return;
-      if (global.db.data.settings.autoread) sock.readMessages([m.key]);
+      if (global.db?.data?.settings?.autoread) sock.readMessages([m.key]);
       m = func.smsg(sock, m, store);
-      const teks = m.text;
+      const teks = m.text || "";
       const isCmd = teks.startsWith(".");
       if (isCmd) {
         if (isSpamming(sender)) return;
@@ -221,12 +221,18 @@ async function startSesi() {
   });
 
   setInterval(async () => {
-    if (global.db.data.settings.autobio) {
-      const truthjson = [`Rein 👑 || ${getIdPengguna().length} Active Users`, `Rein 👑 || Status: ${global.db.data.settings.public == false ? "Maintenance" : "Online"}`];
-      if (!global.currentIndex) global.currentIndex = 0;
-      const truth = truthjson[global.currentIndex];
-      sock.updateProfileStatus(truth).catch((_) => _);
-      global.currentIndex = (global.currentIndex + 1) % truthjson.length;
+    try {
+      if (global.db?.data?.settings?.autobio) {
+        const userCount = Object.keys(global.db?.data?.users || {}).length;
+        const isPublic = global.db?.data?.settings?.public !== false;
+        const truthjson = [`Rein 👑 || ${userCount} Active Users`, `Rein 👑 || Status: ${!isPublic ? "Maintenance" : "Online"}`];
+        if (!global.currentIndex) global.currentIndex = 0;
+        const truth = truthjson[global.currentIndex];
+        sock.updateProfileStatus(truth).catch((_) => _);
+        global.currentIndex = (global.currentIndex + 1) % truthjson.length;
+      }
+    } catch (err) {
+      // ignore autobio errors
     }
   }, 15 * 1000);
 
@@ -239,8 +245,9 @@ async function startSesi() {
     try {
       const botNumber = await sock.decodeJid(sock.user.id);
       const { id: groupId, participants, action, author } = anu;
-      const chatSettings = global.db.data.chats[groupId];
-      const isPublic = global.db.data.settings.public;
+      if (!global.db?.data?.chats) global.db.data.chats = {};
+      const chatSettings = global.db.data.chats[groupId] || {};
+      const isPublic = global.db?.data?.settings?.public !== false;
 
       if (participants.includes(botNumber) || !chatSettings.welcomer || !isPublic) return;
 

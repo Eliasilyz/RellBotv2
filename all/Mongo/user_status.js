@@ -1,9 +1,10 @@
-const { connectDB, User, Log, UserLog } = require("./mongoose");
+const { connectDB, isMongoConnected, User } = require("./mongoose");
 const moment = require("moment-timezone");
 
-connectDB();
+connectDB().catch(() => {});
 
 function parseDuration(durationStr) {
+ if (typeof durationStr !== "string") return null;
  const match = durationStr.match(/^(\d+)([smhdwMy])$/);
  if (!match) return null;
 
@@ -24,188 +25,258 @@ function parseDuration(durationStr) {
  return ms > 0 ? ms : null;
 }
 
-exports.addUser = async function (user) {
- try {
-  const existingUser = await User.findOne({ phone_number: user.phone_number });
-  if (existingUser) return;
-
-  const newUser = {
-   phone_number: user.phone_number,
+function ensureLocalUser(phone_number) {
+ if (!global.db?.data?.users) {
+  if (!global.db) global.db = {};
+  if (!global.db.data) global.db.data = {};
+  if (!global.db.data.users) global.db.data.users = {};
+ }
+ if (!global.db.data.users[phone_number]) {
+  global.db.data.users[phone_number] = {
+   phone_number,
    premium: false,
    premiumUntil: null,
    banned: false,
    bannedUntil: null,
-   username: user.username || "",
-   last_active: null,
-   usage: 0,
+   tickets: 0,
+   lastGacha: 0,
+   gachaCount: 0,
+   waifuCollection: [],
+   tempGacha: null,
   };
+ }
+ return global.db.data.users[phone_number];
+}
 
-  await new User(newUser).save();
- } catch (err) {
-  console.error("Failed to add user", err);
+exports.addUser = async function (user) {
+ if (!user?.phone_number) return;
+ const local = ensureLocalUser(user.phone_number);
+ if (user.username && !local.username) local.username = user.username;
+
+ if (isMongoConnected()) {
+  try {
+   const existingUser = await User.findOne({ phone_number: user.phone_number });
+   if (!existingUser) {
+    const newUser = {
+     phone_number: user.phone_number,
+     premium: local.premium || false,
+     premiumUntil: local.premiumUntil || null,
+     banned: local.banned || false,
+     bannedUntil: local.bannedUntil || null,
+     username: user.username || local.name || "",
+     last_active: null,
+     usage: 0,
+     tickets: local.tickets || 0,
+     waifuCollection: local.waifuCollection || [],
+    };
+    await new User(newUser).save();
+   }
+  } catch (err) {
+   console.error("Failed to sync user to Mongo:", err.message);
+  }
  }
 };
 
 exports.getUser = async function (phone_number) {
- try {
-  return await User.findOne({ phone_number });
- } catch (err) {
-  console.error("Failed to retrieve user", err);
-  return null;
+ if (!phone_number) return null;
+ const local = ensureLocalUser(phone_number);
+
+ if (isMongoConnected()) {
+  try {
+   const mongoUser = await User.findOne({ phone_number });
+   if (mongoUser) {
+    // Merge mongo values into local cache
+    if (mongoUser.premium !== undefined) local.premium = mongoUser.premium;
+    if (mongoUser.premiumUntil !== undefined) local.premiumUntil = mongoUser.premiumUntil;
+    if (mongoUser.banned !== undefined) local.banned = mongoUser.banned;
+    if (mongoUser.bannedUntil !== undefined) local.bannedUntil = mongoUser.bannedUntil;
+    if (mongoUser.tickets !== undefined) local.tickets = mongoUser.tickets;
+    if (mongoUser.waifuCollection !== undefined) local.waifuCollection = mongoUser.waifuCollection;
+    return mongoUser;
+   }
+  } catch (err) {
+   // fallback to local on error
+  }
  }
+
+ return {
+  _id: phone_number,
+  phone_number,
+  username: local.name || local.username || "",
+  premium: local.premium || false,
+  premiumUntil: local.premiumUntil || null,
+  banned: local.banned || false,
+  bannedUntil: local.bannedUntil || null,
+  tickets: local.tickets || 0,
+  waifuCollection: local.waifuCollection || [],
+  gachaCount: local.gachaCount || 0,
+  lastGacha: local.lastGacha || null,
+  createdAt: local.registeredAt || new Date(),
+ };
 };
 
 exports.banUser = async function (phone_number, durationStr) {
- try {
-  const ms = parseDuration(durationStr);
-  if (!ms) return "Invalid duration format. Use 1d, 7d, 1w, etc.";
+ if (!phone_number) return "❌ Phone number is required.";
+ const ms = parseDuration(durationStr);
+ if (!ms) return "Invalid duration format. Use 1d, 7d, 1w, etc.";
 
-  const user = await User.findOne({ phone_number });
-  if (!user) return "User not found.";
+ const local = ensureLocalUser(phone_number);
+ const now = moment();
+ const current = moment(local.bannedUntil);
+ const baseTime = current.isValid() && current.isAfter(now) ? current : now;
+ const newBanUntil = new Date(baseTime.valueOf() + ms);
 
-  const now = moment();
-  const current = moment(user.bannedUntil);
-  const baseTime = current.isValid() && current.isAfter(now) ? current : now;
+ local.banned = true;
+ local.bannedUntil = newBanUntil;
 
-  const newBanUntil = new Date(baseTime.valueOf() + ms);
-  user.banned = true;
-  user.bannedUntil = newBanUntil;
-
-  await user.save();
-
-  const formatted = moment(newBanUntil).tz("Asia/Jakarta").format("YYYY/MM/DD HH:mm:ss");
-  return `🚫 User ${phone_number} banned until ${formatted}`;
- } catch (err) {
-  console.error("Failed to ban user:", err);
-  return "An error occurred while banning user.";
+ if (isMongoConnected()) {
+  User.findOne({ phone_number }).then(async (u) => {
+   if (u) {
+    u.banned = true;
+    u.bannedUntil = newBanUntil;
+    await u.save();
+   }
+  }).catch(() => {});
  }
+
+ const formatted = moment(newBanUntil).tz("Asia/Jakarta").format("YYYY/MM/DD HH:mm:ss");
+ return `🚫 User ${phone_number} banned until ${formatted}`;
 };
 
 exports.setPremium = async function (phone_number, durationStr) {
- try {
-  const ms = parseDuration(durationStr); // eg: 7d => 604800000
-  if (!ms || isNaN(ms)) return "⚠️ Invalid duration format. Use formats like `1d`, `7d`, `2w`, etc.";
+ if (!phone_number) return "❌ Phone number is required.";
+ const ms = parseDuration(durationStr);
+ if (!ms || isNaN(ms)) return "⚠️ Invalid duration format. Use formats like `1d`, `7d`, `2w`, etc.";
 
-  const user = await User.findOne({ phone_number });
-  if (!user) return "❌ User not found.";
+ const local = ensureLocalUser(phone_number);
+ const now = moment();
+ const currentPremiumUntil = moment(local.premiumUntil);
+ const baseTime = currentPremiumUntil.isValid() && currentPremiumUntil.isAfter(now) ? currentPremiumUntil : now;
+ const newPremiumUntil = new Date(baseTime.valueOf() + ms);
 
-  const now = moment();
-  const currentPremiumUntil = moment(user.premiumUntil);
-  const baseTime = currentPremiumUntil.isValid() && currentPremiumUntil.isAfter(now) ? currentPremiumUntil : now;
+ local.premium = true;
+ local.premiumUntil = newPremiumUntil;
 
-  const newPremiumUntil = new Date(baseTime.valueOf() + ms);
-  user.premium = true;
-  user.premiumUntil = newPremiumUntil;
-
-  await user.save();
-
-  // Format output date
-  const formattedDate = moment(newPremiumUntil)
-   .tz("Asia/Tokyo") // atau "Asia/Jakarta"
-   .format("YYYY/MM/DD HH:mm:ss");
-
-  return `🌸 Premium added to ${phone_number}\n📅 Until: ${formattedDate}`;
- } catch (err) {
-  console.error("❌ Failed to update premium status:", err);
-  return "🚫 An error occurred while updating premium status.";
+ if (isMongoConnected()) {
+  User.findOne({ phone_number }).then(async (u) => {
+   if (u) {
+    u.premium = true;
+    u.premiumUntil = newPremiumUntil;
+    await u.save();
+   }
+  }).catch(() => {});
  }
+
+ const formattedDate = moment(newPremiumUntil).tz("Asia/Tokyo").format("YYYY/MM/DD HH:mm:ss");
+ return `🌸 Premium added to ${phone_number}\n📅 Until: ${formattedDate}`;
 };
 
 exports.delPremium = async function (phone_number) {
- try {
-  await User.updateOne({ phone_number }, { $set: { premium: false, premiumUntil: null } });
- } catch (err) {
-  console.error("Failed to remove premium status", err);
+ if (!phone_number) return;
+ const local = ensureLocalUser(phone_number);
+ local.premium = false;
+ local.premiumUntil = null;
+
+ if (isMongoConnected()) {
+  User.updateOne({ phone_number }, { $set: { premium: false, premiumUntil: null } }).catch(() => {});
  }
 };
 
 exports.unBan = async function (phone_number) {
- try {
-  await User.updateOne({ phone_number }, { $set: { banned: false, bannedUntil: null } });
- } catch (err) {
-  console.error("Failed to remove premium status", err);
+ if (!phone_number) return;
+ const local = ensureLocalUser(phone_number);
+ local.banned = false;
+ local.bannedUntil = null;
+
+ if (isMongoConnected()) {
+  User.updateOne({ phone_number }, { $set: { banned: false, bannedUntil: null } }).catch(() => {});
  }
+ return `✅ User ${phone_number} unbanned.`;
 };
 
 exports.findPremiumUsers = async function () {
- try {
-  return await User.find({ premium: true });
- } catch (err) {
-  console.error("Failed to show premium users", err);
+ const localUsers = global.db?.data?.users || {};
+ const list = Object.entries(localUsers)
+  .filter(([_, u]) => u.premium)
+  .map(([phone, u]) => ({
+   phone_number: phone,
+   username: u.name || u.username || "",
+   premium: true,
+   premiumUntil: u.premiumUntil,
+  }));
+
+ if (isMongoConnected()) {
+  try {
+   const mongoUsers = await User.find({ premium: true });
+   const phoneSet = new Set(list.map((u) => u.phone_number));
+   for (const mu of mongoUsers) {
+    if (!phoneSet.has(mu.phone_number)) {
+     list.push({
+      phone_number: mu.phone_number,
+      username: mu.username || "",
+      premium: true,
+      premiumUntil: mu.premiumUntil,
+     });
+    }
+   }
+  } catch (_) {}
  }
+
+ return list;
 };
 
 exports.checkPremiumStatus = async function (phone_number) {
- try {
-  const user = await User.findOne({ phone_number });
-  if (!user) return;
-
-  const expiry = moment(user.premiumUntil);
-
-  if (user.premium && expiry.isValid() && moment().isAfter(expiry)) {
-   user.premium = false;
-   user.premiumUntil = null;
-   await user.save();
-   console.log(`[⏰ Premium expired] ${phone_number}`);
+ if (!phone_number) return;
+ const local = global.db?.data?.users?.[phone_number];
+ if (local?.premium && local.premiumUntil) {
+  const expiry = moment(local.premiumUntil);
+  if (expiry.isValid() && moment().isAfter(expiry)) {
+   local.premium = false;
+   local.premiumUntil = null;
   }
- } catch (err) {
-  console.error("❌ Failed to check premium status:", err);
  }
 };
 
 exports.checkBanStatus = async function (phone_number) {
- try {
-  const user = await User.findOne({ phone_number });
-  if (!user) return;
-
-  const expiry = moment(user.bannedUntil);
-
-  if (user.banned && expiry.isValid() && moment().isAfter(expiry)) {
-   user.banned = false;
-   user.bannedUntil = null;
-   await user.save();
-   console.log(`[🔓 Unbanned] ${phone_number}`);
+ if (!phone_number) return;
+ const local = global.db?.data?.users?.[phone_number];
+ if (local?.banned && local.bannedUntil) {
+  const expiry = moment(local.bannedUntil);
+  if (expiry.isValid() && moment().isAfter(expiry)) {
+   local.banned = false;
+   local.bannedUntil = null;
   }
- } catch (err) {
-  console.error("❌ Failed to check banned status:", err);
  }
 };
 
-exports.getPremiumStatus = async function (phone_number) {
- try {
-  const user = await User.findOne({ phone_number });
-  return user ? user.premium : null;
- } catch (err) {
-  console.error("Error fetching premium status:", err);
-  return null;
+// Fast in-memory sync lookup
+exports.getPremiumStatus = function (phone_number) {
+ if (!phone_number) return false;
+ const local = global.db?.data?.users?.[phone_number];
+ if (local?.premiumUntil && moment().isAfter(moment(local.premiumUntil))) {
+  local.premium = false;
+  local.premiumUntil = null;
+  return false;
  }
+ return !!local?.premium;
 };
 
-exports.getBannedStatus = async function (phone_number) {
- try {
-  const user = await User.findOne({ phone_number });
-  if (user?.bannedUntil && moment().isAfter(moment(user.bannedUntil))) {
-   await exports.checkBanStatus(phone_number);
-   return false;
-  }
-  return user?.banned || false;
- } catch (err) {
-  console.error("Error fetching banned status:", err);
-  return null;
+// Fast in-memory sync lookup
+exports.getBannedStatus = function (phone_number) {
+ if (!phone_number) return false;
+ const local = global.db?.data?.users?.[phone_number];
+ if (local?.bannedUntil && moment().isAfter(moment(local.bannedUntil))) {
+  local.banned = false;
+  local.bannedUntil = null;
+  return false;
  }
+ return !!local?.banned;
 };
 
 setInterval(async () => {
- try {
-  const users = await User.find({
-   $or: [{ premium: true }, { banned: true }],
-  });
-
-  for (const user of users) {
-   await exports.checkPremiumStatus(user.phone_number);
-   await exports.checkBanStatus(user.phone_number);
-  }
- } catch (err) {
-  console.error("Status check interval failed:", err);
+ const localUsers = global.db?.data?.users || {};
+ for (const phone of Object.keys(localUsers)) {
+  await exports.checkPremiumStatus(phone);
+  await exports.checkBanStatus(phone);
  }
-}, 60 * 60 * 1000);
+}, 10 * 60 * 1000);
