@@ -1,4 +1,4 @@
-DEFAULT_PP = "https://telegra.ph/file/6880771a42bad09dd6087.jpg";
+const DEFAULT_PP = "https://telegra.ph/file/6880771a42bad09dd6087.jpg";
 
 async function getProfilePicture(sock, jid) {
   try {

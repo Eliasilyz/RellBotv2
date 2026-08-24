@@ -7,6 +7,9 @@ const { unlink } = require("fs").promises;
 const { sizeFormatter } = require("human-readable");
 const util = require("util");
 const Jimp = require("jimp");
+const BodyForm = require("form-data");
+const cheerio = require("cheerio");
+const path = require("path");
 
 const unixTimestampSeconds = (date = new Date()) => Math.floor(date.getTime() / 1000);
 
@@ -59,17 +62,22 @@ exports.randomNomor = async (ext) => {
 
 exports.jsonFormat = (obj) => {
  try {
-  let print = obj && (obj.constructor.name == "Object" || obj.constructor.name == "Array") ? require("util").format(JSON.stringify(obj, null, 2)) : require("util").format(obj);
+  let print = obj && (obj.constructor?.name == "Object" || obj.constructor?.name == "Array") ? util.format(JSON.stringify(obj, null, 2)) : util.format(obj);
   return print;
  } catch {
-  return require("util").format(obj);
+  return util.format(obj);
  }
 };
 
 exports.totalcase = () => {
- var file = fs.readFileSync("../../system.js").toString();
- var jumlah = (file.match(/case "/g) || []).length;
- return jumlah;
+ try {
+  const filePath = path.resolve(__dirname, "../../system.js");
+  var file = fs.readFileSync(filePath, "utf8");
+  var jumlah = (file.match(/case\s+['"`]/g) || []).length;
+  return jumlah;
+ } catch {
+  return 0;
+ }
 };
 
 exports.generateMessageTag = (epoch) => {
@@ -310,9 +318,9 @@ exports.isUrl = (url) => {
 
 exports.getTime = (format, date) => {
  if (date) {
-  return moment(date).locale("ja-JP-u-ca-japanese").format(format);
+  return moment(date).tz("Asia/Tokyo").locale("ja-JP-u-ca-japanese").format(format);
  } else {
-  return moment.tz("Asia/Tokyok").locale("ja-JP-u-ca-japanese").format(format);
+  return moment().tz("Asia/Tokyo").locale("ja-JP-u-ca-japanese").format(format);
  }
 };
 

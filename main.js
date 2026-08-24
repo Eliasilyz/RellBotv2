@@ -9,44 +9,45 @@ const NodeCache = require("node-cache");
 const _ = require("lodash");
 const groupCache = new NodeCache({ stdTTL: 5 * 60, useClones: false });
 const PhoneNumber = require("awesome-phonenumber");
-const { loadUserList, handleNewUser, getAllNumbers } = require("./all/Mongo/users_id.js");
+const { loadUserList, handleNewUser } = require("./all/Mongo/users_id.js");
 const { getProfilePicture, getGroupDescription, replacePlaceholders, buildContextInfo } = require("./all/library/suport/welcome.js");
 const { useMultiFileAuthState, fetchLatestBaileysVersion, DisconnectReason } = require("baileys");
 const { makeInMemoryStore } = require("./all/library/store");
 const { Boom } = require("@hapi/boom");
+const pino = require("pino");
+const cron = require('node-cron');
+const autoBackup = require('./backup.js');
+const low = require("./all/library/lowdb");
+const { Low, JSONFile } = low;
+
 const usePairingCode = true;
 const more = String.fromCharCode(8206);
 const readmore = more.repeat(4800);
 
-const autoBackup = require('./backup.js');
-const cron = require('node-cron');
-
-const pino = require("pino");
-
 const store = makeInMemoryStore({
   logger: pino().child({ level: "silent", stream: "store" }),
 });
-global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse());
-
-const low = require("./all/library/lowdb");
-const { Low, JSONFile } = low;
 
 const opts = yargs(process.argv.slice(2)).exitProcess(false).parse();
+global.opts = opts;
 const dbPath = "./all/json/database.json";
-
-let db = new JSONFile(dbPath);
+const db = new JSONFile(dbPath);
 
 global.db = new Low(db);
 global.DATABASE = global.db;
 
 global.loadDatabase = async function loadDatabase() {
-  if (global.db.READ)
-    return new Promise((resolve) =>
-      setInterval(function () {
-        !global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null;
-      }, 1 * 1000)
-    );
-  if (global.db.data !== null) return;
+  if (global.db.READ) {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (!global.db.READ) {
+          clearInterval(interval);
+          resolve(global.db.data == null ? global.loadDatabase() : global.db.data);
+        }
+      }, 1000);
+    });
+  }
+  if (global.db.data !== null) return global.db.data;
 
   global.db.READ = true;
   await global.db.read();
@@ -63,29 +64,28 @@ global.loadDatabase = async function loadDatabase() {
   };
 
   global.db.chain = _.chain(global.db.data);
+  return global.db.data;
 };
 
 global.loadDatabase();
 loadUserList().catch(() => { });
 
-process.on("uncaughtException", console.error);
-
-if (global.db)
+if (global.db) {
   setInterval(async () => {
     if (global.db.data) await global.db.write();
   }, 30 * 1000);
+}
 
 const question = (text) => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
-  const store = makeInMemoryStore({
-    logger: pino().child({ level: "silent", stream: "store" }),
-  });
-  console.log(chalk.cyan(`Wait...`));
   return new Promise((resolve) => {
-    rl.question(text, resolve);
+    rl.question(text, (ans) => {
+      rl.close();
+      resolve(ans);
+    });
   });
 };
 
@@ -96,11 +96,8 @@ function getFormattedYear() {
 
 async function startSesi() {
   await global.loadDatabase();
-  const store = makeInMemoryStore({
-    logger: pino().child({ level: "silent", stream: "store" }),
-  });
   const { state, saveCreds } = await useMultiFileAuthState(`./session`);
-  const { version, isLatest } = await fetchLatestBaileysVersion();
+  const { version } = await fetchLatestBaileysVersion();
 
   const connectionOptions = {
     version,
@@ -156,18 +153,23 @@ async function startSesi() {
     }
   });
 
-  sock.getName = (jid, withoutContact = false) => {
-    id = sock.decodeJid(jid);
-    withoutContact = sock.withoutContact || withoutContact;
+  sock.getName = async (jid, withoutContact = false) => {
+    const id = sock.decodeJid(jid);
     let v;
-    if (id.endsWith("@g.us"))
-      return new Promise(async (resolve) => {
-        v = store.contacts[id] || {};
-        if (!(v.name || v.subject)) v = sock.groupMetadata(id) || {};
-        resolve(v.name || v.subject || PhoneNumber("+" + id.replace("@s.whatsapp.net", "")).getNumber("international"));
-      });
-    else v = id === "0@s.whatsapp.net" ? { id, name: "WhatsApp" } : id === sock.decodeJid(sock.user.id) ? sock.user : store.contacts[id] || {};
-    return (withoutContact ? "" : v.name) || v.subject || v.verifiedName || PhoneNumber("+" + jid.replace("@s.whatsapp.net", "")).getNumber("international");
+    if (id.endsWith("@g.us")) {
+      v = store.contacts[id] || {};
+      if (!(v.name || v.subject)) {
+        try {
+          v = await sock.groupMetadata(id) || {};
+        } catch {
+          v = {};
+        }
+      }
+      return v.name || v.subject || PhoneNumber("+" + id.replace("@s.whatsapp.net", "")).getNumber("international");
+    } else {
+      v = id === "0@s.whatsapp.net" ? { id, name: "WhatsApp" } : id === sock.decodeJid(sock.user.id) ? sock.user : store.contacts[id] || {};
+      return (withoutContact ? "" : v.name) || v.subject || v.verifiedName || PhoneNumber("+" + jid.replace("@s.whatsapp.net", "")).getNumber("international");
+    }
   };
 
   const rateLimit = new Map();
