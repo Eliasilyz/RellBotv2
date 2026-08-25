@@ -15,7 +15,7 @@
         "archiver": "^7.0.1",
         "awesome-phonenumber": "^5.11.0",
         "axios": "^1.9.0",
-        "baileys": "npm:@whiskeysockets/baileys",
+        "baileys": "npm:@itsliaaa/baileys",
         "chalk": "^4.1.2",
         "cheerio": "^1.1.0",
         "dotenv": "^17.4.2",

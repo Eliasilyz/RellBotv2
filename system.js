@@ -89,7 +89,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
           autoread: true,
           autobio: false,
           onlyprem: false,
-          anticall: false
+          anticall: false,
         };
       }
       // Other Data
@@ -116,10 +116,10 @@ module.exports = async (sock, m, chatUpdate, store) => {
     const cmd = prefix + command;
     const withoutCmd = isCmd
       ? budy
-        .slice(prefix.length)
-        .trim()
-        .replace(new RegExp(`^${escapeRegex(command)}\\b`, "i"), "")
-        .trim()
+          .slice(prefix.length)
+          .trim()
+          .replace(new RegExp(`^${escapeRegex(command)}\\b`, "i"), "")
+          .trim()
       : "";
     const args = withoutCmd.length > 0 ? withoutCmd.split(/\s+/) : [];
     const text = withoutCmd;
@@ -136,17 +136,21 @@ module.exports = async (sock, m, chatUpdate, store) => {
     const mime = (quoted.msg || quoted).mimetype || "";
     const qmsg = quoted.msg || quoted;
     // Sender & group info
-    const sender = m.sender || (m.key.fromMe ? sock.user.id.split(":")[0] + "@s.whatsapp.net" : sock.decodeJid(m.key.participantAlt || m.key.participant || m.key.remoteJidAlt || m.key.remoteJid || ""));
+    const sender =
+      m.sender ||
+      (m.key.fromMe
+        ? sock.user.id.split(":")[0] + "@s.whatsapp.net"
+        : sock.decodeJid(m.key.participantAlt || m.key.participant || m.key.remoteJidAlt || m.key.remoteJid || ""));
     const pushname = m.pushName || sock.getName(sender);
     const from = m.chat || sock.decodeJid(m.key.remoteJidAlt || m.key.remoteJid || "");
     const isOwner = m.sender === owner + "@s.whatsapp.net";
     const isBot = botNumber.includes(m.sender);
-    const isCreator = [owner].map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
+    const isCreator = [owner].map((v) => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
     // Group participant info
     const groupMetadata = isGroup ? await sock.groupMetadata(m.chat).catch(() => ({})) : {};
     const participants = isGroup ? groupMetadata?.participants : [];
-    const participant_bot = participants?.find(v => v.id === botNumber) || {};
-    const participant_sender = participants?.find(v => v.id === m.sender) || {};
+    const participant_bot = participants?.find((v) => v.id === botNumber) || {};
+    const participant_sender = participants?.find((v) => v.id === m.sender) || {};
     const isBotAdmin = participant_bot?.admin != null;
     const isAdmin = participant_sender?.admin != null;
     // Database checks (Fast synchronous local-first lookup)
@@ -158,85 +162,69 @@ module.exports = async (sock, m, chatUpdate, store) => {
       userdb.registered = true;
       userdb.name = pushname;
       if (isMongoConnected() && !sender.includes("@newsletter") && !sender.includes("@g.us")) {
-        MONGO.addUser({ phone_number: sender, username: pushname }).catch(() => { });
-        USER.addUser({ _id: sender, name: pushname, ppuser }).catch(() => { });
+        MONGO.addUser({ phone_number: sender, username: pushname }).catch(() => {});
+        USER.addUser({ _id: sender, name: pushname, ppuser }).catch(() => {});
       }
     }
 
     const fsaluran = {
       key: {
         remoteJid: sender,
-        participant: "0@s.whatsapp.net"
+        participant: "0@s.whatsapp.net",
       },
       message: {
         extendedTextMessage: {
-          text: m.text
-        }
-      }
+          text: m.text,
+        },
+      },
     };
     const fkontak = {
       key: {
         remoteJid: "status@broadcast",
         fromMe: false,
-        participant: "0@s.whatsapp.net"
+        participant: "0@s.whatsapp.net",
       },
       message: {
         contactMessage: {
           displayName: "Owner Bot",
-          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Owner\nTEL;type=CELL:+${botNumber.split("@")[0]}\nEND:VCARD`
-        }
-      }
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Owner\nTEL;type=CELL:+${botNumber.split("@")[0]}\nEND:VCARD`,
+        },
+      },
     };
-    // const reply2 = async (teks) => {
-    //   const url = global.imgreply;
+    const reply2 = async (teks) => {
+      const thumbBuffer = await fetch(global.imgreply)
+        .then((res) => res.arrayBuffer())
+        .then((buffer) => Buffer.from(buffer))
+        .catch(() => null);
 
-    //   await sock.sendMessage(
-    //     m.chat,
-    //     {
-    //       text: teks,
-    //       contextInfo: {
-    //         showAdAttribution: true,
-    //         forwardingScore: 1,
-    //         isForwarded: true,
-    //         mentionedJid: [m.sender],
-
-    //         linkPreview: {
-    //           'matched-text': url,
-    //           title: "Kaede 2K26",
-    //           description: teks,
-    //           previewType: 0,
-    //           jpegThumbnail: fs.readFileSync('./media/Menu.jpg'),
-    //           highQualityThumbnail: global.thumb,
-    //         },
-    //         externalAdReply: {
-    //           title: FUNC.Greetings() + " " + pushname,
-    //           body: "Kaede 2K26",
-    //           // previewType: "PHOTO",
-    //           // thumbnailUrl: global.thumb,
-    //           thumbnail: fs.readFileSync('./media/Menu.jpg'),
-    //           sourceUrl: global.thumb,
-    //         },
-    //         businessMessageForwardInfo: {
-    //           businessOwnerJid: sock.decodeJid(sock.user.id)
-    //         },
-    //         forwardedNewsletterMessageInfo: {
-    //           newsletterJid: global.idsaluran,
-    //           serverMessageId: null,
-    //           newsletterName: `${FUNC.Greetings()} ${pushname} 👋`
-    //         }
-    //       }
-    //     },
-    //     {
-    //       quoted: fsaluran
-    //     }
-    //   );
-    // };
-    const reply2 = teks => m.reply(teks);
-    const reply = teks => m.reply(teks);
+      await sock.sendMessage(
+        m.chat,
+        {
+          document: Buffer.alloc(0),
+          fileName: "楓 (Kaede) 2K26",
+          mimetype: "application/pdf",
+          fileLength: 0,
+          pageCount: 1,
+          caption: teks,
+          jpegThumbnail: thumbBuffer,
+          contextInfo: {
+            mentionedJid: [m.sender],
+            forwardedNewsletterMessageInfo: {
+              newsletterJid: global.idsaluran,
+              serverMessageId: null,
+              newsletterName: `${FUNC.Greetings()} ${pushname} 👋`,
+            },
+          },
+        },
+        { quoted: fsaluran },
+      );
+    };
+    // const reply2 = (teks) => m.reply(teks);
+    const reply = (teks) => m.reply(teks);
     async function react(emoji) {
       try {
         await sock.sendMessage(m.chat, {
-          react: { text: emoji, key: m.key }
+          react: { text: emoji, key: m.key },
         });
       } catch (error) {
         console.error("Failed to send reaction:", error);
@@ -244,7 +232,7 @@ module.exports = async (sock, m, chatUpdate, store) => {
     }
     async function sendType(text) {
       await sock.sendPresenceUpdate("composing", m.chat);
-      await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000 + Math.random() * 2000));
       return await reply(text);
     }
     //////////////////////////////////////////////////////////
@@ -288,9 +276,9 @@ module.exports = async (sock, m, chatUpdate, store) => {
       sock.sendMessage(
         m.chat,
         {
-          text: `He is currently AFK${reason ? ". Reason: " + reason : "."}\nAFK since: ${FUNC.clockString(FUNC.getJapanDate() - afkTime)}`
+          text: `He is currently AFK${reason ? ". Reason: " + reason : "."}\nAFK since: ${FUNC.clockString(FUNC.getJapanDate() - afkTime)}`,
         },
-        { quoted: fsaluran }
+        { quoted: fsaluran },
       );
     }
     if (db.data.users[m.sender]?.afkTime > -1) {
@@ -298,9 +286,9 @@ module.exports = async (sock, m, chatUpdate, store) => {
       sock.sendMessage(
         m.chat,
         {
-          text: `Welcome back from AFK.\nReason: ${user.afkReason ? user.afkReason : "None"}\nAFK duration: ${FUNC.clockString(FUNC.getJapanDate() - user.afkTime)}`
+          text: `Welcome back from AFK.\nReason: ${user.afkReason ? user.afkReason : "None"}\nAFK duration: ${FUNC.clockString(FUNC.getJapanDate() - user.afkTime)}`,
         },
-        { quoted: fsaluran }
+        { quoted: fsaluran },
       );
       user.afkTime = -1;
       user.afkReason = "";
@@ -310,19 +298,19 @@ module.exports = async (sock, m, chatUpdate, store) => {
       const today = FUNC.getJapanDate();
       const dayOfWeek = new Intl.DateTimeFormat("ja-JP", {
         weekday: "long",
-        timeZone: "Asia/Tokyo"
+        timeZone: "Asia/Tokyo",
       }).format(today);
       const day = new Intl.DateTimeFormat("ja-JP", {
         day: "numeric",
-        timeZone: "Asia/Tokyo"
+        timeZone: "Asia/Tokyo",
       }).format(today);
       const month = new Intl.DateTimeFormat("ja-JP", {
         month: "numeric",
-        timeZone: "Asia/Tokyo"
+        timeZone: "Asia/Tokyo",
       }).format(today);
       const year = new Intl.DateTimeFormat("ja-JP", {
         year: "numeric",
-        timeZone: "Asia/Tokyo"
+        timeZone: "Asia/Tokyo",
       }).format(today);
 
       return `Hari ini adalah ${dayOfWeek}, ${day}/${month}/${year}.`;
@@ -440,7 +428,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           timeZone: "Asia/Tokyo",
           hour: "2-digit",
           minute: "2-digit",
-          hour12: true
+          hour12: true,
         };
         const timeString = now.toLocaleTimeString("en-US", timeOptions);
         return `${timeString}`;
@@ -467,11 +455,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             key: { ...m.key },
             message: { extendedTextMessage: { text: id } },
             pushName: m.pushName,
-            messageTimestamp: m.messageTimestamp || 754785898978
+            messageTimestamp: m.messageTimestamp || 754785898978,
           };
           return sock.ev.emit("messages.upsert", {
             messages: [emit_msg],
-            type: "notify"
+            type: "notify",
           });
         }
       }
@@ -491,7 +479,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 The answer was: *${jawaban}*!`
+          text: `💡 The answer was: *${jawaban}*!`,
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -499,10 +487,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
           text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
-          mentions: [m.sender]
+          mentions: [m.sender],
         });
         await sock.sendMessage(m.chat, {
-          react: { text: "✔", key: m.key }
+          react: { text: "✔", key: m.key },
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -534,7 +522,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 The answer was: *${answer}*!`
+          text: `💡 The answer was: *${answer}*!`,
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -542,10 +530,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       } else if (body.toLowerCase().includes(answer.toLowerCase())) {
         await sock.sendMessage(m.chat, {
           text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${answer}`,
-          mentions: [m.sender]
+          mentions: [m.sender],
         });
         await sock.sendMessage(m.chat, {
-          react: { text: "✔", key: m.key }
+          react: { text: "✔", key: m.key },
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -558,7 +546,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 The answer was: *${jawaban}* !`
+          text: `💡 The answer was: *${jawaban}* !`,
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -566,10 +554,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
           text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
-          mentions: [m.sender]
+          mentions: [m.sender],
         });
         await sock.sendMessage(m.chat, {
-          react: { text: "✔", key: m.key }
+          react: { text: "✔", key: m.key },
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -582,7 +570,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 The answer was: *${answer}* !`
+          text: `💡 The answer was: *${answer}* !`,
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -590,10 +578,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       } else if (body.toLowerCase().includes(answer.toLowerCase())) {
         await sock.sendMessage(m.chat, {
           text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${answer}`,
-          mentions: [m.sender]
+          mentions: [m.sender],
         });
         await sock.sendMessage(m.chat, {
-          react: { text: "✔", key: m.key }
+          react: { text: "✔", key: m.key },
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -606,7 +594,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 The answer was: *${jawaban}* !`
+          text: `💡 The answer was: *${jawaban}* !`,
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -614,10 +602,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
           text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
-          mentions: [m.sender]
+          mentions: [m.sender],
         });
         await sock.sendMessage(m.chat, {
-          react: { text: "✔", key: m.key }
+          react: { text: "✔", key: m.key },
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -630,7 +618,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       if (body.toLowerCase() === "nyerah") {
         await sock.sendMessage(m.chat, {
-          text: `💡 The answer was: *${jawaban}* !`
+          text: `💡 The answer was: *${jawaban}* !`,
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -638,10 +626,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       } else if (body.toLowerCase().includes(jawaban.toLowerCase())) {
         await sock.sendMessage(m.chat, {
           text: `🎉 *Correct!*\n\n👤 Winner: @${m.sender.split("@")[0]}\n📝 Answer: ${jawaban}`,
-          mentions: [m.sender]
+          mentions: [m.sender],
         });
         await sock.sendMessage(m.chat, {
-          react: { text: "✔", key: m.key }
+          react: { text: "✔", key: m.key },
         });
         clearTimeout(waktu);
         FUNC.sleep(3000);
@@ -650,7 +638,15 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
     }
 
     function isPlayingGame(userId) {
-      return scrambleword[userId] || kuismath[userId] || whosmegame[userId] || guesswordgame[userId] || guessstencegame[userId] || triviaquizgame[userId] || guesselementgame[userId];
+      return (
+        scrambleword[userId] ||
+        kuismath[userId] ||
+        whosmegame[userId] ||
+        guesswordgame[userId] ||
+        guessstencegame[userId] ||
+        triviaquizgame[userId] ||
+        guesselementgame[userId]
+      );
     }
     /////////////////////////////////////////////////////////
     // === Handler Balasan Menfess ===
@@ -660,28 +656,38 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       const alias = menfess[m.sender].nama || "Anonymous";
       if (isCmd) return;
       const msgType = Object.keys(m.message)[0];
+      const thumbBuffer = await fetch(global.imgreply)
+        .then((res) => res.arrayBuffer())
+        .then((buffer) => Buffer.from(buffer))
+        .catch(() => null);
+
       const fwdMsg = {
-        text: m.text,
+        document: Buffer.alloc(0),
+        fileName: "楓 (Kaede) 2K26",
+        mimetype: "application/pdf",
+        fileLength: 0,
+        pageCount: 1,
+        caption: teks,
+        jpegThumbnail: thumbBuffer,
         contextInfo: {
-          isForwarded: true,
-          forwardingScore: 1,
-          externalAdReply: {
-            title: `Message from ${alias}`,
-            thumbnailUrl: global.thumb,
-            mediaType: 1,
-            renderLargerThumbnail: false
-          }
-        }
+          mentionedJid: [target],
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: global.idsaluran,
+            serverMessageId: null,
+            newsletterName: `${FUNC.Greetings()} ${pushname} 👋`,
+          },
+        },
       };
 
-      await sock.sendMessage(target, fwdMsg, { quoted: fkontak });
+      // Kirim langsung tanpa opsi { quoted }
+      await sock.sendMessage(target, fwdMsg);
       await react("✈️");
 
       if (!menfess[target]) {
         menfess[target] = {
           tujuan: m.sender,
           nama: "Anonymous",
-          active: true
+          active: true,
         };
       }
     }
@@ -692,7 +698,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
     async function useLimit(sender, isPremium, cost = 1) {
       const user = (global.db.data.users[sender] ||= {
         limit: MAX_LIMIT,
-        lastRecharge: Date.now()
+        lastRecharge: Date.now(),
       });
 
       if (isPremium) return true;
@@ -720,9 +726,19 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
     }
     setInterval(autoRechargeLimits, 60 * 1000);
 
-    const example = teks => `*Command Usage:*\nType *${cmd}* ${teks}`;
+    const example = (teks) => `*Command Usage:*\nType *${cmd}* ${teks}`;
+    async function fetchThumb(url) {
+      if (!url) return null;
+      try {
+        return await fetch(url)
+          .then((r) => r.arrayBuffer())
+          .then((b) => Buffer.from(b));
+      } catch {
+        return null;
+      }
+    }
     // leveling
-    const user = isMongoConnected() ? (await USER.getUser(sender)) : null;
+    const user = isMongoConnected() ? await USER.getUser(sender) : null;
     const required = LEVEL.getRequiredExp(user?.level || 1);
     function generateProgressBar(current, total) {
       if (!total || isNaN(total)) return "[░░░░░░░░░░░░] 0%";
@@ -739,7 +755,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       case "menfess":
         {
           if (isGroup) return reply(msg.private);
-          if (global.db.data.menfess[m.sender]?.active) return reply("❗ You are currently in an active Menfess session.");
+          if (global.db.data.menfess[m.sender]?.active)
+            return reply("❗ You are currently in an active Menfess session.");
           if (!text.includes("|")) return reply(example("628xxxxxxx|Ally"));
           const [num, alias] = text.split("|");
           const target = num.replace(/\D/g, "") + "@s.whatsapp.net";
@@ -749,13 +766,13 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           menfess[m.sender] = {
             tujuan: target,
             nama: alias?.trim() || "Someone",
-            active: true
+            active: true,
           };
 
           menfess[target] = {
             tujuan: m.sender,
             nama: "Anonymous",
-            active: true
+            active: true,
           };
 
           const timeout = setTimeout(
@@ -763,28 +780,28 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               if (menfess[m.sender]) menfess[m.sender].active = false;
               if (menfess[target]) {
                 sock.sendMessage(target, {
-                  text: "⏳ Menfess session has ended."
+                  text: "⏳ Menfess session has ended.",
                 });
                 menfess[target].active = false;
               }
               global.menfessTimeouts.delete(m.sender);
               global.menfessTimeouts.delete(target);
             },
-            10 * 60 * 1000
+            10 * 60 * 1000,
           ); // 10 menit
 
           global.menfessTimeouts.set(m.sender, timeout);
           global.menfessTimeouts.set(target, timeout);
 
           await sock.sendMessage(target, {
-            text: `📩 You received an anonymous message.\nReply to this message to send a response.\nType *${prefix}delmenfess* to end.`
+            text: `📩 You received an anonymous message.\nReply to this message to send a response.\nType *${prefix}delmenfess* to end.`,
           });
           await sock.sendMessage(
             m.chat,
             {
-              text: `✅ Menfess session started.\nPlease send your message.\nIt will expire in 10 minutes or by typing *${prefix}delmenfess*.`
+              text: `✅ Menfess session started.\nPlease send your message.\nIt will expire in 10 minutes or by typing *${prefix}delmenfess*.`,
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -805,10 +822,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             global.menfessTimeouts.delete(partner);
           }
           await sock.sendMessage(partner, {
-            text: `❌ Your partner has ended the Menfess session.`
+            text: `❌ Your partner has ended the Menfess session.`,
           });
           await sock.sendMessage(m.chat, {
-            text: `✅ Menfess session ended.`
+            text: `✅ Menfess session ended.`,
           });
           menfess[m.sender].active = false;
           menfess[partner].active = false;
@@ -831,11 +848,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 title: name,
                 body: source,
                 thumbnailUrl: image,
-                mediaType: 1
-              }
-            }
+                mediaType: 1,
+              },
+            },
           },
-          { quoted: m }
+          { quoted: m },
         );
         break;
       }
@@ -860,11 +877,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 title: name,
                 body: source,
                 thumbnailUrl: image,
-                mediaType: 1
-              }
-            }
+                mediaType: 1,
+              },
+            },
           },
-          { quoted: m }
+          { quoted: m },
         );
         break;
       }
@@ -890,7 +907,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             const { waifu, user } = await gacha.getHaremChar(text);
             if (!waifu || !user) throw new Error("Waifu or user data not found");
             const count = user.length;
-            const list = user.map((u, i) => `${i + 1}. ${u.username || u.phone_number?.split("@")[0] || "Unknown"}`).join("\n");
+            const list = user
+              .map((u, i) => `${i + 1}. ${u.username || u.phone_number?.split("@")[0] || "Unknown"}`)
+              .join("\n");
             const caption =
               `*🔍 WAIFU OWNERSHIP CHECK*\n\n` +
               `👑 *Name:* ${waifu.name}\n` +
@@ -908,11 +927,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     body: waifu.source,
                     thumbnailUrl: waifu.image,
                     mediaType: 1,
-                    renderLargerThumbnail: true
-                  }
-                }
+                    renderLargerThumbnail: true,
+                  },
+                },
               },
-              { quoted }
+              { quoted },
             );
           } catch (err) {
             console.error("Harem text mode error, fallback to user harem:", err);
@@ -942,11 +961,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                       body: randomWaifu.rarity,
                       thumbnailUrl: randomWaifu.image,
                       mediaType: 1,
-                      renderLargerThumbnail: false
-                    }
-                  }
+                      renderLargerThumbnail: false,
+                    },
+                  },
                 },
-                { quoted: m }
+                { quoted: m },
               );
             } catch (e) {
               console.error("Fallback error:", e);
@@ -977,11 +996,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     title: randomWaifu.name || "Your Waifu",
                     thumbnailUrl: randomWaifu.image,
                     mediaType: 1,
-                    renderLargerThumbnail: false
-                  }
-                }
+                    renderLargerThumbnail: false,
+                  },
+                },
               },
-              { quoted: m }
+              { quoted: m },
             );
           } catch (e) {
             console.error("User harem error:", e);
@@ -1053,7 +1072,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
           if (command === "animasudetail") {
             let url = args[0];
-            if (!url || !url.includes("v1.animasu.top")) throw "❌ Please provide a valid URL!\n\nExample:\n.animasudetail https://v1.animasu.top/anime/boruto-naruto-next-generations-sub-indo/";
+            if (!url || !url.includes("v1.animasu.top"))
+              throw "❌ Please provide a valid URL!\n\nExample:\n.animasudetail https://v1.animasu.top/anime/boruto-naruto-next-generations-sub-indo/";
             let res = await detail(url);
             if (!res.status) throw res.result;
             let a = res.result;
@@ -1067,14 +1087,14 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             teks += `🏷️ *Genres:* ${a.genres.length ? a.genres.join(", ") : "-"}\n\n`;
             if (a.episodeLinks.length) {
               teks += `🎥 *Episode Links:*\n`;
-              a.episodeLinks.slice(0, 5).forEach(ep => (teks += `- ${ep.number}: ${ep.link}\n`));
+              a.episodeLinks.slice(0, 5).forEach((ep) => (teks += `- ${ep.number}: ${ep.link}\n`));
               teks += "\n";
             }
             if (a.downloadLinks.length) {
               teks += `⬇️ *Download Links:*\n`;
-              a.downloadLinks.forEach(dl => {
+              a.downloadLinks.forEach((dl) => {
                 teks += `*${dl.quality}*\n`;
-                dl.links.forEach(x => (teks += `• ${x.title}: ${x.link}\n`));
+                dl.links.forEach((x) => (teks += `• ${x.title}: ${x.link}\n`));
                 teks += "\n";
               });
             }
@@ -1093,7 +1113,20 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
           const result = await SCR.searchAnimeInfoFromAnilist(text);
           if (result.error) return reply("❌ Anime not found.");
-          const { title, synopsis, poster, cover, startDate, endDate, status, episodeCount, rating, genres, studios, characters } = result;
+          const {
+            title,
+            synopsis,
+            poster,
+            cover,
+            startDate,
+            endDate,
+            status,
+            episodeCount,
+            rating,
+            genres,
+            studios,
+            characters,
+          } = result;
           const shortDesc = synopsis?.length > 600 ? synopsis.slice(0, 600) + "..." : synopsis;
           let message = "";
 
@@ -1117,11 +1150,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   title: `${title}`,
                   thumbnailUrl: poster,
                   mediaType: 1,
-                  renderLargerThumbnail: false
-                }
-              }
+                  renderLargerThumbnail: false,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -1201,11 +1234,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   mediaType: 1,
                   renderLargerThumbnail: false,
                   thumbnailUrl: top.image,
-                  sourceUrl: top.url
-                }
-              }
+                  sourceUrl: top.url,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -1221,7 +1254,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             `♀️ *Gender:* ${res.gender === "Male" ? "Male" : res.gender === "Female" ? "Female" : "Unknown"}\n` +
             `🎂 *Birth Date:* ${res.birthDate}\n` +
             `💖 *Favorites:* ${res.favourites} users\n` +
-            `🎬 *Related Media:*\n${res.relatedMedia.map(m => `- ${m.title} (${m.type === "ANIME" ? "Anime" : "Manga"})`).join("\n")}\n\n` +
+            `🎬 *Related Media:*\n${res.relatedMedia.map((m) => `- ${m.title} (${m.type === "ANIME" ? "Anime" : "Manga"})`).join("\n")}\n\n` +
             `📝 *Description:*\n${res.description}\n\n` +
             `🔗 *Link:* ${res.siteUrl}`;
 
@@ -1234,11 +1267,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 externalAdReply: {
                   mediaType: 1,
                   title: res.name.full,
-                  thumbnailUrl: res.image.medium || res.image.large
-                }
-              }
+                  thumbnailUrl: res.image.medium || res.image.large,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -1273,7 +1306,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             isPremium: isPremium,
             premiumUntil: user.premiumUntil || null,
             lastGacha: user.lastGacha || null,
-            registeredAt: user.createdAt || new Date()
+            registeredAt: user.createdAt || new Date(),
           };
 
           const profileText = FUNC.generateUserProfile(dummyUser);
@@ -1285,11 +1318,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 externalAdReply: {
                   title: pushname + " Profile",
                   thumbnailUrl: ppuser,
-                  renderLargerThumbnail: false
-                }
-              }
+                  renderLargerThumbnail: false,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -1360,17 +1393,23 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             type: "exp_multiplier",
             value: {
               value: multiplier,
-              duration: expiresIn || "1d"
-            }
+              duration: expiresIn || "1d",
+            },
           };
         } else {
           reward = {
             type: rewardType,
-            value: isNaN(rawValue) ? rawValue : Number(rawValue)
+            value: isNaN(rawValue) ? rawValue : Number(rawValue),
           };
         }
 
-        const res = await REEDEM.createCustomCode(code, reward.type, reward.value, Number(maxUses) || 1, expiresIn || null);
+        const res = await REEDEM.createCustomCode(
+          code,
+          reward.type,
+          reward.value,
+          Number(maxUses) || 1,
+          expiresIn || null,
+        );
         return reply(res.message);
       }
       case "redeem":
@@ -1398,9 +1437,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           sock.sendMessage(
             m.chat,
             {
-              text: `${m.pushName} *is now AFK* ${text ? ": " + text : ""}`
+              text: `${m.pushName} *is now AFK* ${text ? ": " + text : ""}`,
             },
-            { quoted: fsaluran }
+            { quoted: fsaluran },
           );
         }
         break;
@@ -1437,7 +1476,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             maker: global.menuMaker,
             etc: global.menuEtc,
             owner: global.menuOwner,
-            all: global.menu
+            all: global.menu,
           };
 
           if (menuMap[text]) {
@@ -1454,55 +1493,59 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           const models = {
             miku: {
               voice_id: "67aee909-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Hatsune Miku"
+              voice_name: "Hatsune Miku",
             },
             nahida: {
               voice_id: "67ae0979-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Nahida"
+              voice_name: "Nahida",
             },
             nami: {
               voice_id: "67ad95a0-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Nami"
+              voice_name: "Nami",
             },
             ana: {
               voice_id: "f2ec72cc-110c-11ef-811c-00163e0255ec",
-              voice_name: "Ana"
+              voice_name: "Ana",
             },
             optimus_prime: {
               voice_id: "67ae0f40-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Optimus Prime"
+              voice_name: "Optimus Prime",
             },
             goku: {
               voice_id: "67aed50c-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Goku"
+              voice_name: "Goku",
             },
             taylor_swift: {
               voice_id: "67ae4751-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Taylor Swift"
+              voice_name: "Taylor Swift",
             },
             elon_musk: {
               voice_id: "67ada61f-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Elon Musk"
+              voice_name: "Elon Musk",
             },
             mickey_mouse: {
               voice_id: "67ae7d37-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Mickey Mouse"
+              voice_name: "Mickey Mouse",
             },
             kendrick_lamar: {
               voice_id: "67add638-5d4b-11ee-a861-00163e2ac61b",
-              voice_name: "Kendrick Lamar"
+              voice_name: "Kendrick Lamar",
             },
             angela_adkinsh: {
               voice_id: "d23f2adb-5d1b-11ee-a861-00163e2ac61b",
-              voice_name: "Angela Adkinsh"
+              voice_name: "Angela Adkinsh",
             },
             eminem: {
               voice_id: "c82964b9-d093-11ee-bfb7-e86f38d7ec1a",
-              voice_name: "Eminem"
-            }
+              voice_name: "Eminem",
+            },
           };
 
-          const userAgents = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64)", "Mozilla/5.0 (Macintosh; Intel Mac OS X)", "Mozilla/5.0 (Linux; Android 8.0.0)"];
+          const userAgents = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X)",
+            "Mozilla/5.0 (Linux; Android 8.0.0)",
+          ];
 
           function getRandomIp() {
             return Array.from({ length: 4 })
@@ -1511,7 +1554,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           }
 
           async function generateTTS(text, model) {
-            if (!models[model]) throw `❌ Model "${model}" not found.\n\nAvailable models:\n` + Object.keys(models).join(", ");
+            if (!models[model])
+              throw `❌ Model "${model}" not found.\n\nAvailable models:\n` + Object.keys(models).join(", ");
 
             const agent = userAgents[Math.floor(Math.random() * userAgents.length)];
             const { voice_id, voice_name } = models[model];
@@ -1526,9 +1570,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   speed: "1",
                   volume: "50",
                   text,
-                  pos: 0
-                }
-              ]
+                  pos: 0,
+                },
+              ],
             };
 
             const config = {
@@ -1536,8 +1580,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 "Content-Type": "application/json",
                 Accept: "*/*",
                 "X-Forwarded-For": getRandomIp(),
-                "User-Agent": agent
-              }
+                "User-Agent": agent,
+              },
             };
 
             const res = await axios.post("https://voxbox-tts-api.imyfone.com/pc/v1/voice/tts", payload, config);
@@ -1545,7 +1589,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
             return {
               audio: result?.oss_url,
-              voice_name
+              voice_name,
             };
           }
 
@@ -1573,14 +1617,15 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               return sock.sendMessage(m.key.remoteJid, { text: listMsg }, { quoted: m });
             }
 
-            let [isi, model] = text.split("|").map(v => v.trim().toLowerCase());
+            let [isi, model] = text.split("|").map((v) => v.trim().toLowerCase());
             if (!isi || !model) {
               return sock.sendMessage(
                 m.key.remoteJid,
                 {
-                  text: `❌ Invalid format: .${command} text|model\n\nAvailable models:\n` + Object.keys(models).join(", ")
+                  text:
+                    `❌ Invalid format: .${command} text|model\n\nAvailable models:\n` + Object.keys(models).join(", "),
                 },
-                { quoted: m }
+                { quoted: m },
               );
             }
 
@@ -1593,22 +1638,22 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 {
                   audio: { url: result.audio },
                   mimetype: "audio/mpeg",
-                  ptt: true
+                  ptt: true,
                 },
-                { quoted: m }
+                { quoted: m },
               );
             } catch (e) {
               await sock.sendMessage(
                 m.key.remoteJid,
                 {
-                  text: `❌ An error occurred.\nError log: ${e.message || e}`
+                  text: `❌ An error occurred.\nError log: ${e.message || e}`,
                 },
-                { quoted: m }
+                { quoted: m },
               );
             } finally {
               if (loading.key) {
                 await sock.sendMessage(m.key.remoteJid, {
-                  delete: loading.key
+                  delete: loading.key,
                 });
               }
             }
@@ -1643,11 +1688,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   mediaType: 1,
                   renderLargerThumbnail: false,
                   thumbnailUrl: global.thumb,
-                  sourceUrl: global.saweria
-                }
-              }
+                  sourceUrl: global.saweria,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -1661,7 +1706,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               .join(".");
           }
           async function generateTTS(text) {
-            const userAgents = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64)", "Mozilla/5.0 (Macintosh; Intel Mac OS X)", "Mozilla/5.0 (Linux; Android 8.0.0)"];
+            const userAgents = [
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+              "Mozilla/5.0 (Macintosh; Intel Mac OS X)",
+              "Mozilla/5.0 (Linux; Android 8.0.0)",
+            ];
             const agent = userAgents[Math.floor(Math.random() * userAgents.length)];
             const payload = {
               raw_text: text,
@@ -1673,9 +1722,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   speed: "1",
                   volume: "50",
                   text,
-                  pos: 0
-                }
-              ]
+                  pos: 0,
+                },
+              ],
             };
 
             const config = {
@@ -1683,15 +1732,15 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 "Content-Type": "application/json",
                 Accept: "*/*",
                 "X-Forwarded-For": getRandomIp(),
-                "User-Agent": agent
-              }
+                "User-Agent": agent,
+              },
             };
             const res = await axios.post("https://voxbox-tts-api.imyfone.com/pc/v1/voice/tts", payload, config);
             const result = res.data?.data?.convert_result?.[0];
 
             return {
               audio: result?.oss_url,
-              voice_name: "Nahida"
+              voice_name: "Nahida",
             };
           }
 
@@ -1702,9 +1751,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 audio: { url: result.audio },
                 mimetype: "audio/mpeg",
-                ptt: true
+                ptt: true,
               },
-              { quoted: m }
+              { quoted: m },
             );
           } catch (e) {
             await reply("❌ An error occurred.\nError log");
@@ -1736,8 +1785,20 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         {
           if (!isOwner) return reply(mess.owner);
           const { execSync } = require("child_process");
-          const ls = fs.readdirSync(".").filter(item => item !== "node_modules" && item !== "package-lock.json" && item !== "yarn.lock" && item !== "tmp" && item !== "backup.zip");
-          const zipCommand = process.platform === "win32" ? `powershell Compress-Archive -Path ${ls.join(",")} -DestinationPath backup.zip` : `zip -r backup.zip ${ls.join(" ")}`;
+          const ls = fs
+            .readdirSync(".")
+            .filter(
+              (item) =>
+                item !== "node_modules" &&
+                item !== "package-lock.json" &&
+                item !== "yarn.lock" &&
+                item !== "tmp" &&
+                item !== "backup.zip",
+            );
+          const zipCommand =
+            process.platform === "win32"
+              ? `powershell Compress-Archive -Path ${ls.join(",")} -DestinationPath backup.zip`
+              : `zip -r backup.zip ${ls.join(" ")}`;
           try {
             execSync(zipCommand);
             await sock.sendMessage(
@@ -1745,9 +1806,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 document: fs.readFileSync("./backup.zip"),
                 mimetype: "application/zip",
-                fileName: "backup.zip"
+                fileName: "backup.zip",
               },
-              { quoted: m }
+              { quoted: m },
             );
             await react("✅");
             fs.unlinkSync("./backup.zip");
@@ -1766,11 +1827,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             {
               document: sesi,
               mimetype: "application/json",
-              fileName: "creds.json"
+              fileName: "creds.json",
             },
             {
-              quoted: fkontak
-            }
+              quoted: fkontak,
+            },
           );
         }
         break;
@@ -1788,15 +1849,19 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             self: "Bot is restricted to the owner only.",
             onlypremium: "Only premium users can use the bot.",
             alluser: "All users can access the bot.",
-            maintenance: "Bot is under maintenance."
+            maintenance: "Bot is under maintenance.",
           };
           const setting = global.db.data.settings;
           if (!args[0]) {
-            const currentModes = [`🔁 Public: ${setting.public ? "✅" : "❌"}`, `⭐ Only Premium: ${setting.onlyprem ? "✅" : "❌"}`, `⚙ Maintenance: ${setting.maintenance ? "✅" : "❌"}`].join("\n");
+            const currentModes = [
+              `🔁 Public: ${setting.public ? "✅" : "❌"}`,
+              `⭐ Only Premium: ${setting.onlyprem ? "✅" : "❌"}`,
+              `⚙ Maintenance: ${setting.maintenance ? "✅" : "❌"}`,
+            ].join("\n");
             return reply(
               `📌 Current Bot Modes:\n${currentModes}\n\n🛠 Use: ${Object.keys(validModes)
-                .map(v => `"mode ${v}"`)
-                .join(" | ")}`
+                .map((v) => `"mode ${v}"`)
+                .join(" | ")}`,
             );
           }
           const mode = args[0].toLowerCase();
@@ -1877,10 +1942,14 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
           if (!args[1]) return reply("How many days?");
-          let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
+          let blockwww = m.mentionedJid[0]
+            ? m.mentionedJid[0]
+            : m.quoted
+              ? m.quoted.sender
+              : args[0] + "@s.whatsapp.net";
           await MONGO.setPremium(blockwww, args[1]).then(reply);
           let react = sock.sendMessage(m.chat, {
-            react: { text: "✅", key: m.key }
+            react: { text: "✅", key: m.key },
           });
         }
         break;
@@ -1889,7 +1958,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isCreator) return;
           if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
-          let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
+          let blockwww = m.mentionedJid[0]
+            ? m.mentionedJid[0]
+            : m.quoted
+              ? m.quoted.sender
+              : args[0] + "@s.whatsapp.net";
           await MONGO.delPremium(blockwww);
           reply("✅ Premium removed.");
         }
@@ -1900,7 +1973,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
           if (!args[1]) return reply("How many days?");
-          let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
+          let blockwww = m.mentionedJid[0]
+            ? m.mentionedJid[0]
+            : m.quoted
+              ? m.quoted.sender
+              : args[0] + "@s.whatsapp.net";
           await MONGO.banUser(blockwww, args[1]).then(reply);
         }
         break;
@@ -1909,7 +1986,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isCreator) return;
           if (!isMongoConnected()) return reply(msg.mongoRequired);
           if (!args[0]) return reply("Please provide a phone number.");
-          let blockwww = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : args[0] + "@s.whatsapp.net";
+          let blockwww = m.mentionedJid[0]
+            ? m.mentionedJid[0]
+            : m.quoted
+              ? m.quoted.sender
+              : args[0] + "@s.whatsapp.net";
           await MONGO.unBan(blockwww).then(reply);
         }
         break;
@@ -1942,7 +2023,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         {
           if (!isCreator) return;
           if (!args[0]) return reply(example("menu"));
-          const getCase = caseName => {
+          const getCase = (caseName) => {
             try {
               const fileContent = fs.readFileSync("./system.js", "utf-8");
               const caseBlock = fileContent.split(`case "${caseName}"`)[1];
@@ -1961,26 +2042,27 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         {
           if (!text) return reply(example("130.54.130.237"));
           try {
-            const res = await fetch(`https://ipwho.is/${text}`).then(res => res.json());
+            const res = await fetch(`https://ipwho.is/${text}`).then((res) => res.json());
             if (!res.success) throw new Error(`❌ IP address "${text}" not found.`);
             await sock.sendMessage(
               m.chat,
               {
                 location: {
                   degreesLatitude: res.latitude,
-                  degreesLongitude: res.longitude
-                }
+                  degreesLongitude: res.longitude,
+                },
               },
-              { ephemeralExpiration: 604800 }
+              { ephemeralExpiration: 604800 },
             );
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             let infoText = "";
             infoText += "📡 *IP ADDRESS INFO* 🌐\n\n";
             infoText += "🗂️ *BASIC INFO*\n";
             infoText += "• IP Address      : " + (res.ip || "N/A") + "\n";
             infoText += "• Success         : " + (res.success ? "Yes ✅" : "No ❌") + "\n";
             infoText += "• Type            : " + (res.type || "N/A") + "\n";
-            infoText += "• Continent       : " + (res.continent || "N/A") + " (" + (res.continent_code || "N/A") + ")\n";
+            infoText +=
+              "• Continent       : " + (res.continent || "N/A") + " (" + (res.continent_code || "N/A") + ")\n";
             infoText += "• Country         : " + (res.country || "N/A") + " (" + (res.country_code || "N/A") + ")\n";
             infoText += "• Region          : " + (res.region || "N/A") + " (" + (res.region_code || "N/A") + ")\n";
             infoText += "• City            : " + (res.city || "N/A") + "\n";
@@ -2024,27 +2106,27 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             return await sock.sendMessage(
               m.chat,
               {
-                video: media
+                video: media,
               },
-              { quoted: m }
+              { quoted: m },
             );
           } else if (/image/.test(mime)) {
             const media = await qt.download();
             return await sock.sendMessage(
               m.chat,
               {
-                image: media
+                image: media,
               },
-              { quoted: m }
+              { quoted: m },
             );
           } else if (/audio/.test(mime)) {
             const media = await qt.download();
             return await sock.sendMessage(
               m.chat,
               {
-                audio: media
+                audio: media,
               },
-              { quoted: m }
+              { quoted: m },
             );
           } else if (!isViewOnce) {
             return reply("Hanya untuk pesan view once.");
@@ -2063,10 +2145,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               messages: [
                 {
                   role: "user",
-                  content: text
-                }
+                  content: text,
+                },
               ],
-              model: "llama-3.3-70b-versatile"
+              model: "llama-3.3-70b-versatile",
             });
             await sendType(chatCompletion.choices[0]?.message?.content || "Tidak ada respon.");
           } catch (err) {
@@ -2122,7 +2204,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           const { deepimg } = require("./all/scrape/Scrape.js");
           const resp = await deepimg(prompt, {
             style: style,
-            size: "3:2"
+            size: "3:2",
           });
           sock.sendMessage(m.chat, { image: { url: resp }, caption: prompt }, { quoted: m });
         }
@@ -2135,11 +2217,13 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let teksnya = quoted ? quoted.text : text;
           let pengirim = quoted ? quoted.sender : m.sender;
           let namanya = quoted ? await sock.getName(pengirim) : pushname;
-          let ppnyauser = await sock.profilePictureUrl(pengirim, "image").catch(() => "https://telegra.ph/file/6880771a42bad09dd6087.jpg");
+          let ppnyauser = await sock
+            .profilePictureUrl(pengirim, "image")
+            .catch(() => "https://telegra.ph/file/6880771a42bad09dd6087.jpg");
           let { result } = await quote(teksnya, namanya, ppnyauser);
           sock.sendImageAsSticker(from, result, m, {
             packname: global.packname,
-            author: global.author
+            author: global.author,
           });
         }
         break;
@@ -2154,7 +2238,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             let media = await quoted.download();
             let encmedia = await sock.sendImageAsSticker(from, media, m, {
               packname: global.packname,
-              author: global.author
+              author: global.author,
             });
             await fs.unlinkSync(encmedia);
           } else if (/video/.test(mime)) {
@@ -2163,7 +2247,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             let media = await quoted.download();
             let encmedia = await sock.sendVideoAsSticker(from, media, m, {
               packname: global.packname,
-              author: global.author
+              author: global.author,
             });
             await fs.unlinkSync(encmedia);
           } else {
@@ -2177,7 +2261,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
           let encmedia = await sock.sendImageAsSticker(from, `https://api.siputzx.my.id/api/m/brat?text=${text}`, m, {
             packname: global.packname,
-            author: global.author
+            author: global.author,
           });
         }
         break;
@@ -2199,7 +2283,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let meme = `https://api.memegen.link/images/custom/${encodeURIComponent(atas ? atas : "")}/${encodeURIComponent(bawah ? bawah : "")}.png?background=${url}`;
           sock.sendImageAsSticker(m.chat, meme, m, {
             packname: global.packname,
-            author: global.author
+            author: global.author,
           });
         }
         break;
@@ -2208,14 +2292,15 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         {
           let [teks1, teks2] = text.split`|`;
           if (!teks1) return reply(example("hi|loser"));
-          if (!teks2) return reply(`Please send or reply to an image/video with caption ${prefix + command} text1|text2`);
+          if (!teks2)
+            return reply(`Please send or reply to an image/video with caption ${prefix + command} text1|text2`);
           let teksbwh = teks2 + `\nDate: ${moment.tz("Asia/Tokyo").format("DD/MM/YY")}\nBot: 0823-3422-6291`;
           if (/image/.test(mime)) {
             if (!(await useLimit(m.sender, isPremium, 1))) return reply(msg.endLimit);
             let media = await sock.downloadMediaMessage(qmsg);
             let encmedia = await sock.sendImageAsSticker(m?.chat, media, m, {
               packname: teks1,
-              author: teksbwh
+              author: teksbwh,
             });
             if (encmedia && encmedia.filePath) {
               await fs.unlinkSync(encmedia.filePath);
@@ -2226,7 +2311,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             let media = await quoted.download();
             let encmedia = await sock.sendVideoAsSticker(from, media, m, {
               packname: global.packname,
-              author: global.author
+              author: global.author,
             });
             if (encmedia && encmedia.filePath) {
               await fs.unlinkSync(encmedia.filePath);
@@ -2245,9 +2330,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 "Access-Control-Allow-Origin": "*",
                 Referer: "https://www.google.com/",
                 "Referrer-Policy": "strict-origin-when-cross-origin",
-                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+                "User-Agent":
+                  "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
               },
-              responseType: "arraybuffer"
+              responseType: "arraybuffer",
             });
             const contentType = gt.headers["content-type"];
             console.log(`Content-Type: ${contentType}`);
@@ -2266,11 +2352,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     externalAdReply: {
                       mediaType: 1,
                       title: `Hi ${pushname}`,
-                      thumbnailUrl: thumb
-                    }
-                  }
+                      thumbnailUrl: thumb,
+                    },
+                  },
                 },
-                { quoted: fkontak }
+                { quoted: fkontak },
               );
             } else if (/image/i.test(contentType)) {
               return sock.sendMessage(
@@ -2281,11 +2367,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     externalAdReply: {
                       mediaType: 2,
                       title: `Hi ${pushname}`,
-                      thumbnailUrl: thumb
-                    }
-                  }
+                      thumbnailUrl: thumb,
+                    },
+                  },
                 },
-                { quoted: fkontak }
+                { quoted: fkontak },
               );
             } else if (/video/i.test(contentType)) {
               return sock.sendMessage(
@@ -2296,11 +2382,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     externalAdReply: {
                       mediaType: 1,
                       title: `Hi ${pushname}`,
-                      thumbnailUrl: thumb
-                    }
-                  }
+                      thumbnailUrl: thumb,
+                    },
+                  },
                 },
-                { quoted: fkontak }
+                { quoted: fkontak },
               );
             } else if (/audio/i.test(contentType) || text.includes(".mp3")) {
               return sock.sendMessage(
@@ -2312,11 +2398,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                       mediaType: 1,
                       title: `Hi ${pushname}`,
                       sourceUrl: "",
-                      thumbnailUrl: thumb
-                    }
-                  }
+                      thumbnailUrl: thumb,
+                    },
+                  },
                 },
-                { quoted: fkontak }
+                { quoted: fkontak },
               );
             } else if (/application\/zip/i.test(contentType) || /application\/x-zip-compressed/i.test(contentType)) {
               return sock.sendMessage(
@@ -2324,9 +2410,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 {
                   document: { url: text },
                   fileName: ``,
-                  mimetype: text
+                  mimetype: text,
                 },
-                { quoted: fkontak }
+                { quoted: fkontak },
               );
             } else if (/application\/pdf/i.test(contentType)) {
               return sock.sendMessage(
@@ -2334,9 +2420,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 {
                   document: { url: text },
                   fileName: ``,
-                  mimetype: text
+                  mimetype: text,
                 },
-                { quoted: fkontak }
+                { quoted: fkontak },
               );
             } else {
               return m.reply(`MIME : ${contentType}\n\n${gt.data}`);
@@ -2364,13 +2450,13 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               m.chat,
               {
                 image: {
-                  url: datas.data.image
+                  url: datas.data.image,
                 },
-                caption: "DONE"
+                caption: "DONE",
               },
               {
-                quoted: m
-              }
+                quoted: m,
+              },
             );
           } catch (e) {
             console.log(e);
@@ -2412,11 +2498,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     title: user.uniqueId,
                     thumbnailUrl: user.avatarLarger,
                     mediaType: 1,
-                    renderLargerThumbnail: false
-                  }
-                }
+                    renderLargerThumbnail: false,
+                  },
+                },
               },
-              { quoted: fsaluran }
+              { quoted: fsaluran },
             );
           } catch (error) {
             console.error(error);
@@ -2456,11 +2542,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   thumbnailUrl: user.hd_profile_pic_url_info?.url || "",
                   mediaType: 1,
                   renderLargerThumbnail: false,
-                  sourceUrl: `https://www.instagram.com/${user.username}`
-                }
-              }
+                  sourceUrl: `https://www.instagram.com/${user.username}`,
+                },
+              },
             },
-            { quoted: fkontak }
+            { quoted: fkontak },
           );
         } catch (err) {
           console.error(err);
@@ -2504,11 +2590,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     title: result.name || "GitHubUser",
                     thumbnailUrl: result.avatar_url,
                     mediaType: 1,
-                    renderLargerThumbnail: false
-                  }
-                }
+                    renderLargerThumbnail: false,
+                  },
+                },
               },
-              { quoted: fsaluran }
+              { quoted: fsaluran },
             );
           } catch (error) {
             console.error(error);
@@ -2524,8 +2610,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let getGroups = await sock.groupFetchAllParticipating();
           let groups = Object.entries(getGroups)
             .slice(0)
-            .map(entry => entry[1]);
-          let anu = groups.map(v => v.id);
+            .map((entry) => entry[1]);
+          let anu = groups.map((v) => v.id);
           reply(`${anu.length} group chats are being sent a broadcast.`);
           for (let i of anu) {
             await FUNC.sleep(1500);
@@ -2539,7 +2625,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         if (!text.includes("|")) {
           return reply("📢 Please use the correct format:\n`.update <type> | <title> | <desc>`");
         }
-        const [typeRaw, titleRaw, descRaw] = text.split("|").map(a => a.trim());
+        const [typeRaw, titleRaw, descRaw] = text.split("|").map((a) => a.trim());
         const type = typeRaw.toLowerCase();
         const title = titleRaw || "Untitled Update";
         const desc = descRaw || "No description available.";
@@ -2548,13 +2634,13 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           revamp: { emoji: "♻️", label: "System Revamp" },
           fix: { emoji: "🛠️", label: "Bug Fix" },
           info: { emoji: "📢", label: "Announcement" },
-          remove: { emoji: "❌", label: "Feature Removed" }
+          remove: { emoji: "❌", label: "Feature Removed" },
         };
         const tag = typeInfo[type];
         if (!tag) return reply("❌ Invalid type. Valid types: feature, revamp, fix, info, remove");
         const updateMessage = `${tag.emoji} *Update - ${tag.label}*\n\n📌 *${title}*\n\n📝 ${desc}\n\n🕒 ${moment().format("YYYY/MM/DD HH:mm")}\n🧑‍💻 Dev: ${global.ownerName || "Bot Owner"}\n\n_This update was broadcast to all users_`;
         const sendTo = ["120363400223227222@newsletter", "120363418657733797@g.us", "120363297738337531@g.us"];
-        const sendUpdate = async jid => {
+        const sendUpdate = async (jid) => {
           try {
             await sock.sendMessage(
               jid,
@@ -2566,11 +2652,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     title: "From " + pushname,
                     thumbnailUrl: ppuser,
                     mediaType: 1,
-                    renderLargerThumbnail: false
-                  }
-                }
+                    renderLargerThumbnail: false,
+                  },
+                },
               },
-              { quoted: fkontak }
+              { quoted: fkontak },
             );
           } catch (err) {
             console.error("Gagal mengirim update:", err);
@@ -2608,17 +2694,17 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 title: res.title,
                 mediaType: 1,
                 renderLargerThumbnail: false,
-                thumbnailUrl: res.image
-              }
-            }
+                thumbnailUrl: res.image,
+              },
+            },
           },
-          { quoted: fsaluran }
+          { quoted: fsaluran },
         );
         break;
       }
       case "videy": {
         if (!args[0]) return reply(example("https://videy.co/v/?id=xxXXX"));
-        const extractVideyId = url => {
+        const extractVideyId = (url) => {
           try {
             const parsed = new URL(url);
             const id = parsed.searchParams.get("id");
@@ -2635,9 +2721,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           from,
           {
             video: { url: videoUrl },
-            caption: `✅ Video retrieved successfully!`
+            caption: `✅ Video retrieved successfully!`,
           },
-          { quoted: m }
+          { quoted: m },
         );
         break;
       }
@@ -2657,18 +2743,18 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             if (selected.length === 1) {
               await sock.sendImage(from, selected[0], text, m);
             } else {
-              const mediaList = selected.map(url => ({
+              const mediaList = selected.map((url) => ({
                 image: { url },
-                caption: text
+                caption: text,
               }));
               await sock.sendAlbumMessage(m.chat, mediaList, {
-                quoted: fkontak
+                quoted: fkontak,
               });
             }
           } catch (error) {
             console.error(error);
             await sock.sendMessage(m.chat, {
-              react: { text: "❌", key: m.key }
+              react: { text: "❌", key: m.key },
             });
           }
         }
@@ -2687,8 +2773,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (res.status !== 200 || !res.result?.status) return reply("Failed to retrieve TikTok data!");
           const data = res.result;
           const title = data.title || "TikTok";
-          const images = data.data.filter(d => d.type === "photo").map(d => d.url);
-          const video = data.data.find(d => d.type === "nowatermark_hd")?.url || data.data.find(d => d.type === "nowatermark")?.url;
+          const images = data.data.filter((d) => d.type === "photo").map((d) => d.url);
+          const video =
+            data.data.find((d) => d.type === "nowatermark_hd")?.url ||
+            data.data.find((d) => d.type === "nowatermark")?.url;
           const music = data.music_info?.url;
           if (!(await useLimit(m.sender, isPremium, 5))) return reply(msg.endLimit);
 
@@ -2700,9 +2788,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 {
                   video: { url: resu.no_watermark },
                   fileName: `tiktok.mp4`,
-                  mimetype: "video/mp4"
+                  mimetype: "video/mp4",
                 },
-                { quoted: m }
+                { quoted: m },
               )
               .then(() => {
                 sock.sendMessage(
@@ -2710,20 +2798,20 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   {
                     audio: { url: resu.music },
                     fileName: `tiktok.mp3`,
-                    mimetype: "audio/mp4"
+                    mimetype: "audio/mp4",
                   },
-                  { quoted: m }
+                  { quoted: m },
                 );
               });
           } else if (images.length > 0) {
             if (images.length === 1) {
               await sock.sendMessage(m.chat, { image: { url: images[0] }, caption: title }, { quoted: m });
             } else {
-              const album = images.map(url => ({
-                image: { url }
+              const album = images.map((url) => ({
+                image: { url },
               }));
               await sock.sendAlbumMessage(m.chat, album, {
-                quoted: m
+                quoted: m,
               });
             }
             if (music) {
@@ -2732,9 +2820,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 {
                   audio: { url: music },
                   fileName: "tiktok.mp3",
-                  mimetype: "audio/mp4"
+                  mimetype: "audio/mp4",
                 },
-                { quoted: m }
+                { quoted: m },
               );
             }
           } else {
@@ -2767,9 +2855,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               const duration = msToMinutes(track.duration_ms);
 
               msgSpotify += `🎵 *Title* : ${track.name}\n`;
-              msgSpotify += `👤 *Artist* : ${track.artists.map(v => v.name).join(", ")}\n`;
+              msgSpotify += `👤 *Artist* : ${track.artists.map((v) => v.name).join(", ")}\n`;
               msgSpotify += `💿 *Album* : ${track.album.name}\n`;
-              msgSpotify += `👥 *Album Artist* : ${track.album.artists.map(v => v.name).join(", ")}\n`;
+              msgSpotify += `👥 *Album Artist* : ${track.album.artists.map((v) => v.name).join(", ")}\n`;
               msgSpotify += `📅 *Release Date* : ${track.album.release_date}\n`;
               msgSpotify += `🔢 *Track Number* : ${track.track_number} / ${track.album.total_tracks}\n`;
               msgSpotify += `⏳ *Duration* : ${duration}\n`;
@@ -2797,7 +2885,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let searchRes;
 
           try {
-            searchRes = await fetch(searchUrl).then(res => res.json());
+            searchRes = await fetch(searchUrl).then((res) => res.json());
           } catch (e) {
             console.error(e);
             return m.reply("❌ An error occurred while searching for the song.");
@@ -2806,7 +2894,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!searchRes.status || !searchRes.data) return m.reply("❌ No search results found.");
 
           // 🎬 Get first video
-          let video = searchRes.data.find(v => v.type === "video");
+          let video = searchRes.data.find((v) => v.type === "video");
           if (!video) return m.reply("❌ No matching video found.");
           // api
           const cheerio = require("cheerio");
@@ -2831,8 +2919,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   "Content-Type": "application/x-www-form-urlencoded",
                   Origin: "https://yt1s.click",
                   Referer: "https://yt1s.click/",
-                  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                }
+                  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                },
               });
 
               const $ = cheerio.load(res.data);
@@ -2845,7 +2933,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   thumbnail,
                   filesize: null,
                   duration: null,
-                  success: true
+                  success: true,
                 };
               }
             } catch (e) {
@@ -2857,7 +2945,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
               const payload = {
                 fileType: "MP3",
-                id: videoId
+                id: videoId,
               };
 
               const res = await axios.post("https://ht.flvto.online/converter", payload, {
@@ -2865,8 +2953,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   "Content-Type": "application/json",
                   Origin: "https://ht.flvto.online",
                   Referer: `https://ht.flvto.online/widget?url=https://www.youtube.com/watch?v=${videoId}`,
-                  "User-Agent": "Mozilla/5.0 (Linux; Android 13)"
-                }
+                  "User-Agent": "Mozilla/5.0 (Linux; Android 13)",
+                },
               });
 
               const data = res?.data;
@@ -2884,7 +2972,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 thumbnail,
                 filesize: data.filesize,
                 duration: data.duration,
-                success: true
+                success: true,
               };
             } catch (e) {
               console.warn("Gagal FLVTO:", e.message || e.toString());
@@ -2907,21 +2995,24 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!dlRes.link) return m.reply("❌ Audio not found or download failed.");
 
           // 🎶 Send song info
+          const thumbBuffer = await fetch(video.thumbnail)
+            .then((res) => res.arrayBuffer())
+            .then((buffer) => Buffer.from(buffer))
+            .catch(() => null);
+
           await sock.sendMessage(
-            from,
+            m.chat,
             {
-              text: `🎶 *Title:* ${video.title}\n` + `👤 *Channel:* ${video.author?.name}\n` + `⏱️ *Duration:* ${video.duration?.timestamp}\n` + `🔗 *Link:* ${video.url}`,
-              contextInfo: {
-                externalAdReply: {
-                  title: video.title,
-                  body: `Uploader: ${video.author?.name}`,
-                  thumbnailUrl: video.thumbnail,
-                  mediaType: 1,
-                  renderLargerThumbnail: true
-                }
-              }
+              text: `🎶 *Title:* ${video.title}\n👤 *Channel:* ${video.author?.name}\n⏱️ *Duration:* ${video.duration?.timestamp}\n🔗 *Link:* ${video.url}`,
+              linkPreview: {
+                "matched-text": video.url,
+                title: video.title,
+                description: `Uploader: ${video.author?.name}`,
+                previewType: 0,
+                jpegThumbnail: thumbBuffer,
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
 
           // 🎧 Send MP3 file
@@ -2929,18 +3020,19 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             from,
             {
               audio: {
-                url: dlRes.link
+                url: dlRes.link,
               },
               mimetype: "audio/mpeg",
               fileName: dlRes.title + ".mp3",
-              ptt: false
+              ptt: false,
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
       case "terabox": {
-        if (!text) return reply(`🔗 Please provide a Terabox URL!\nExample: ${prefix}terabox https://1024terabox.com/s/1zCxxxx`);
+        if (!text)
+          return reply(`🔗 Please provide a Terabox URL!\nExample: ${prefix}terabox https://1024terabox.com/s/1zCxxxx`);
         if (!FUNC.isUrl(args[0]) && !args[0].includes("terabox.com")) return "Invalid link!";
         try {
           await reply("⏳ Fetching download link...");
@@ -2960,9 +3052,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 document: { url: direct_url },
                 mimetype: "application/octet-stream",
                 fileName: filename,
-                caption: `📁 *Terabox Download*\n\n📄 File Name: ${filename}\n📦 Size: ${sizeMB.toFixed(2)} MB`
+                caption: `📁 *Terabox Download*\n\n📄 File Name: ${filename}\n📦 Size: ${sizeMB.toFixed(2)} MB`,
               },
-              { quoted: m }
+              { quoted: m },
             );
           } else {
             const caption = `📁 *Terabox Downloader*\n\n📄 File Name: ${filename}\n📦 Size: ${sizeMB.toFixed(2)} MB\n\n⚠️ *File size exceeds 50MB and cannot be sent directly.*\n\n🔗 Download link:\n${direct_url}`;
@@ -2978,11 +3070,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     thumbnailUrl: thumb,
                     sourceUrl: direct_url,
                     mediaType: 1,
-                    renderLargerThumbnail: true
-                  }
-                }
+                    renderLargerThumbnail: true,
+                  },
+                },
               },
-              { quoted: m }
+              { quoted: m },
             );
           }
         } catch (e) {
@@ -2994,7 +3086,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
       case "tourl":
         {
-          if (!/video/.test(mime) && !/image/.test(mime)) return reply(`Please send or reply to an image/video with caption ${prefix + command}`);
+          if (!/video/.test(mime) && !/image/.test(mime))
+            return reply(`Please send or reply to an image/video with caption ${prefix + command}`);
           let { TelegraPh } = require("./all/scrape/uploader.js");
           let media = await sock.downloadAndSaveMediaMessage(quoted);
           let anu = await TelegraPh(media);
@@ -3008,7 +3101,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!/webp/.test(mime)) return reply(`reply some sticker`);
           let media = await sock.downloadAndSaveMediaMessage(quoted);
           let ran = await FUNC.getRandom(".png");
-          exec(`ffmpeg -i ${media} ${ran}`, err => {
+          exec(`ffmpeg -i ${media} ${ran}`, (err) => {
             fs.unlinkSync(media);
             if (err) throw err;
             let buffer = fs.readFileSync(ran);
@@ -3030,10 +3123,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 video: {
                   url: util.format(ehe),
-                  caption: "Convert WebP to video"
-                }
+                  caption: "Convert WebP to video",
+                },
               },
-              { quoted: fkontak }
+              { quoted: fkontak },
             );
             await fs.unlinkSync(media);
           }
@@ -3051,9 +3144,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             {
               document: audio,
               mimetype: "audio/mpeg",
-              fileName: `Convert By ${sock.user.name}.mp3`
+              fileName: `Convert By ${sock.user.name}.mp3`,
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
@@ -3070,8 +3163,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 backgroundColor: "#FF000000",
                 font: 3,
-                statusJidList: jidAllList
-              }
+                statusJidList: jidAllList,
+              },
             );
             reply(msg.done);
           } catch (error) {
@@ -3086,7 +3179,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isCreator) return;
           if (/video/.test(mime)) {
             var videosw = await sock.downloadAndSaveMediaMessage(quoted);
-            await sock.sendMessage("status@broadcast", { video: { url: videosw }, caption: text || "" }, { statusJidList: jidAllList });
+            await sock.sendMessage(
+              "status@broadcast",
+              { video: { url: videosw }, caption: text || "" },
+              { statusJidList: jidAllList },
+            );
             await reply(msg.done);
           } else {
             reply("Please reply to a video");
@@ -3100,7 +3197,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isCreator) return;
           if (/image/.test(mime)) {
             var imagesw = await sock.downloadAndSaveMediaMessage(quoted);
-            await sock.sendMessage("status@broadcast", { image: { url: imagesw }, caption: text || "" }, { statusJidList: jidAllList });
+            await sock.sendMessage(
+              "status@broadcast",
+              { image: { url: imagesw }, caption: text || "" },
+              { statusJidList: jidAllList },
+            );
             await reply(msg.done);
           } else {
             reply("Please reply to an image");
@@ -3118,12 +3219,12 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 audio: { url: audiosw },
                 mimetype: "audio/mp4",
-                ptt: true
+                ptt: true,
               },
               {
                 backgroundColor: "#FF000000",
-                statusJidList: jidAllList
-              }
+                statusJidList: jidAllList,
+              },
             );
             await reply(msg.done);
           } else {
@@ -3134,7 +3235,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       case "toaudio":
       case "audio":
         {
-          if (!/video/.test(mime) && !/audio/.test(mime)) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
+          if (!/video/.test(mime) && !/audio/.test(mime))
+            reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
           if (!m.quoted) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
           let media = await sock.downloadMediaMessage(quoted);
           let { toAudio } = require("./all/library/converter.js");
@@ -3145,7 +3247,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
       case "tovn":
       case "voice":
         {
-          if (!/video/.test(mime) && !/audio/.test(mime)) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
+          if (!/video/.test(mime) && !/audio/.test(mime))
+            reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
           if (!m.quoted) reply(`Please send or reply to a video/audio with caption ${prefix + command}`);
           let media = await quoted.download();
           let { toPTT } = require("./all/library/converter.js");
@@ -3153,7 +3256,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           sock.sendMessage(from, {
             audio: audio,
             mimetype: "audio/mpeg",
-            ptt: true
+            ptt: true,
           });
         }
         break;
@@ -3167,17 +3270,18 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 headers: {
                   Referer: "https://gesserit.co/tiktok",
-                  "User-Agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-                  responseType: "arraybuffer"
-                }
-              }
+                  "User-Agent":
+                    "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                  responseType: "arraybuffer",
+                },
+              },
             )
           ).data;
           const b = Buffer.from(a.audioUrl);
           sock.sendMessage(m.chat, {
             audio: Buffer.from(a.audioUrl.split("base64,")[1], "base64"),
             mimetype: "audio/mpeg",
-            ptt: true
+            ptt: true,
           });
         }
         break;
@@ -3196,11 +3300,12 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 "content-length": 0,
                 "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
                 origin: "https://drive.google.com",
-                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
+                "user-agent":
+                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36",
                 "x-client-data": "CKG1yQEIkbbJAQiitskBCMS2yQEIqZ3KAQioo8oBGLeYygE=",
                 "x-drive-first-party": "DriveWebUi",
-                "x-json-requested": "true"
-              }
+                "x-json-requested": "true",
+              },
             });
             let { fileName, sizeBytes, downloadUrl } = JSON.parse((await res.text()).slice(4));
             if (!downloadUrl) return reply("Download limit reached for link!");
@@ -3210,7 +3315,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               downloadUrl,
               fileName,
               fileSize: (sizeBytes / 1024 / 1024).toFixed(2),
-              mimetype: data.headers.get("content-type")
+              mimetype: data.headers.get("content-type"),
             };
           }
           try {
@@ -3222,9 +3327,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               {
                 document: { url: kanjuttgede.downloadUrl },
                 fileName: kanjuttgede.fileName,
-                mimetype: kanjuttgede.mimetype
+                mimetype: kanjuttgede.mimetype,
               },
-              { quoted: fkontak }
+              { quoted: fkontak },
             );
           } catch (error) {
             console.log(error.message);
@@ -3257,36 +3362,36 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                     m.chat,
                     {
                       video: { url: media.url },
-                      caption: media.caption || ""
+                      caption: media.caption || "",
                     },
-                    { quoted: m }
+                    { quoted: m },
                   );
                 } else {
                   await sock.sendMessage(
                     m.chat,
                     {
                       image: { url: media.url },
-                      caption: media.caption || ""
+                      caption: media.caption || "",
                     },
-                    { quoted: m }
+                    { quoted: m },
                   );
                 }
               } else {
                 const uniqueThumbnails = [];
                 const mediaList = mediaArray
-                  .filter(item => {
+                  .filter((item) => {
                     if (!uniqueThumbnails.includes(item.thumbnail)) {
                       uniqueThumbnails.push(item.thumbnail);
                       return true;
                     }
                     return false;
                   })
-                  .map(item => ({
-                    image: { url: item.thumbnail }
+                  .map((item) => ({
+                    image: { url: item.thumbnail },
                   }));
 
                 await sock.sendAlbumMessage(m.chat, mediaList, {
-                  quoted: m
+                  quoted: m,
                 });
               }
             } else {
@@ -3305,7 +3410,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             if (!args[0]) {
               return m.reply(example("https://fb.watch/xxx"));
             }
-            if ((!FUNC.isUrl(args[0]) && !args[0].includes("facebook.com")) || !args[0].includes("fb.watch")) return "Invalid link!";
+            if ((!FUNC.isUrl(args[0]) && !args[0].includes("facebook.com")) || !args[0].includes("fb.watch"))
+              return "Invalid link!";
             if (!(await useLimit(m.sender, isPremium, 10))) return reply(msg.endLimit);
             const url = args[0];
             const response = await fetch(`https://api.neekoi.me/api/fbdl?url=${encodeURIComponent(url)}`);
@@ -3321,9 +3427,9 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               m.chat,
               {
                 video: { url: data.result.data[0].url },
-                caption: messageText
+                caption: messageText,
               },
-              { quoted: m }
+              { quoted: m },
             );
           } catch (error) {
             console.error(error);
@@ -3338,8 +3444,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let getGroups = await sock.groupFetchAllParticipating();
           let groups = Object.entries(getGroups)
             .slice(0)
-            .map(entry => entry[1]);
-          let anu = groups.map(v => v.id);
+            .map((entry) => entry[1]);
+          let anu = groups.map((v) => v.id);
           let teks = `*[ GROUP LIST ]*`;
           for (let x of anu) {
             let metadata2 = await sock.groupMetadata(x);
@@ -3361,16 +3467,22 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           const teks = pes;
           const jidawal = m.chat;
           const data = await sock.groupMetadata(id);
-          const halls = await data.participants.filter(v => v.id.endsWith(".net")).map(v => v.id);
+          const halls = await data.participants.filter((v) => v.id.endsWith(".net")).map((v) => v.id);
           await m.reply(`*pushcontact* to group *${data.subject}* is being processed`);
           for (let mem of halls) {
             if (mem !== botNumber && mem.split("@")[0] !== global.owner) {
-              const vcard = "BEGIN:VCARD\n" + "VERSION:3.0\n" + `FN:${ownerName}\n` + "ORG:Developer;\n" + `TEL;type=CELL;type=VOICE;waid=${global.owner}:${global.owner}\n` + "END:VCARD";
+              const vcard =
+                "BEGIN:VCARD\n" +
+                "VERSION:3.0\n" +
+                `FN:${ownerName}\n` +
+                "ORG:Developer;\n" +
+                `TEL;type=CELL;type=VOICE;waid=${global.owner}:${global.owner}\n` +
+                "END:VCARD";
               const sentMsg = await sock.sendMessage(mem, {
                 contacts: {
                   displayName: ownerName,
-                  contacts: [{ vcard }]
-                }
+                  contacts: [{ vcard }],
+                },
               });
               await sock.sendMessage(mem, { text: teks }, { quoted: sentMsg });
               await FUNC.sleep(global.delayPushkontak);
@@ -3379,16 +3491,16 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           await sock.sendMessage(
             jidawal,
             {
-              text: `*Pushcontact Successful ✅*\nTotal members messaged: ${halls.length}`
+              text: `*Pushcontact Successful ✅*\nTotal members messaged: ${halls.length}`,
             },
-            { quoted: m }
+            { quoted: m },
           );
         }
         break;
       case "couple":
         {
           if (!m.isGroup) return reply(msg.group);
-          let member = participants.map(u => u.id);
+          let member = participants.map((u) => u.id);
           let orang = member[Math.floor(Math.random() * member.length)];
           let jodoh = member[Math.floor(Math.random() * member.length)];
           sock.sendMessage(
@@ -3401,11 +3513,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 isForwarded: true,
                 externalAdReply: {
                   title: "Kaede",
-                  thumbnailUrl: `https://files.catbox.moe/j93ldt.jpg`
-                }
-              }
+                  thumbnailUrl: `https://files.catbox.moe/j93ldt.jpg`,
+                },
+              },
             },
-            { quoted: fsaluran }
+            { quoted: fsaluran },
           );
         }
         break;
@@ -3431,11 +3543,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   title: data.title || "Untitled",
                   thumbnailUrl: data.thumbnail,
                   mediaType: 1,
-                  renderLargerThumbnail: true
-                }
-              }
+                  renderLargerThumbnail: true,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         } catch (e) {
           console.error(e);
@@ -3472,11 +3584,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   title: data.title || "Untitled",
                   thumbnailUrl: data.thumbnail,
                   mediaType: 1,
-                  renderLargerThumbnail: true
-                }
-              }
+                  renderLargerThumbnail: true,
+                },
+              },
             },
-            { quoted: m }
+            { quoted: m },
           );
         } catch (e) {
           console.error(e);
@@ -3501,8 +3613,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let result = args[0].split("https://chat.whatsapp.com/")[1];
           await sock
             .groupAcceptInvite(result)
-            .then(res => m.reply(FUNC.jsonformat(res)))
-            .catch(err => m.reply(FUNC.jsonformat(err)));
+            .then((res) => m.reply(FUNC.jsonformat(res)))
+            .catch((err) => m.reply(FUNC.jsonformat(err)));
         }
         break;
       case "welcome":
@@ -3530,7 +3642,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isBotAdmin) return reply(msg.adminbot);
           if (!text)
             return reply(
-              "Please enter a custom welcome message.\nAvailable tags:\n@user : Mention the user\n@group : Group name\n@desc : Group description\n@readmore : Readmore separator\n@member : Member count"
+              "Please enter a custom welcome message.\nAvailable tags:\n@user : Mention the user\n@group : Group name\n@desc : Group description\n@readmore : Readmore separator\n@member : Member count",
             );
           chatdb.welcometxt = m.text.replace(cmd + " ", "");
           await reply(`Done..`);
@@ -3543,7 +3655,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isBotAdmin) return reply(msg.adminbot);
           if (!text)
             return reply(
-              "Please enter a custom welcome message.\nAvailable tags:\n@user : Mention the user\n@group : Group name\n@desc : Group description\n@readmore : Readmore separator\n@member : Member count"
+              "Please enter a custom welcome message.\nAvailable tags:\n@user : Mention the user\n@group : Group name\n@desc : Group description\n@readmore : Readmore separator\n@member : Member count",
             );
           chatdb.leftxt = m.text.replace(cmd + " ", "");
           await reply(`Done..`);
@@ -3559,14 +3671,14 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           sock.sendMessage(m.chat, {
             text: `@${m.chat}` + " " + teks || "",
             contextInfo: {
-              mentionedJid: (await sock.groupMetadata(m.chat)).participants.map(v => v.id),
+              mentionedJid: (await sock.groupMetadata(m.chat)).participants.map((v) => v.id),
               groupMentions: [
                 {
                   groupSubject: "Everyone",
-                  groupJid: m.chat
-                }
-              ]
-            }
+                  groupJid: m.chat,
+                },
+              ],
+            },
           });
         }
         break;
@@ -3579,14 +3691,14 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           sock.sendMessage(m.chat, {
             text: `@${m.chat}` + " " + teks || "",
             contextInfo: {
-              mentionedJid: (await sock.groupMetadata(m.chat)).participants.map(v => v.id),
+              mentionedJid: (await sock.groupMetadata(m.chat)).participants.map((v) => v.id),
               groupMentions: [
                 {
                   groupSubject: "here",
-                  groupJid: m.chat
-                }
-              ]
-            }
+                  groupJid: m.chat,
+                },
+              ],
+            },
           });
         }
         break;
@@ -3641,20 +3753,24 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isGroup) return reply(msg.group);
           if (!isBotAdmin) return reply(msg.adminbot);
           if (text || m.quoted) {
-            let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
+            let users = m.mentionedJid[0]
+              ? m.mentionedJid[0]
+              : m.quoted
+                ? m.quoted.sender
+                : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
             await sock
               .groupParticipantsUpdate(m.chat, [users], "remove")
-              .then(res =>
+              .then((res) =>
                 sock.sendMessage(
                   m.chat,
                   {
                     text: `@${users.split("@")[0]} has been kicked successfully.`,
-                    mentions: [`${users}`]
+                    mentions: [`${users}`],
                   },
-                  { quoted: fkontak }
-                )
+                  { quoted: fkontak },
+                ),
               )
-              .catch(err => m.reply(err.toString()));
+              .catch((err) => m.reply(err.toString()));
           } else return m.reply(example("number/@tag"));
         }
         break;
@@ -3664,19 +3780,21 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isGroup) return reply(msg.group);
           if (!m.quoted && !text) return m.reply(example("hi"));
           var teks = m.quoted ? m.quoted.text : m.text.replace(cmd + " ", "");
-          var member = await groupMetadata.participants.map(e => e.id);
+          var member = await groupMetadata.participants.map((e) => e.id);
           sock.sendMessage(m.chat, { text: `${teks}`, mentions: [...member] }, { quoted: m });
         }
         break;
       case "translate": {
         let teks = m.quoted ? m.quoted.text : m.text.replace(cmd + " ", "");
         if (!teks) return reply(`❌ Please enter text to translate.\n\nExample: *${prefix}translate Hello|id*`);
-        let [query, target] = teks.split("|").map(v => v.trim());
+        let [query, target] = teks.split("|").map((v) => v.trim());
         if (!query) return reply(`❌ Text to translate not found.\n\nExample: *${prefix}translate Hello|id*`);
         if (!target) target = "id";
 
         try {
-          const res = await fetch(`https://api.siputzx.my.id/api/tools/translate?text=${encodeURIComponent(query)}&source=auto&target=${target}`);
+          const res = await fetch(
+            `https://api.siputzx.my.id/api/tools/translate?text=${encodeURIComponent(query)}&source=auto&target=${target}`,
+          );
           const json = await res.json();
 
           if (!json.success || !json.translatedText) {
@@ -3719,8 +3837,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   remoteJid: m.chat,
                   fromMe: true,
                   id: m.quoted.id,
-                  participant: m.quoted.sender
-                }
+                  participant: m.quoted.sender,
+                },
               });
             } else {
               if (!isBotAdmin) return reply(msg.adminbot);
@@ -3729,8 +3847,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   remoteJid: m.chat,
                   fromMe: false,
                   id: m.quoted.id,
-                  participant: m.quoted.sender
-                }
+                  participant: m.quoted.sender,
+                },
               });
             }
           } else {
@@ -3740,8 +3858,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 remoteJid: m.chat,
                 fromMe: false,
                 id: m.quoted.id,
-                participant: m.quoted.sender
-              }
+                participant: m.quoted.sender,
+              },
             });
           }
         }
@@ -3752,7 +3870,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isGroup) return reply(msg.group);
           if (!isBotAdmin) return reply(msg.adminbot);
           if (m.quoted || text) {
-            let target = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
+            let target = m.mentionedJid[0]
+              ? m.mentionedJid[0]
+              : m.quoted
+                ? m.quoted.sender
+                : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
             await sock.groupParticipantsUpdate(m.chat, [target], "demote");
             m.reply(msg.done);
           } else return m.reply(example("62838XXX"));
@@ -3764,7 +3886,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           if (!isGroup) return reply(msg.group);
           if (!isBotAdmin) return reply(msg.adminbot);
           if (m.quoted || text) {
-            let target = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
+            let target = m.mentionedJid[0]
+              ? m.mentionedJid[0]
+              : m.quoted
+                ? m.quoted.sender
+                : text.replace(/[^0-9]/g, "") + "@s.whatsapp.net";
             await sock.groupParticipantsUpdate(m.chat, [target], "promote");
             m.reply(msg.done);
           } else return m.reply(example("62838XXX"));
@@ -3783,16 +3909,16 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 number: "62881026950162",
                 name: "🌸 Franklin",
                 title: "👨‍💻 Bot Developer",
-                org: "Deep Technology Inc."
+                org: "Deep Technology Inc.",
               },
               {
                 number: "6282334226291",
                 name: "🍁 Kaede",
                 title: "👑 Group Admin",
-                org: "Sekai-Team"
-              }
+                org: "Sekai-Team",
+              },
             ],
-            fkontak
+            fkontak,
           );
         }
         break;
@@ -3827,7 +3953,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           let sucked = await makeWaSocket({
             auth: state,
             version,
-            logger: pino({ level: "fatal" })
+            logger: pino({ level: "fatal" }),
           });
           for (let i = 0; i < pepekk; i++) {
             await FUNC.sleep(1500);
@@ -3838,15 +3964,19 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         }
         break;
       case "clearchat":
-        m.reply("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        m.reply(
+          "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        );
         break;
       case "upch":
         {
           sock.sendMessage(m.chat, {
-            react: { text: "⏳", key: m.key }
+            react: { text: "⏳", key: m.key },
           });
           let idch = "120363400223227222@newsletter";
-          let ppnyauser = await await sock.profilePictureUrl(m.sender, "image").catch(_ => "https://telegra.ph/file/6880771a42bad09dd6087.jpg");
+          let ppnyauser = await await sock
+            .profilePictureUrl(m.sender, "image")
+            .catch((_) => "https://telegra.ph/file/6880771a42bad09dd6087.jpg");
           sock.sendMessage(
             idch,
             {
@@ -3857,14 +3987,14 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                   title: "From " + pushname,
                   thumbnailUrl: ppnyauser,
                   mediaType: 1,
-                  renderLargerThumbnail: false
-                }
-              }
+                  renderLargerThumbnail: false,
+                },
+              },
             },
-            { quoted: fkontak }
+            { quoted: fkontak },
           );
           await sock.sendMessage(m.chat, {
-            react: { text: "✅", key: m.key }
+            react: { text: "✅", key: m.key },
           });
         }
         break;
@@ -3891,7 +4021,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 m.reply(`⏰ Time's up!\n✅ Correct answer: ${whosmegame[m.sender].jawaban}`);
                 delete whosmegame[m.sender];
               }
-            }, gamewaktu * 1000)
+            }, gamewaktu * 1000),
           };
         }
         break;
@@ -3919,7 +4049,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 m.reply(`⏰ Time's up!\n✅ Correct answer: ${scrambleword[m.sender].answer}`);
                 delete scrambleword[m.sender];
               }
-            }, gamewaktu * 1000)
+            }, gamewaktu * 1000),
           };
         }
         break;
@@ -3945,7 +4075,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 m.reply(`⏰ Time's up!\n✅ Correct answer: ${guesswordgame[m.sender].jawaban}`);
                 delete guesswordgame[m.sender];
               }
-            }, gamewaktu * 1000)
+            }, gamewaktu * 1000),
           };
         }
         break;
@@ -3972,7 +4102,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 m.reply(`⏰ Time's up!\n✅ Correct answer: ${guesswordgame[m.sender].jawaban}`);
                 delete guesswordgame[m.sender];
               }
-            }, gamewaktu * 1000)
+            }, gamewaktu * 1000),
           };
         }
         break;
@@ -4000,7 +4130,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 m.reply(`⏰ Time's up!\n✅ Correct answer: ${triviaquizgame[m.sender].jawaban}`);
                 delete triviaquizgame[m.sender];
               }
-            }, gamewaktu * 1000)
+            }, gamewaktu * 1000),
           };
         }
         break;
@@ -4028,7 +4158,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
                 m.reply(`⏰ Time's up!\n✅ Correct answer: ${guesselementgame[m.sender].answer}`);
                 delete guesselementgame[m.sender];
               }
-            }, gamewaktu * 1000)
+            }, gamewaktu * 1000),
           };
         }
         break;
@@ -4047,7 +4177,11 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 📌 Example: ${prefix}math medium`);
 
           let result = await genMath(text.toLowerCase());
-          sock.sendText(m.chat, `🧮 *What is the answer to this equation?*\n\n「 ${result.soal} 」\n⏰ Time limit: ${(result.waktu / 1000).toFixed(2)} seconds`, m);
+          sock.sendText(
+            m.chat,
+            `🧮 *What is the answer to this equation?*\n\n「 ${result.soal} 」\n⏰ Time limit: ${(result.waktu / 1000).toFixed(2)} seconds`,
+            m,
+          );
 
           math[m.sender] = result.hadiah;
           kuismath[m.sender] = result.jawaban;
@@ -4079,7 +4213,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
             }
           }
 
-          luminAi(`${encodeURIComponent(text)}`, from, prompt).then(result => {
+          luminAi(`${encodeURIComponent(text)}`, from, prompt).then((result) => {
             reply(result);
           });
         }
@@ -4092,7 +4226,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           donasi += "🍁 Welcome to Kaede's Donation Page 🍁\n";
           donasi += "Like autumn leaves warmly coloring the world, your support enriches our development.\n\n";
           donasi += "🗾 Your Support Drives Our Future.\n";
-          donasi += "This page accepts support to keep the project growing, maintain server stability, and realize new ideas.\n\n";
+          donasi +=
+            "This page accepts support to keep the project growing, maintain server stability, and realize new ideas.\n\n";
           donasi += "💖 Special thanks to all supporters:\n";
           donasi += "– Heartfelt thank you message\n";
           donasi += "– Name included in supporter credits (optional)\n";
@@ -4136,7 +4271,7 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
           info += `🍁 Support on Trakteer\n- ${global.trakteer}\n\n`;
 
           info += "📣 *Message*\n";
-          info += "\"Like cherry blossoms gently coloring the world,\"\n";
+          info += '"Like cherry blossoms gently coloring the world,"\n';
           info += "Kaede and Silvia are here to assist and brighten your daily activities.";
 
           reply2(info);
@@ -4179,7 +4314,8 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
         if (m.isBaileys && m.fromMe) return;
         if (!m.text) return;
 
-        if (m.text.startsWith("$") || m.text.startsWith(">") || m.text.startsWith("=>") || m.text.startsWith(prefix)) return;
+        if (m.text.startsWith("$") || m.text.startsWith(">") || m.text.startsWith("=>") || m.text.startsWith(prefix))
+          return;
 
         // Auto AI Handle
         if (userdb.autoai && !isGroup && !global.db.data.menfess[m.sender]?.active) {
@@ -4190,13 +4326,13 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
               const data = {
                 prompt: promptText,
                 system: systemPrompt,
-                temperature: temperatureValue
+                temperature: temperatureValue,
               };
 
               const { data: res } = await axios.post("https://api.siputzx.my.id/api/ai/glm47flash", data, {
                 headers: {
-                  'Content-Type': 'application/json'
-                }
+                  "Content-Type": "application/json",
+                },
               });
 
               // Mengambil teks dari res.data.response sesuai struktur JSON API
@@ -4209,10 +4345,10 @@ Jangan menyebut variabel seperti ${pushname}, ${timeNow}, atau ${getTodayDate()}
 
           // Pemanggilan Fungsi
           glm4Ai(m.text, prompt)
-            .then(result => {
+            .then((result) => {
               reply(result);
             })
-            .catch(error => console.error("Terjadi kesalahan:", error));
+            .catch((error) => console.error("Terjadi kesalahan:", error));
         }
     }
   } catch (e) {
